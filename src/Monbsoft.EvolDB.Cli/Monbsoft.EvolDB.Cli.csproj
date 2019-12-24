@@ -7,6 +7,17 @@
     <Authors>Monbsoft</Authors>
     <Company>Monbsoft</Company>
     <Product>EvolDB</Product>
+    <AssemblyName>evoldb</AssemblyName>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NLog" Version="4.6.8" />
+    <PackageReference Include="System.CommandLine.Experimental" Version="0.3.0-alpha.19577.1" />
+    <PackageReference Include="System.CommandLine.Hosting" Version="0.3.0-alpha.19577.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Infrastructure\" />
+  </ItemGroup>
 
 </Project>
