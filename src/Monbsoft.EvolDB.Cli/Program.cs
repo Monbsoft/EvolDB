@@ -2,7 +2,9 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Monbsoft.EvolDB.Cli.Handlers;
+using Monbsoft.EvolDB.Extensions;
 using NLog;
+using NLog.Extensions.Logging;
 using System;
 using System.CommandLine;
 using System.CommandLine.Builder;
@@ -24,9 +26,8 @@ namespace Monbsoft.EvolDB.Cli
 
             var newCommand = new Command("new");
             newCommand.Description = "Creates a migration workspace";
-            newCommand.Handler = CommandHandler.Create(NewHandler.Execute);
+            newCommand.Handler = CommandHandler.Create<IWorkspace>(NewHandler.Execute);
             rootCommand.AddCommand(newCommand);
-
 
             try
             {
@@ -34,10 +35,16 @@ namespace Monbsoft.EvolDB.Cli
                 var parser = new CommandLineBuilder(rootCommand)
                     .UseHost(host =>
                     {
-
+                        host.ConfigureLogging((context, loggingBuilder) =>
+                        {
+                            loggingBuilder.ClearProviders();
+                            loggingBuilder.SetMinimumLevel(LogLevel.Trace);
+                            loggingBuilder.AddNLog();
+                        });
 
                     })
                     .UseVersionOption()
+                    .ConfigureWorkspace()
                     .UseHelp()
                     .Build();
                 return await parser.InvokeAsync(args);

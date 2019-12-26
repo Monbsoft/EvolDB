@@ -1,6 +1,6 @@
-﻿using Monbsoft.EvolDB.Cli.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.CommandLine;
 using System.Text;
 
 namespace Monbsoft.EvolDB.Cli.Handlers
@@ -8,9 +8,8 @@ namespace Monbsoft.EvolDB.Cli.Handlers
     public static class NewHandler
     {
 
-        public static void Execute()
+        public static void Execute(IWorkspace workspace)
         {
-            var workspace = new Workspace();
             workspace.Create();
         }
     }
