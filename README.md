@@ -1,6 +1,6 @@
 # EvolDB
 
-[![Build Status](https://monbsoft.visualstudio.com/EvolDB/_apis/build/status/EvolDB%20Continuous?branchName=dev-cli)](https://monbsoft.visualstudio.com/EvolDB/_build/latest?definitionId=2&branchName=dev-cli)
+[Build Status](https://monbsoft.visualstudio.com/EvolDB/_apis/build/status/Monbsoft.EvolDB?branchName=master)
 
 EvolDB is a simple database migration tool for .Net Core. It is inspired by [Evolve](https://github.com/lecaillon/Evolve) and [Flyway](https://flywaydb.org/).
 
