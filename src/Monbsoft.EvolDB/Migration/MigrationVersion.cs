@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Globalization;
 
 namespace Monbsoft.EvolDB
 {
-    public class MigrationVersion : IComparable
+    public class MigrationVersion : IEquatable<MigrationVersion>, IComparable
     {
         #region Champs
         private readonly int _hashCode;
@@ -11,6 +12,10 @@ namespace Monbsoft.EvolDB
         #region Constructeurs
         public MigrationVersion(int major, int minor, int patch, int revision)
         {
+            Major = major;
+            Minor = minor;
+            Patch = patch;
+            Revision = revision;
             _hashCode = major ^ minor ^ patch ^ revision;
         }
         #endregion
@@ -36,7 +41,6 @@ namespace Monbsoft.EvolDB
         {
             return !(left == right);
         }
-
         /// <summary>
         /// Détermine si la première version est inférieure à la seconde version.
         /// </summary>
@@ -52,7 +56,6 @@ namespace Monbsoft.EvolDB
 
             return left.CompareTo(right) < 0;
         }
-
         /// <summary>
         /// Détermine si la première version est inférieure ou égale à la seconde.
         /// </summary>
@@ -61,13 +64,12 @@ namespace Monbsoft.EvolDB
         /// <returns></returns>
         public static bool operator <=(MigrationVersion left, MigrationVersion right)
         {
-            if(left is null)
+            if (left is null)
             {
                 return !(right is null);
             }
-            return left.CompareTo(right) <= 0; 
+            return left.CompareTo(right) <= 0;
         }
-
         /// <summary>
         /// Détermine si 2 versions de migration sont égales.
         /// </summary>
@@ -86,14 +88,13 @@ namespace Monbsoft.EvolDB
         /// <returns></returns>
         public static bool operator >(MigrationVersion left, MigrationVersion right)
         {
-            if(left is null)
+            if (left is null)
             {
                 return !(right is null);
             }
 
             return left.CompareTo(right) > 0;
         }
-
         /// <summary>
         /// Détermine si la première version est supérieure ou égale qu'à la seconde version.
         /// </summary>
@@ -102,14 +103,37 @@ namespace Monbsoft.EvolDB
         /// <returns></returns>
         public static bool operator >=(MigrationVersion left, MigrationVersion right)
         {
-            if(left is null)
+            if (left is null)
             {
                 return !(right is null);
             }
 
             return left.CompareTo(right) >= 0;
         }
+        public static bool TryParse(string source, out MigrationVersion version)
+        {
+            if(string.IsNullOrWhiteSpace(source))
+            {
+                version = null;
+                return false;
+            }
 
+            source = source.Trim();
+            string[] tab = source.Split('_');
+
+            if(tab.Length != 4)
+            {
+                version = null;
+                return false;
+            }
+            int major = int.Parse(tab[0], NumberStyles.None, CultureInfo.InvariantCulture);
+            int minor = int.Parse(tab[1], NumberStyles.None, CultureInfo.InvariantCulture);
+            int patch = int.Parse(tab[2], NumberStyles.None, CultureInfo.InvariantCulture);
+            int revision = int.Parse(tab[3], NumberStyles.None, CultureInfo.InvariantCulture);
+
+            version = new MigrationVersion(major, minor, patch, revision);
+            return true;
+        }
         /// <summary>
         /// Compare l'instance actuelle avec un autre objet.
         /// </summary>
@@ -180,6 +204,11 @@ namespace Monbsoft.EvolDB
         public override int GetHashCode()
         {
             return _hashCode;
+        }
+
+        public override string ToString()
+        {
+            return $"{Major}_{Minor}_{Patch}_{Revision}";
         }
         #endregion
     }

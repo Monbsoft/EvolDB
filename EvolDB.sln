@@ -5,7 +5,11 @@ VisualStudioVersion = 16.0.29519.87
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Monbsoft.EvolDB.Cli", "src\Monbsoft.EvolDB.Cli\Monbsoft.EvolDB.Cli.csproj", "{21E064D7-2EB9-4E62-892B-9B986F13D60F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monbsoft.EvolDB", "src\Monbsoft.EvolDB\Monbsoft.EvolDB.csproj", "{BD3BBD18-6A88-429F-8667-7A07F2E43C50}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Monbsoft.EvolDB", "src\Monbsoft.EvolDB\Monbsoft.EvolDB.csproj", "{BD3BBD18-6A88-429F-8667-7A07F2E43C50}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{0C011063-3805-41BE-8BD9-AE4A0829BE44}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monbsoft.EvolDB.Tests", "test\Monbsoft.EvolDB.Tests\Monbsoft.EvolDB.Tests.csproj", "{1CBFBBB8-1E73-4232-8474-A22D6ED1AB6E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,9 +25,16 @@ Global
 		{BD3BBD18-6A88-429F-8667-7A07F2E43C50}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD3BBD18-6A88-429F-8667-7A07F2E43C50}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD3BBD18-6A88-429F-8667-7A07F2E43C50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CBFBBB8-1E73-4232-8474-A22D6ED1AB6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CBFBBB8-1E73-4232-8474-A22D6ED1AB6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CBFBBB8-1E73-4232-8474-A22D6ED1AB6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CBFBBB8-1E73-4232-8474-A22D6ED1AB6E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1CBFBBB8-1E73-4232-8474-A22D6ED1AB6E} = {0C011063-3805-41BE-8BD9-AE4A0829BE44}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2944BD86-71E6-40BC-B2D8-0E5C7DC83145}
