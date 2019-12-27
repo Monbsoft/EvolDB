@@ -1,4 +1,6 @@
-﻿using System.CommandLine.Builder;
+﻿using Microsoft.Extensions.Configuration;
+using Monbsoft.EvolDB.Workspace;
+using System.CommandLine.Builder;
 using System.CommandLine.Invocation;
 using System.IO;
 
@@ -10,7 +12,8 @@ namespace Monbsoft.EvolDB.Extensions
         {
             builder.UseMiddleware((context) =>
             {
-                var workspace = new Workspace(Directory.GetCurrentDirectory());
+                var workspace = new WorkspaceBuilder()
+                    .Build();
                 context.BindingContext.AddService(typeof(IWorkspace), () => workspace);
             });
 

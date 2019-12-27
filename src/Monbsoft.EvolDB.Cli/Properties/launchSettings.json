@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Monbsoft.EvolDB.Cli": {
+      "commandName": "Project",
+      "commandLineArgs": "new"
+    }
+  }
+}

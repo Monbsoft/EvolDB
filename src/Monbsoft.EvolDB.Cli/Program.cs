@@ -3,6 +3,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Monbsoft.EvolDB.Cli.Handlers;
 using Monbsoft.EvolDB.Extensions;
+using Monbsoft.EvolDB.Workspace;
 using NLog;
 using NLog.Extensions.Logging;
 using System;
@@ -41,7 +42,6 @@ namespace Monbsoft.EvolDB.Cli
                             loggingBuilder.SetMinimumLevel(LogLevel.Trace);
                             loggingBuilder.AddNLog();
                         });
-
                     })
                     .UseVersionOption()
                     .ConfigureWorkspace()
@@ -52,12 +52,12 @@ namespace Monbsoft.EvolDB.Cli
             catch(Exception ex)
             {
                 logger.Error(ex, "Stopped program because of exception");
+                throw;
             }
             finally
             {
                 LogManager.Shutdown();
             }
-            return -1;
         }
     }
 }
