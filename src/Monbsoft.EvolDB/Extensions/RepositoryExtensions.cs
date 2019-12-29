@@ -1,20 +1,20 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Monbsoft.EvolDB.Workspace;
+using Monbsoft.EvolDB.Repository;
 using System.CommandLine.Builder;
 using System.CommandLine.Invocation;
 using System.IO;
 
 namespace Monbsoft.EvolDB.Extensions
 {
-    public static class WorkspaceExtensions
+    public static class RepositoryExtensions
     {
-        public static CommandLineBuilder ConfigureWorkspace(this CommandLineBuilder builder)
+        public static CommandLineBuilder ConfigureRepository(this CommandLineBuilder builder)
         {
             builder.UseMiddleware((context) =>
             {
-                var workspace = new WorkspaceBuilder()
+                var workspace = new RepositoryBuilder()
                     .Build();
-                context.BindingContext.AddService(typeof(IWorkspace), () => workspace);
+                context.BindingContext.AddService(typeof(IRepository), () => workspace);
             });
 
             return builder;

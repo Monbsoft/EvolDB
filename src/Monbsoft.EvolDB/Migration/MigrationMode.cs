@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Monbsoft.EvolDB.Migration
 {
-    public class Migration
+    public class MigrationMode
     {
     }
 }

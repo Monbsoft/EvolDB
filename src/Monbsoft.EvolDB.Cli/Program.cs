@@ -1,9 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Monbsoft.EvolDB.Cli.Handlers;
 using Monbsoft.EvolDB.Extensions;
-using Monbsoft.EvolDB.Workspace;
+using Monbsoft.EvolDB.Repository;
 using NLog;
 using NLog.Extensions.Logging;
 using System;
@@ -25,10 +24,15 @@ namespace Monbsoft.EvolDB.Cli
             var rootCommand = new RootCommand();
             rootCommand.Description = "EvolDB is a simple database migration tool for .Net Core.";
 
-            var newCommand = new Command("new");
-            newCommand.Description = "Creates a migration workspace";
-            newCommand.Handler = CommandHandler.Create<IWorkspace>(NewHandler.Execute);
+            var newCommand = new Command("init");
+            newCommand.Description = "Creates a migration repository";
+            newCommand.Handler = CommandHandler.Create<IRepository>(EvolHandler.NewExecute);
             rootCommand.AddCommand(newCommand);
+
+            var addCommand = new Command("add");
+            addCommand.Description = "Adds a commit";
+            addCommand.Handler = CommandHandler.Create<IRepository>(EvolHandler.AddExecute);
+            rootCommand.AddCommand(addCommand);
 
             try
             {
@@ -44,7 +48,7 @@ namespace Monbsoft.EvolDB.Cli
                         });
                     })
                     .UseVersionOption()
-                    .ConfigureWorkspace()
+                    .ConfigureRepository()
                     .UseHelp()
                     .Build();
                 return await parser.InvokeAsync(args);

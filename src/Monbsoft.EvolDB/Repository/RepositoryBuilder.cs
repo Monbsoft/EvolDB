@@ -4,17 +4,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Monbsoft.EvolDB.Workspace
+namespace Monbsoft.EvolDB.Repository
 {
-    public class WorkspaceBuilder : IWorkspaceBuilder
+    public class RepositoryBuilder : IRepositoryBuilder
     {
-        public IWorkspace Build()
+        public IRepository Build()
         {
             var folder = new DirectoryInfo(Directory.GetCurrentDirectory());
 
             // configuration
             IConfigurationRoot configuration = null;
-            var configFile = new FileInfo(Path.Combine(folder.FullName, Workspace.ConfigFile));
+            var configFile = new FileInfo(Path.Combine(folder.FullName, Repository.ConfigFile));
             if (configFile.Exists)
             {
                 configuration = new ConfigurationBuilder()
@@ -22,7 +22,7 @@ namespace Monbsoft.EvolDB.Workspace
                     .Build();
             }
 
-            return new Workspace(folder.FullName, configuration);
+            return new Repository(folder.FullName, configuration);
         }
     }
 }

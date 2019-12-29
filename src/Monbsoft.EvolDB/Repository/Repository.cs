@@ -1,27 +1,28 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Monbsoft.EvolDB.Workspace
+namespace Monbsoft.EvolDB.Repository
 {
-    public class Workspace : IWorkspace
+    public class Repository : IRepository
     {
         #region Champs
-        public const string ScriptFolder = "scripts";
+        public const string CommitFolder = "commits";
         public const string ConfigFile = "config.json";
         private readonly DirectoryInfo _directory;
         private IConfigurationRoot _configuration;
         #endregion
 
         #region Constructeurs
-        public Workspace(string path)
+        public Repository(string path)
             : this(path, null)
         {
 
         }
 
-        public Workspace(string path, IConfigurationRoot configuration)
+        public Repository(string path, IConfigurationRoot configuration)
         {
             if (string.IsNullOrEmpty(path))
             {
@@ -50,13 +51,29 @@ namespace Monbsoft.EvolDB.Workspace
             {
                 throw new InvalidOperationException("The directory is not empty.");
             }
-            _directory.CreateSubdirectory(ScriptFolder);
+            _directory.CreateSubdirectory(CommitFolder);
             FileInfo configFile = new FileInfo(Path.Combine(_directory.FullName, ConfigFile));
             using (var sw = configFile.CreateText())
             {
                 sw.WriteLine("{");
                 sw.WriteLine("}");
             }
+        }
+
+        public void Load()
+        {
+            var scripts = GetScripts();
+            foreach(var script in scripts)
+            {
+                
+            }
+        }
+
+        public List<FileInfo> GetScripts()
+        {
+            var scriptFolder = _directory.GetDirectories(CommitFolder).First();
+            
+            return scriptFolder.GetFiles().ToList();
         }
         #endregion
     }
