@@ -34,6 +34,10 @@ namespace Monbsoft.EvolDB.Cli
             addCommand.Handler = CommandHandler.Create<IRepository>(EvolHandler.AddExecute);
             rootCommand.AddCommand(addCommand);
 
+            var testCommand = new Command("test");
+            testCommand.Description = "Test a commit";
+            testCommand.Handler = CommandHandler.Create<IRepository>(EvolHandler.TestExecute);
+            rootCommand.AddCommand(testCommand);
             try
             {
 
