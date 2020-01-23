@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Monbsoft.EvolDB.Repository
 {
-    public class Repository : IRepository
+    public class MigrationRepository : IRepository
     {
         #region Champs
         public const string CommitFolder = "commits";
@@ -16,13 +16,13 @@ namespace Monbsoft.EvolDB.Repository
         #endregion
 
         #region Constructeurs
-        public Repository(string path)
+        public MigrationRepository(string path)
             : this(path, null)
         {
 
         }
 
-        public Repository(string path, IConfigurationRoot configuration)
+        public MigrationRepository(string path, IConfigurationRoot configuration)
         {
             if (string.IsNullOrEmpty(path))
             {

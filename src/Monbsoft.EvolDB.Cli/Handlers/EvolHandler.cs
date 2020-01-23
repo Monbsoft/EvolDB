@@ -14,20 +14,19 @@ namespace Monbsoft.EvolDB.Cli.Handlers
     public static class EvolHandler
     {
         private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
-        public static void NewExecute(IRepository repository)
+        public static void InitExecute()
         {
-            _logger.Debug("Creating workspace...");
-            repository.Create();
+            _logger.Debug("Creating repository...");
 
-            _logger.Info($"Workspace \"{repository.Name}\" is created.");
+
         }
 
-        public static void AddExecute(IRepository repository)
+        public static void CommitExecute(IRepository repository)
         {
-            _logger.Debug("Adding script...");
+            _logger.Debug("Creating commit...");
             var loader = new CommitLoader();
             loader.Load(repository);
-            _logger.Info("Script is added.");
+            _logger.Info($"Commit is created.");
         }
 
         public static void TestExecute(IRepository repository)

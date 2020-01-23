@@ -14,7 +14,7 @@ namespace Monbsoft.EvolDB.Repository
 
             // configuration
             IConfigurationRoot configuration = null;
-            var configFile = new FileInfo(Path.Combine(folder.FullName, Repository.ConfigFile));
+            var configFile = new FileInfo(Path.Combine(folder.FullName, MigrationRepository.ConfigFile));
             if (configFile.Exists)
             {
                 configuration = new ConfigurationBuilder()
@@ -22,7 +22,7 @@ namespace Monbsoft.EvolDB.Repository
                     .Build();
             }
 
-            return new Repository(folder.FullName, configuration);
+            return new MigrationRepository(folder.FullName, configuration);
         }
     }
 }

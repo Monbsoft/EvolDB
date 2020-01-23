@@ -12,9 +12,9 @@ namespace Monbsoft.EvolDB.Extensions
         {
             builder.UseMiddleware((context) =>
             {
-                var workspace = new RepositoryBuilder()
+                var repository = new RepositoryBuilder()
                     .Build();
-                context.BindingContext.AddService(typeof(IRepository), () => workspace);
+                context.BindingContext.AddService(typeof(IRepository), () => repository);
             });
 
             return builder;

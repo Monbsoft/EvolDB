@@ -10,6 +10,7 @@ using System.CommandLine;
 using System.CommandLine.Builder;
 using System.CommandLine.Hosting;
 using System.CommandLine.Invocation;
+using System.IO;
 using System.Threading.Tasks;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
@@ -24,16 +25,33 @@ namespace Monbsoft.EvolDB.Cli
             var rootCommand = new RootCommand();
             rootCommand.Description = "EvolDB is a simple database migration tool for .Net Core.";
 
-            var newCommand = new Command("init");
-            newCommand.Description = "Creates a migration repository";
-            newCommand.Handler = CommandHandler.Create<IRepository>(EvolHandler.NewExecute);
-            rootCommand.AddCommand(newCommand);
+            // commande init
+            var initCommand = new Command("init");
+            initCommand.Description = "Create a migration repository";
+            initCommand.Handler = CommandHandler.Create<string>(name =>
+            {
+                logger.Debug("Creating repository...");
+                var directory = new DirectoryInfo(Path.Combine(Directory.GetCurrentDirectory(), name));                
+                if(directory.Exists)
+                {
+                    return;
+                }
+                directory.Create();
+                var repository = new MigrationRepository(directory.FullName);
+                repository.Create();
+                logger.Info($"Repository {name} is created.");
+            });
+            initCommand.AddArgument(new Argument<string>("name"));
+            rootCommand.AddCommand(initCommand);
 
-            var addCommand = new Command("add");
-            addCommand.Description = "Adds a commit";
-            addCommand.Handler = CommandHandler.Create<IRepository>(EvolHandler.AddExecute);
-            rootCommand.AddCommand(addCommand);
+            // commande commit
+            var commitCommand = new Command("commit");
+            commitCommand.Description = "Create a commit";
+            commitCommand.Handler = CommandHandler.Create<IRepository>(EvolHandler.CommitExecute);
+            rootCommand.AddCommand(commitCommand);
 
+
+            // commande test
             var testCommand = new Command("test");
             testCommand.Description = "Test a commit";
             testCommand.Handler = CommandHandler.Create<IRepository>(EvolHandler.TestExecute);
