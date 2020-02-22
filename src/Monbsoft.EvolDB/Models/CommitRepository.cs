@@ -62,14 +62,14 @@ namespace Monbsoft.EvolDB.Models
 
         public void Load()
         {
-            var commits = GetCommits();
+            var commits = GetCommitFiles();
             foreach(var commit in commits)
             {
                 
             }
         }
 
-        public List<FileInfo> GetCommits()
+        public List<FileInfo> GetCommitFiles()
         {
             var commitFolder = _directory.GetDirectories(CommitFolder).First();
             

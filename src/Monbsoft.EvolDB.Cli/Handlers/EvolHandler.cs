@@ -2,6 +2,8 @@
 using Couchbase.Authentication;
 using Couchbase.Configuration.Client;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Monbsoft.EvolDB.Migration;
 using Monbsoft.EvolDB.Models;
 using Monbsoft.EvolDB.Repository;
@@ -22,11 +24,11 @@ namespace Monbsoft.EvolDB.Cli.Handlers
 
         }
 
-        public static void CommitExecute(IRepository repository)
+        public static void CommitExecute(string message, IHost host, IRepository repository)
         {
             _logger.Debug("Creating commit...");
-            var loader = new CommitLoader();
-            loader.Load(repository);
+            var commitLoader = host.Services.GetRequiredService<ICommitLoader>();
+            commitLoader.Load(repository);
             _logger.Info($"Commit is created.");
         }
 

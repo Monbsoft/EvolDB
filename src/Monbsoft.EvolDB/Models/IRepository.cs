@@ -10,6 +10,6 @@ namespace Monbsoft.EvolDB.Models
         string Name { get;  }
         void Create();
         void Load();
-        List<FileInfo> GetCommits();
+        List<FileInfo> GetCommitFiles();
     }
 }

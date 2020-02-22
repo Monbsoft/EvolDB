@@ -1,9 +1,12 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Monbsoft.EvolDB.Cli.Handlers;
 using Monbsoft.EvolDB.Extensions;
+using Monbsoft.EvolDB.Migration;
 using Monbsoft.EvolDB.Models;
 using Monbsoft.EvolDB.Repository;
+using Monbsoft.EvolDB.Services;
 using NLog;
 using NLog.Extensions.Logging;
 using System;
@@ -48,7 +51,8 @@ namespace Monbsoft.EvolDB.Cli
             // commande commit
             var commitCommand = new Command("commit");
             commitCommand.Description = "Create a commit";
-            commitCommand.Handler = CommandHandler.Create<IRepository>(EvolHandler.CommitExecute);
+            commitCommand.AddArgument(new Argument<string>("message"));
+            commitCommand.Handler = CommandHandler.Create<string, IHost, IRepository>(EvolHandler.CommitExecute);
             rootCommand.AddCommand(commitCommand);
 
 
@@ -68,6 +72,12 @@ namespace Monbsoft.EvolDB.Cli
                             loggingBuilder.ClearProviders();
                             loggingBuilder.SetMinimumLevel(LogLevel.Trace);
                             loggingBuilder.AddNLog();
+                        });
+                        host.ConfigureServices(services =>
+                        {
+                            services.AddSingleton<IHashService, HashService>();
+                            services.AddSingleton<ICommitLoader, CommitLoader>();
+
                         });
                     })
                     .UseVersionOption()
