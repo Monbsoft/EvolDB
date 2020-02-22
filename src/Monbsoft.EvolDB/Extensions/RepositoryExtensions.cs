@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Monbsoft.EvolDB.Models;
 using Monbsoft.EvolDB.Repository;
 using System.CommandLine.Builder;
 using System.CommandLine.Invocation;

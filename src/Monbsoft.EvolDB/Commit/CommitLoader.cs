@@ -14,11 +14,11 @@ namespace Monbsoft.EvolDB.Migration
         public void Load(IRepository workspace)
         {
             _logger.Debug("Loading commits...");
-            var scripts = workspace.GetCommits();
-            foreach(var script in scripts)
+            var commits = workspace.GetCommits();
+            foreach(var commit in commits)
             {
-                var hash = HashUtilities.ComputeHash(script.FullName);
-                _logger.Info($"{script.Name} is checksum = {hash}.");
+                var hash = HashUtilities.ComputeHash(commit.FullName);
+                _logger.Info($"{commit.Name} is checksum = {hash}.");
             }
 
             _logger.Info("Commits are loaded.");
