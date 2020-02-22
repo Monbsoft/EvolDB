@@ -15,8 +15,8 @@ namespace Monbsoft.EvolDB.Tests
         [InlineData("1_4_0_1", "1_4_0_0", 1)]
         public void MigrationVersionCompare(string ver1, string ver2, int result)
         {
-            Assert.True(MigrationVersion.TryParse(ver1, out MigrationVersion v1));
-            Assert.True(MigrationVersion.TryParse(ver2, out MigrationVersion v2));
+            Assert.True(CommitVersion.TryParse(ver1, out CommitVersion v1));
+            Assert.True(CommitVersion.TryParse(ver2, out CommitVersion v2));
 
             Assert.Equal(v1.CompareTo(v2), result);
         }

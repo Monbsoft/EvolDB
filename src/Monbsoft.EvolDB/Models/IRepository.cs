@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace Monbsoft.EvolDB.Repository
+namespace Monbsoft.EvolDB.Models
 {
     public interface IRepository
     {
@@ -10,6 +10,6 @@ namespace Monbsoft.EvolDB.Repository
         string Name { get;  }
         void Create();
         void Load();
-        List<FileInfo> GetScripts();
+        List<FileInfo> GetCommits();
     }
 }

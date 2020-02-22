@@ -37,7 +37,7 @@ namespace Monbsoft.EvolDB.Cli
                     return;
                 }
                 directory.Create();
-                var repository = new MigrationRepository(directory.FullName);
+                var repository = new CommitRepository(directory.FullName);
                 repository.Create();
                 logger.Info($"Repository {name} is created.");
             });

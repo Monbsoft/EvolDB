@@ -3,14 +3,14 @@ using System.Globalization;
 
 namespace Monbsoft.EvolDB
 {
-    public class MigrationVersion : IEquatable<MigrationVersion>, IComparable
+    public class CommitVersion : IEquatable<CommitVersion>, IComparable
     {
         #region Champs
         private readonly int _hashCode;
         #endregion
 
         #region Constructeurs
-        public MigrationVersion(int major, int minor, int patch, int revision)
+        public CommitVersion(int major, int minor, int patch, int revision)
         {
             Major = major;
             Minor = minor;
@@ -37,7 +37,7 @@ namespace Monbsoft.EvolDB
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public static bool operator !=(MigrationVersion left, MigrationVersion right)
+        public static bool operator !=(CommitVersion left, CommitVersion right)
         {
             return !(left == right);
         }
@@ -47,7 +47,7 @@ namespace Monbsoft.EvolDB
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public static bool operator <(MigrationVersion left, MigrationVersion right)
+        public static bool operator <(CommitVersion left, CommitVersion right)
         {
             if (left is null)
             {
@@ -62,7 +62,7 @@ namespace Monbsoft.EvolDB
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public static bool operator <=(MigrationVersion left, MigrationVersion right)
+        public static bool operator <=(CommitVersion left, CommitVersion right)
         {
             if (left is null)
             {
@@ -76,7 +76,7 @@ namespace Monbsoft.EvolDB
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public static bool operator ==(MigrationVersion left, MigrationVersion right)
+        public static bool operator ==(CommitVersion left, CommitVersion right)
         {
             return !(left is null) && left.Equals(right);
         }
@@ -86,7 +86,7 @@ namespace Monbsoft.EvolDB
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public static bool operator >(MigrationVersion left, MigrationVersion right)
+        public static bool operator >(CommitVersion left, CommitVersion right)
         {
             if (left is null)
             {
@@ -101,7 +101,7 @@ namespace Monbsoft.EvolDB
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public static bool operator >=(MigrationVersion left, MigrationVersion right)
+        public static bool operator >=(CommitVersion left, CommitVersion right)
         {
             if (left is null)
             {
@@ -110,7 +110,7 @@ namespace Monbsoft.EvolDB
 
             return left.CompareTo(right) >= 0;
         }
-        public static bool TryParse(string source, out MigrationVersion version)
+        public static bool TryParse(string source, out CommitVersion version)
         {
             if(string.IsNullOrWhiteSpace(source))
             {
@@ -131,7 +131,7 @@ namespace Monbsoft.EvolDB
             int patch = int.Parse(tab[2], NumberStyles.None, CultureInfo.InvariantCulture);
             int revision = int.Parse(tab[3], NumberStyles.None, CultureInfo.InvariantCulture);
 
-            version = new MigrationVersion(major, minor, patch, revision);
+            version = new CommitVersion(major, minor, patch, revision);
             return true;
         }
         /// <summary>
@@ -141,7 +141,7 @@ namespace Monbsoft.EvolDB
         /// <returns></returns>
         public int CompareTo(object obj)
         {
-            MigrationVersion other = obj as MigrationVersion;
+            CommitVersion other = obj as CommitVersion;
             return CompareTo(other);
         }
 
@@ -150,7 +150,7 @@ namespace Monbsoft.EvolDB
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public int CompareTo(MigrationVersion other)
+        public int CompareTo(CommitVersion other)
         {
             if (other is null)
             {
@@ -189,10 +189,10 @@ namespace Monbsoft.EvolDB
         }
         public override bool Equals(object obj)
         {
-            return Equals(obj as MigrationVersion);
+            return Equals(obj as CommitVersion);
         }
 
-        public bool Equals(MigrationVersion other)
+        public bool Equals(CommitVersion other)
         {
             return !ReferenceEquals(other, null) &&
                 Major == other.Major &&

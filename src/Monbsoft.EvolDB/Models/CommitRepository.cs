@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Monbsoft.EvolDB.Repository
+namespace Monbsoft.EvolDB.Models
 {
-    public class MigrationRepository : IRepository
+    public class CommitRepository : IRepository
     {
         #region Champs
         public const string CommitFolder = "commits";
@@ -16,13 +16,13 @@ namespace Monbsoft.EvolDB.Repository
         #endregion
 
         #region Constructeurs
-        public MigrationRepository(string path)
+        public CommitRepository(string path)
             : this(path, null)
         {
 
         }
 
-        public MigrationRepository(string path, IConfigurationRoot configuration)
+        public CommitRepository(string path, IConfigurationRoot configuration)
         {
             if (string.IsNullOrEmpty(path))
             {
@@ -62,18 +62,18 @@ namespace Monbsoft.EvolDB.Repository
 
         public void Load()
         {
-            var scripts = GetScripts();
-            foreach(var script in scripts)
+            var commits = GetCommits();
+            foreach(var commit in commits)
             {
                 
             }
         }
 
-        public List<FileInfo> GetScripts()
+        public List<FileInfo> GetCommits()
         {
-            var scriptFolder = _directory.GetDirectories(CommitFolder).First();
+            var commitFolder = _directory.GetDirectories(CommitFolder).First();
             
-            return scriptFolder.GetFiles().ToList();
+            return commitFolder.GetFiles().ToList();
         }
         #endregion
     }
