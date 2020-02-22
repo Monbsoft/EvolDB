@@ -3,6 +3,7 @@ using Couchbase.Authentication;
 using Couchbase.Configuration.Client;
 using Microsoft.Extensions.Configuration;
 using Monbsoft.EvolDB.Migration;
+using Monbsoft.EvolDB.Models;
 using Monbsoft.EvolDB.Repository;
 using NLog;
 using System;

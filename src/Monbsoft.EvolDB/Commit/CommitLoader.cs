@@ -1,4 +1,5 @@
 ﻿using Monbsoft.EvolDB.Infrastructure;
+using Monbsoft.EvolDB.Models;
 using Monbsoft.EvolDB.Repository;
 using NLog;
 using System;

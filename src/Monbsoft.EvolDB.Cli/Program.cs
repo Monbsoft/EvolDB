@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Monbsoft.EvolDB.Cli.Handlers;
 using Monbsoft.EvolDB.Extensions;
+using Monbsoft.EvolDB.Models;
 using Monbsoft.EvolDB.Repository;
 using NLog;
 using NLog.Extensions.Logging;
