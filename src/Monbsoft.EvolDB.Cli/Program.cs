@@ -3,8 +3,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Monbsoft.EvolDB.Cli.Handlers;
 using Monbsoft.EvolDB.Commit;
-using Monbsoft.EvolDB.Extensions;
 using Monbsoft.EvolDB.Models;
+using Monbsoft.EvolDB.Repository;
 using Monbsoft.EvolDB.Services;
 using NLog;
 using NLog.Extensions.Logging;
@@ -40,8 +40,7 @@ namespace Monbsoft.EvolDB.Cli
                     return;
                 }
                 directory.Create();
-                var repository = new CommitRepository(directory.FullName);
-                repository.Create();
+
                 logger.Info($"Repository {name} is created.");
             });
             initCommand.AddArgument(new Argument<string>("name"));
@@ -50,8 +49,8 @@ namespace Monbsoft.EvolDB.Cli
             // commande commit
             var commitCommand = new Command("commit");
             commitCommand.Description = "Create a commit";
-            commitCommand.AddArgument(new Argument<string>("message"));
-            commitCommand.Handler = CommandHandler.Create<string, IHost, IRepository>(EvolHandler.CommitExecute);
+            commitCommand.AddArgument(new Argument<string>("migration"));
+            commitCommand.Handler = CommandHandler.Create<string, IHost>(EvolHandler.CommitExecute);
             rootCommand.AddCommand(commitCommand);
 
 
@@ -75,7 +74,14 @@ namespace Monbsoft.EvolDB.Cli
                         host.ConfigureServices(services =>
                         {
                             services.AddSingleton<IHashService, HashService>();
-                            services.AddSingleton<ICommitLoader, CommitLoader>();
+                            services.AddSingleton<IMigrationParser, MigrationParser>();
+                            services.AddSingleton<IRepositoryBuilder, RepositoryBuilder>();
+                            services.AddSingleton<IRepository, CommitRepository>(services =>
+                            {
+                                var builder = services.GetRequiredService<IRepositoryBuilder>();
+                                return builder.Build();
+                            });
+                            services.AddSingleton<ICommitBuilder, CommitBuilder>();
 
                         });
                     })

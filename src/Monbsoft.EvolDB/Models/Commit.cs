@@ -6,6 +6,8 @@ namespace Monbsoft.EvolDB.Models
 {
     public class Commit
     {
+        public string FullName { get; set; }
+
         public Migration Migration { get; set; }
 
         public string Message { get; set; }
@@ -13,5 +15,6 @@ namespace Monbsoft.EvolDB.Models
         public string Hash { get; set; }
 
         public CommitVersion Version { get; set; }
+
     }
 }

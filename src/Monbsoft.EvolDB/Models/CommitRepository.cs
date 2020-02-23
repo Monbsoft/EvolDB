@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Monbsoft.EvolDB.Repository;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,50 +10,52 @@ namespace Monbsoft.EvolDB.Models
     public class CommitRepository : IRepository
     {
         #region Champs
-        public const string CommitFolder = "commits";
+        public const string Commit_Folder = "commits";
         public const string ConfigFile = "config.json";
         private readonly DirectoryInfo _directory;
         private IConfigurationRoot _configuration;
         #endregion
 
         #region Constructeurs
-        public CommitRepository(string path)
-            : this(path, null)
+        public CommitRepository(DirectoryInfo folder)
+            : this(folder, null)
         {
         }
 
-        public CommitRepository(string path, IConfigurationRoot configuration)
+        public CommitRepository(DirectoryInfo folder, IConfigurationRoot configuration)
         {
-            if (string.IsNullOrEmpty(path))
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            _directory = folder ?? throw new ArgumentNullException(nameof(folder));
 
-            if (!Directory.Exists(path))
+            if (!_directory.Exists)
             {
                 throw new DirectoryNotFoundException();
             }
-
-            _directory = new DirectoryInfo(path);
             _configuration = configuration;
         }
         #endregion
 
         #region Propriétés
-        public List<Commit> Commits { get; }
+        public DirectoryInfo CommitFolder { get; set; }
+        public List<Commit> Commits { get; set; }
         public IConfigurationRoot Configuration => _configuration;
         public string Name => _directory.Name;
         #endregion
 
         #region Méthodes
-        public void Create()
+        public static void Create(string name)
         {
-            if (_directory.GetDirectories().Any())
+            var folder = new DirectoryInfo(Path.Combine(Directory.GetCurrentDirectory(), name));
+            if(!folder.Exists)
+            {
+                folder.Create();
+            }
+            // créer l'arborescence
+            if (folder.GetFiles().Any())
             {
                 throw new InvalidOperationException("The directory is not empty.");
             }
-            _directory.CreateSubdirectory(CommitFolder);
-            FileInfo configFile = new FileInfo(Path.Combine(_directory.FullName, ConfigFile));
+            folder.CreateSubdirectory(Commit_Folder);
+            FileInfo configFile = new FileInfo(Path.Combine(folder.FullName, ConfigFile));
             using (var sw = configFile.CreateText())
             {
                 sw.WriteLine("{");
@@ -60,16 +63,25 @@ namespace Monbsoft.EvolDB.Models
             }
         }
 
-        public List<FileInfo> GetCommitFiles()
+        public bool Check()
         {
-            var commitFolder = _directory.GetDirectories(CommitFolder).First();
+            var enumerator = Commits.Select(c => c.Version).GetEnumerator();
+            CommitVersion old = null;
+            
+            while(enumerator.MoveNext())
+            {
+                if(old == null)
+                {
+                    old = enumerator.Current;
+                    continue;
+                }
+                if(old >= enumerator.Current)
+                {
+                    return false;
+                }
 
-            return commitFolder.GetFiles().ToList();
-        }
-
-        internal void Load(List<Commit> commits)
-        {
-
+            }
+            return true;
         }
         #endregion
     }

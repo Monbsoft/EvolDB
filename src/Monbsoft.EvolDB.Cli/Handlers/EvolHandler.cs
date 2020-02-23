@@ -17,15 +17,13 @@ namespace Monbsoft.EvolDB.Cli.Handlers
         public static void InitExecute()
         {
             _logger.Debug("Creating repository...");
-
+            
 
         }
 
-        public static void CommitExecute(string message, IHost host, m.IRepository repository)
+        public static void CommitExecute(string migration, IHost host)
         {
-            _logger.Debug("Creating commit...");
-            var commitLoader = host.Services.GetRequiredService<ICommitLoader>();
-            commitLoader.Load(repository);
+            _logger.Debug("Creating commit...");            
             _logger.Info($"Commit is created.");
         }
 

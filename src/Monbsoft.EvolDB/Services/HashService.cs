@@ -10,7 +10,7 @@ namespace Monbsoft.EvolDB.Services
     {
         public string ComputeHash(string fileName)
         {
-            string shaHash = null;
+            string shaHash = string.Empty;
 
             using (Stream stream = File.OpenRead(fileName))
             using (var bufferedStream = new BufferedStream(stream, 1024 * 32))
@@ -24,7 +24,6 @@ namespace Monbsoft.EvolDB.Services
                     shaHash = BitConverter.ToString(checksum).Replace("-", string.Empty);
                 }
             }
-
             return shaHash;
         }
     }
