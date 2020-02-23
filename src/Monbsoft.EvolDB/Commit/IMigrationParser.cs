@@ -1,9 +1,9 @@
-﻿using Monbsoft.EvolDB.Models;
+﻿using m = Monbsoft.EvolDB.Models;
 
 namespace Monbsoft.EvolDB.Commit
 {
     public interface IMigrationParser
     {
-        Token Parse(string name);
+        m.Commit Parse(string name);
     }
 }

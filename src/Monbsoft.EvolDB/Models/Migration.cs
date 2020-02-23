@@ -4,14 +4,9 @@ using System.Text;
 
 namespace Monbsoft.EvolDB.Models
 {
-    public class CommitType
+    public enum Migration
     {
-        public char Value { get; }
+        Versioned,
+        Repeatable
     }
-
-    public class VersionType : CommitType
-    {
-
-    }
-
 }

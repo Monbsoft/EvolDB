@@ -3,7 +3,7 @@
 namespace Monbsoft.EvolDB.Tests
 {
     public class CommitVersionTests
-    {
+    {        
         [Theory]
         [InlineData("1_0_0_0", "1_0_0_0", 0)]
         [InlineData("1_2_0_0", "1_1_0_0", 1)]

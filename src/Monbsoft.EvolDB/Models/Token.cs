@@ -6,9 +6,9 @@ namespace Monbsoft.EvolDB.Models
 {
     public class Token
     {
-        public int MyProperty { get; set; }
+        public Migration Migration { get; set; }
 
-        public string Version { get; set; }
+        public CommitVersion Version { get; set; }
 
         public string Message { get; set; }
     }

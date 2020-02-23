@@ -1,47 +1,54 @@
-﻿using Monbsoft.EvolDB.Models;
+﻿using m = Monbsoft.EvolDB.Models;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Monbsoft.EvolDB.Commit
 {
     public class MigrationParser : IMigrationParser
     {
-        private static Regex _versionRegex = new Regex(
+        private static Regex _migrationRegex = new Regex(
             @"^(?<prefix>[V|R])(?<version>[0-9\\._]+)__(?<message>\w+)[\\.]{1}n1ql$");
 
-
-        public Token Parse(string migration)
+        public m.Commit Parse(string migration)
         {
-            var match = _versionRegex.Match(migration);
-            if(match == null || match.Groups.Count <4 || match.Groups.Count > 4)
+            var match = _migrationRegex.Match(migration.Trim());
+            if (match == null || match.Groups.Count < 4 || match.Groups.Count > 4)
             {
                 return null;
             }
 
-            return new Token
+            return new m.Commit
             {
-                Migration = ParseMigration(match.Groups[""])
-                Message = match.Groups["message"].Value,
-                Version = match.Groups["version"].Value,
+                Migration = ParsePrefix(match.Groups["prefix"].Value),
+                Message = ParseMessage(match.Groups["message"].Value),
+                Version = ParseVersion(match.Groups["version"].Value),
             };
         }
 
-        private Migration ParsePrefix(string prefix)
+        private string ParseMessage(string message)
         {
-            switch(prefix)
+            return message.Replace('_', ' ');
+        }
+
+        private m.Migration ParsePrefix(string prefix)
+        {
+            switch (prefix)
             {
                 case "V":
-                    return Migration.Versioned;
+                    return m.Migration.Versioned;
+
                 case "R":
-                    return Migration.Repeatable;
+                    return m.Migration.Repeatable;
+
                 default:
                     throw new ArgumentException(
                         message: "Migration is not recognized.",
                         paramName: nameof(prefix));
             }
+        }
+        private CommitVersion ParseVersion(string version)
+        {
+            return CommitVersion.Parse(version);
         }
     }
 }
