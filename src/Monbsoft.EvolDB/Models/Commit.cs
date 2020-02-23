@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Monbsoft.EvolDB.Migration
+namespace Monbsoft.EvolDB.Models
 {
     public class Commit
     {

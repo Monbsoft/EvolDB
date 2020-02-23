@@ -9,7 +9,6 @@ namespace Monbsoft.EvolDB.Models
         IConfigurationRoot Configuration { get; }
         string Name { get;  }
         void Create();
-        void Load();
         List<FileInfo> GetCommitFiles();
     }
 }

@@ -2,8 +2,8 @@
 
 namespace Monbsoft.EvolDB.Commit
 {
-    public interface ICommitLoader
+    public interface IMigrationParser
     {
-        void Load(IRepository workspace);
+        Token Parse(string name);
     }
 }

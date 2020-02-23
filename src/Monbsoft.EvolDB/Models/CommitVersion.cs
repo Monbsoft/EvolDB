@@ -6,6 +6,7 @@ namespace Monbsoft.EvolDB
     public class CommitVersion : IEquatable<CommitVersion>, IComparable
     {
         #region Champs
+        private static char[] SeparatorArray = new char[] { '_', '.' };
         private readonly int _hashCode;
         #endregion
 
@@ -110,30 +111,62 @@ namespace Monbsoft.EvolDB
 
             return left.CompareTo(right) >= 0;
         }
-        public static bool TryParse(string source, out CommitVersion version)
+        public static CommitVersion Parse(string input)
         {
-            if(string.IsNullOrWhiteSpace(source))
+            if(string.IsNullOrEmpty(input))
             {
-                version = null;
+                throw new ArgumentNullException(nameof(input));
+            }
+            CommitVersion version = null;
+            if (!TryParse(input, out version))
+            {
+                throw new ArgumentOutOfRangeException("version");
+            }
+            return version;
+        }
+
+        public static bool TryParse(string version, out CommitVersion result)
+        {
+            int major = 0, minor = 0, patch = 0, revision = 0;
+            result = null;
+
+            var parsedComponents = version.Split(SeparatorArray);
+            int length = parsedComponents.Length;
+            if((length < 2) || (length > 4))
+            {
+                result = null;
                 return false;
             }
 
-            source = source.Trim();
-            string[] tab = source.Split('_');
-
-            if(tab.Length != 4)
+            if(!TryParseComponent(parsedComponents[0], out major))
             {
-                version = null;
                 return false;
             }
-            int major = int.Parse(tab[0], NumberStyles.None, CultureInfo.InvariantCulture);
-            int minor = int.Parse(tab[1], NumberStyles.None, CultureInfo.InvariantCulture);
-            int patch = int.Parse(tab[2], NumberStyles.None, CultureInfo.InvariantCulture);
-            int revision = int.Parse(tab[3], NumberStyles.None, CultureInfo.InvariantCulture);
+            if(!TryParseComponent(parsedComponents[1], out minor))
+            {
+                return false;
+            }
+            length -= 2;
+            if(length >  0)
+            {
+                if(!TryParseComponent(parsedComponents[2], out patch))
+                {
+                    return false;
+                }
+                length--;
+                if(length > 0)
+                {
+                    if(!TryParseComponent(parsedComponents[3], out revision))
+                    {
+                        return false;
+                    }
+                }
+            }
 
-            version = new CommitVersion(major, minor, patch, revision);
+            result = new CommitVersion(major, minor, patch, revision);
             return true;
         }
+
         /// <summary>
         /// Compare l'instance actuelle avec un autre objet.
         /// </summary>
@@ -144,7 +177,6 @@ namespace Monbsoft.EvolDB
             CommitVersion other = obj as CommitVersion;
             return CompareTo(other);
         }
-
         /// <summary>
         /// Compare l'instance actuelle avec une autre version.
         /// </summary>
@@ -191,7 +223,6 @@ namespace Monbsoft.EvolDB
         {
             return Equals(obj as CommitVersion);
         }
-
         public bool Equals(CommitVersion other)
         {
             return !ReferenceEquals(other, null) &&
@@ -200,15 +231,17 @@ namespace Monbsoft.EvolDB
                 Patch == other.Patch &&
                 Revision == other.Revision;
         }
-
         public override int GetHashCode()
         {
             return _hashCode;
         }
-
         public override string ToString()
         {
             return $"{Major}_{Minor}_{Patch}_{Revision}";
+        }
+        private static bool TryParseComponent(string component, out int result)
+        {
+            return Int32.TryParse(component, NumberStyles.Integer, CultureInfo.InvariantCulture, out result);
         }
         #endregion
     }

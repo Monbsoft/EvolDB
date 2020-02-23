@@ -19,7 +19,6 @@ namespace Monbsoft.EvolDB.Models
         public CommitRepository(string path)
             : this(path, null)
         {
-
         }
 
         public CommitRepository(string path, IConfigurationRoot configuration)
@@ -40,6 +39,7 @@ namespace Monbsoft.EvolDB.Models
         #endregion
 
         #region Propriétés
+        public List<Commit> Commits { get; }
         public IConfigurationRoot Configuration => _configuration;
         public string Name => _directory.Name;
         #endregion
@@ -60,20 +60,16 @@ namespace Monbsoft.EvolDB.Models
             }
         }
 
-        public void Load()
-        {
-            var commits = GetCommitFiles();
-            foreach(var commit in commits)
-            {
-                
-            }
-        }
-
         public List<FileInfo> GetCommitFiles()
         {
             var commitFolder = _directory.GetDirectories(CommitFolder).First();
-            
+
             return commitFolder.GetFiles().ToList();
+        }
+
+        internal void Load(List<Commit> commits)
+        {
+
         }
         #endregion
     }
