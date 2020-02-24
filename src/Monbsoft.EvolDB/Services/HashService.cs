@@ -8,11 +8,11 @@ namespace Monbsoft.EvolDB.Services
 {
     public class HashService : IHashService
     {
-        public string ComputeHash(string fileName)
+        public string ComputeHash(FileInfo file)
         {
             string shaHash = string.Empty;
 
-            using (Stream stream = File.OpenRead(fileName))
+            using (Stream stream = file.OpenRead())
             using (var bufferedStream = new BufferedStream(stream, 1024 * 32))
             {
 

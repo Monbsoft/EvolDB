@@ -63,26 +63,12 @@ namespace Monbsoft.EvolDB.Models
             }
         }
 
-        public bool Check()
+        public bool Validate(Commit commit)
         {
-            var enumerator = Commits.Select(c => c.Version).GetEnumerator();
-            CommitVersion old = null;
-            
-            while(enumerator.MoveNext())
-            {
-                if(old == null)
-                {
-                    old = enumerator.Current;
-                    continue;
-                }
-                if(old >= enumerator.Current)
-                {
-                    return false;
-                }
-
-            }
-            return true;
+            var max = Commits.Max(c => c.Version);
+            return commit.Version > max;
         }
+
         #endregion
     }
 }

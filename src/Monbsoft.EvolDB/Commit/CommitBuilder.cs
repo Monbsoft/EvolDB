@@ -31,10 +31,10 @@ namespace Monbsoft.EvolDB.Commit
             _logger.LogDebug($"Building commit {file.Name}...");
 
             var commit = _parser.Parse(file.Name);
-            commit.Hash = _hashService.ComputeHash(file.FullName);
+            commit.Hash = _hashService.ComputeHash(file);
             commit.FullName = file.FullName;
 
-            _logger.LogInformation($"Commit {file.Name} is built.");
+            _logger.LogDebug($"Commit {file.Name} is built.");
             return commit;
 
         }

@@ -3,6 +3,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Monbsoft.EvolDB.Cli.Handlers;
 using Monbsoft.EvolDB.Commit;
+using Monbsoft.EvolDB.Excceptions;
 using Monbsoft.EvolDB.Models;
 using Monbsoft.EvolDB.Repository;
 using Monbsoft.EvolDB.Services;
@@ -34,13 +35,7 @@ namespace Monbsoft.EvolDB.Cli
             initCommand.Handler = CommandHandler.Create<string>(name =>
             {
                 logger.Debug("Creating repository...");
-                var directory = new DirectoryInfo(Path.Combine(Directory.GetCurrentDirectory(), name));                
-                if(directory.Exists)
-                {
-                    return;
-                }
-                directory.Create();
-
+                CommitRepository.Create(name);
                 logger.Info($"Repository {name} is created.");
             });
             initCommand.AddArgument(new Argument<string>("name"));
@@ -76,24 +71,30 @@ namespace Monbsoft.EvolDB.Cli
                             services.AddSingleton<IHashService, HashService>();
                             services.AddSingleton<IMigrationParser, MigrationParser>();
                             services.AddSingleton<IRepositoryBuilder, RepositoryBuilder>();
+                            services.AddSingleton<ICommitBuilder, CommitBuilder>();
+                            services.AddSingleton<ICommitService, CommitService>();
                             services.AddSingleton<IRepository, CommitRepository>(services =>
                             {
                                 var builder = services.GetRequiredService<IRepositoryBuilder>();
-                                return builder.Build();
+                                return (CommitRepository)builder.Build();
                             });
-                            services.AddSingleton<ICommitBuilder, CommitBuilder>();
+
 
                         });
                     })
                     .UseVersionOption()
-                    .ConfigureRepository()
                     .UseHelp()
                     .Build();
                 return await parser.InvokeAsync(args);
             }
+            catch(Exception ex) when (ex.InnerException is CommitException)
+            {
+                logger.Error(ex.InnerException.Message);
+                throw;
+            }
             catch(Exception ex)
             {
-                logger.Error(ex, "Stopped program because of exception");
+                logger.Error(ex, $"Stopped program because of exception: {ex.Message}");
                 throw;
             }
             finally

@@ -1,7 +1,9 @@
-﻿namespace Monbsoft.EvolDB.Services
+﻿using System.IO;
+
+namespace Monbsoft.EvolDB.Services
 {
     public interface IHashService
     {
-        string ComputeHash(string fileName);
+        string ComputeHash(FileInfo file);
     }
 }

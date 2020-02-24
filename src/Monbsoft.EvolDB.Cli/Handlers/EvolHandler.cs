@@ -8,6 +8,7 @@ using m = Monbsoft.EvolDB.Models;
 using NLog;
 using System;
 using Monbsoft.EvolDB.Commit;
+using Monbsoft.EvolDB.Services;
 
 namespace Monbsoft.EvolDB.Cli.Handlers
 {
@@ -23,7 +24,9 @@ namespace Monbsoft.EvolDB.Cli.Handlers
 
         public static void CommitExecute(string migration, IHost host)
         {
-            _logger.Debug("Creating commit...");            
+            _logger.Debug("Creating commit...");
+            var commitService = host.Services.GetRequiredService<ICommitService>();
+            commitService.Create(migration);
             _logger.Info($"Commit is created.");
         }
 

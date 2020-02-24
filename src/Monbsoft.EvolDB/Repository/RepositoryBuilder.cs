@@ -12,12 +12,12 @@ namespace Monbsoft.EvolDB.Repository
 {
     public class RepositoryBuilder : IRepositoryBuilder
     {
-        private readonly CommitBuilder _commitBuilder;
+        private readonly ICommitBuilder _commitBuilder;
         private readonly ILogger<RepositoryBuilder> _logger;
         private DirectoryInfo _folder;
         private DirectoryInfo _commitFolder;
 
-        public RepositoryBuilder(CommitBuilder commitBuilder, ILogger<RepositoryBuilder> logger)
+        public RepositoryBuilder(ICommitBuilder commitBuilder, ILogger<RepositoryBuilder> logger)
         {
             _commitBuilder = commitBuilder ?? throw new ArgumentNullException(nameof(commitBuilder));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -48,7 +48,7 @@ namespace Monbsoft.EvolDB.Repository
                 var commit = _commitBuilder.Build(commitFolder);
                 repository.Commits.Add(commit);
             }
-            _logger.LogInformation("Repository is built.");
+            _logger.LogInformation($"{repository.Commits.Count} commits found.");
             return repository;
         }
 
