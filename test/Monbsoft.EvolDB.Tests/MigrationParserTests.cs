@@ -1,4 +1,5 @@
 ﻿using Monbsoft.EvolDB.Commit;
+using Monbsoft.EvolDB.Excceptions;
 using Monbsoft.EvolDB.Models;
 using Xunit;
 
@@ -32,9 +33,7 @@ namespace Monbsoft.EvolDB.Tests
         {
             var parser = new MigrationParser();
 
-            var commit = parser.Parse(migration);
-
-            Assert.Null(commit);
+            Assert.Throws<CommitException>(() => parser.Parse(migration));
         }
     }
 }
