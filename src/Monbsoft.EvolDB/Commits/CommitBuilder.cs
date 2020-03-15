@@ -7,7 +7,7 @@ using System.Text;
 using m = Monbsoft.EvolDB.Models;
 
 
-namespace Monbsoft.EvolDB.Commit
+namespace Monbsoft.EvolDB.Commits
 {
     public class CommitBuilder : ICommitBuilder
     {

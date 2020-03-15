@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Monbsoft.EvolDB.Commit
+namespace Monbsoft.EvolDB.Commits
 {
     public interface ICommitBuilder
     {

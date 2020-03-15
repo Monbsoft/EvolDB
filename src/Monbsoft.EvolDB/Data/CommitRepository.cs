@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Monbsoft.EvolDB.Repository;
+using Monbsoft.EvolDB.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Monbsoft.EvolDB.Models
+namespace Monbsoft.EvolDB.Data
 {
     public class CommitRepository : IRepository
     {
@@ -63,7 +63,7 @@ namespace Monbsoft.EvolDB.Models
             }
         }
 
-        public bool Validate(Commit commit)
+        public bool Validate(Models.Commit commit)
         {
             var max = Commits.Max(c => c.Version);
             return commit.Version > max;

@@ -1,14 +1,13 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Monbsoft.EvolDB.Commit;
+using Monbsoft.EvolDB.Commits;
 using Monbsoft.EvolDB.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
-namespace Monbsoft.EvolDB.Repository
+namespace Monbsoft.EvolDB.Data
 {
     public class RepositoryBuilder : IRepositoryBuilder
     {
@@ -42,7 +41,7 @@ namespace Monbsoft.EvolDB.Repository
             // commits
             var repository = new CommitRepository(_folder, configuration);
             repository.CommitFolder = _commitFolder;
-            repository.Commits = new List<Models.Commit>();
+            repository.Commits = new List<Commit>();
             foreach(var commitFolder in GetCommitFiles())
             {
                 var commit = _commitBuilder.Build(commitFolder);

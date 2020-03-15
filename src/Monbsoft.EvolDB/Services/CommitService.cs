@@ -1,24 +1,22 @@
 ﻿using Microsoft.Extensions.Logging;
-using Monbsoft.EvolDB.Commit;
+using Monbsoft.EvolDB.Commits;
+using Monbsoft.EvolDB.Data;
 using Monbsoft.EvolDB.Excceptions;
-using m = Monbsoft.EvolDB.Models;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace Monbsoft.EvolDB.Services
 {
     public class CommitService : ICommitService
     {
         private readonly IMigrationParser _migrationParser;
-        private readonly m.IRepository _repository;
+        private readonly IRepository _repository;
         private readonly ICommitBuilder _commitBuilder;
         private readonly ILogger<CommitService> _logger;
 
         public CommitService(
             ICommitBuilder commitBuilder,   
-            m.IRepository repository, 
+            IRepository repository, 
             IMigrationParser parser,
             ILogger<CommitService> logger)
         {

@@ -2,10 +2,9 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Monbsoft.EvolDB.Cli.Handlers;
-using Monbsoft.EvolDB.Commit;
+using Monbsoft.EvolDB.Commits;
+using Monbsoft.EvolDB.Data;
 using Monbsoft.EvolDB.Excceptions;
-using Monbsoft.EvolDB.Models;
-using Monbsoft.EvolDB.Repository;
 using Monbsoft.EvolDB.Services;
 using NLog;
 using NLog.Extensions.Logging;
@@ -14,7 +13,6 @@ using System.CommandLine;
 using System.CommandLine.Builder;
 using System.CommandLine.Hosting;
 using System.CommandLine.Invocation;
-using System.IO;
 using System.Threading.Tasks;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 

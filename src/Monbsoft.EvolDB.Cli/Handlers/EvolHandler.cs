@@ -4,11 +4,10 @@ using Couchbase.Configuration.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using m = Monbsoft.EvolDB.Models;
 using NLog;
 using System;
-using Monbsoft.EvolDB.Commit;
 using Monbsoft.EvolDB.Services;
+using Monbsoft.EvolDB.Data;
 
 namespace Monbsoft.EvolDB.Cli.Handlers
 {
@@ -30,7 +29,7 @@ namespace Monbsoft.EvolDB.Cli.Handlers
             _logger.Info($"Commit is created.");
         }
 
-        public static void TestExecute(m.IRepository repository)
+        public static void TestExecute(IRepository repository)
         {
             var configuration = repository.Configuration;
             var test = configuration.GetConnectionString("test");

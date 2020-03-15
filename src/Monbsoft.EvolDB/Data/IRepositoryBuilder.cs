@@ -1,6 +1,6 @@
 ﻿using Monbsoft.EvolDB.Models;
 
-namespace Monbsoft.EvolDB.Repository
+namespace Monbsoft.EvolDB.Data
 {
     public interface IRepositoryBuilder
     {

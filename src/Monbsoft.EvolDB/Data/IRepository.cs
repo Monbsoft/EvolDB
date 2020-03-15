@@ -1,8 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Monbsoft.EvolDB.Models;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Monbsoft.EvolDB.Models
+namespace Monbsoft.EvolDB.Data
 {
     public interface IRepository
     {
@@ -11,6 +12,6 @@ namespace Monbsoft.EvolDB.Models
         IConfigurationRoot Configuration { get; }
         string Name { get; }
 
-        bool Validate(Commit commit);
+        bool Validate(Models.Commit commit);
     }
 }

@@ -1,6 +1,6 @@
 ﻿using m = Monbsoft.EvolDB.Models;
 
-namespace Monbsoft.EvolDB.Commit
+namespace Monbsoft.EvolDB.Commits
 {
     public interface IMigrationParser
     {

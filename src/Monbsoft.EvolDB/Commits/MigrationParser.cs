@@ -3,7 +3,7 @@ using System;
 using System.Text.RegularExpressions;
 using Monbsoft.EvolDB.Excceptions;
 
-namespace Monbsoft.EvolDB.Commit
+namespace Monbsoft.EvolDB.Commits
 {
     public class MigrationParser : IMigrationParser
     {

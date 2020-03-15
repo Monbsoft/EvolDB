@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <Folder Include="Properties\" />
+    <Folder Include="Repository\" />
   </ItemGroup>
 
 </Project>
