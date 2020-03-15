@@ -13,15 +13,15 @@ namespace Monbsoft.EvolDB.Tests
         [InlineData("V12_1_2__initial.n1ql", Migration.Versioned, "12_1_2_0", "initial")]
         [InlineData("R12_1_14_0__initial.n1ql", Migration.Repeatable, "12_1_14_0", "initial")]
         [InlineData("V2.3.5__test.n1ql", Migration.Versioned, "2_3_5_0", "test")]
-        public void ParseMigration(string migration, Migration type, string version, string message)
+        public void TryParseMigration(string migration, Migration type, string version, string message)
         {
             var parser = new MigrationParser();
 
-            var token = parser.Parse(migration);
+            var parsed = parser.TryParse(migration, out Commit commit);
 
-            Assert.Equal(type, token.Migration);
-            Assert.Equal(version, token.Version.ToString());
-            Assert.Equal(message, token.Message);
+            Assert.Equal(type, commit.Migration);
+            Assert.Equal(version, commit.Version.ToString());
+            Assert.Equal(message, commit.Message);
         }
 
 
@@ -33,7 +33,7 @@ namespace Monbsoft.EvolDB.Tests
         {
             var parser = new MigrationParser();
 
-            Assert.Throws<CommitException>(() => parser.Parse(migration));
+            Assert.Throws<CommitException>(() => parser.TryParse(migration, out Commit commit));
         }
     }
 }

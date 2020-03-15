@@ -1,7 +1,7 @@
-﻿using m = Monbsoft.EvolDB.Models;
-using System;
+﻿using System;
 using System.Text.RegularExpressions;
 using Monbsoft.EvolDB.Excceptions;
+using Monbsoft.EvolDB.Models;
 
 namespace Monbsoft.EvolDB.Commits
 {
@@ -10,27 +10,29 @@ namespace Monbsoft.EvolDB.Commits
         private static Regex _migrationRegex = new Regex(
             @"^(?<prefix>[V|R])(?<version>[0-9\\._]+)__(?<message>\w+)[\\.]{1}n1ql$");
 
-        public m.Commit Parse(string migration)
+        /// <summary>
+        /// Converts the migration representation. A return value indicates whether the conversion succeeded or failed.
+        /// </summary>
+        /// <param name="migration"></param>
+        /// <param name="commit"></param>
+        /// <returns></returns>
+        public bool TryParse(string migration, out Commit commit)
         {
             var match = Match(migration);
 
-            return new m.Commit
+            if(!match.Success)
+            {
+                commit = null;
+                return false;
+            }
+            
+            commit = new Commit
             {
                 Migration = ParsePrefix(match.Groups["prefix"].Value),
                 Message = ParseMessage(match.Groups["message"].Value),
                 Version = ParseVersion(match.Groups["version"].Value),
             };
-        }
-
-        public string ParseName(string migration)
-        {
-            var match = Match(migration);
-
-            string prefix = match.Groups["prefix"].Value;
-            var version = ParseVersion(match.Groups["version"].Value);
-            string message = match.Groups["message"].Value;
-
-            return $"{prefix}{version.ToString()}__{message}.n1ql";
+            return true;
         }
 
         private Match Match(string migration)
@@ -48,15 +50,15 @@ namespace Monbsoft.EvolDB.Commits
             return message.Replace('_', ' ');
         }
 
-        private m.Migration ParsePrefix(string prefix)
+        private Migration ParsePrefix(string prefix)
         {
             switch (prefix)
             {
                 case "V":
-                    return m.Migration.Versioned;
+                    return Migration.Versioned;
 
                 case "R":
-                    return m.Migration.Repeatable;
+                    return Migration.Repeatable;
 
                 default:
                     throw new ArgumentException(

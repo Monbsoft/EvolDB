@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Monbsoft.EvolDB.Models;
+using Monbsoft.Extensions.FileProviders;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,17 +13,17 @@ namespace Monbsoft.EvolDB.Data
         #region Champs
         public const string Commit_Folder = "commits";
         public const string ConfigFile = "config.json";
-        private readonly DirectoryInfo _directory;
+        private readonly IDirectoryInfo _directory;
         private IConfigurationRoot _configuration;
         #endregion
 
         #region Constructeurs
-        public CommitRepository(DirectoryInfo folder)
+        public CommitRepository(IDirectoryInfo folder)
             : this(folder, null)
         {
         }
 
-        public CommitRepository(DirectoryInfo folder, IConfigurationRoot configuration)
+        public CommitRepository(IDirectoryInfo folder, IConfigurationRoot configuration)
         {
             _directory = folder ?? throw new ArgumentNullException(nameof(folder));
 
@@ -35,7 +36,7 @@ namespace Monbsoft.EvolDB.Data
         #endregion
 
         #region Propriétés
-        public DirectoryInfo CommitFolder { get; set; }
+        public IDirectoryInfo CommitFolder { get; set; }
         public List<Commit> Commits { get; set; }
         public IConfigurationRoot Configuration => _configuration;
         public string Name => _directory.Name;
@@ -45,7 +46,7 @@ namespace Monbsoft.EvolDB.Data
         public static void Create(string name)
         {
             var folder = new DirectoryInfo(Path.Combine(Directory.GetCurrentDirectory(), name));
-            if(!folder.Exists)
+            if (!folder.Exists)
             {
                 folder.Create();
             }
@@ -63,7 +64,12 @@ namespace Monbsoft.EvolDB.Data
             }
         }
 
-        public bool Validate(Models.Commit commit)
+        public IFileInfo CreateCommitFile(string name)
+        {
+            return PhysicalFileInfo.Create(Path.Combine(CommitFolder.PhysicalPath, name));
+        }
+
+        public bool Validate(Commit commit)
         {
             var max = Commits.Max(c => c.Version);
             return commit.Version > max;

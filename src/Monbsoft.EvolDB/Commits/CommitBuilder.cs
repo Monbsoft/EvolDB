@@ -1,10 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
+﻿
+using Microsoft.Extensions.Logging;
+using Monbsoft.EvolDB.Models;
 using Monbsoft.EvolDB.Services;
+using Monbsoft.Extensions.FileProviders;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using m = Monbsoft.EvolDB.Models;
 
 
 namespace Monbsoft.EvolDB.Commits
@@ -14,15 +13,18 @@ namespace Monbsoft.EvolDB.Commits
         private readonly ILogger<CommitBuilder> _logger;
         private readonly IMigrationParser _parser;
         private readonly IHashService _hashService;
+        private Commit _commit;
 
         public CommitBuilder(IMigrationParser parser, IHashService hashService, ILogger<CommitBuilder> logger)
         {
             _parser = parser ?? throw new ArgumentNullException(nameof(parser));
             _hashService = hashService ?? throw new ArgumentNullException(nameof(hashService));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
+            _commit = null;
         }
 
-        public m.Commit Build(FileInfo file)
+        public Commit Build(IFileInfo file)
         {
             if (file == null || !file.Exists)
             {
@@ -30,14 +32,17 @@ namespace Monbsoft.EvolDB.Commits
             }
             _logger.LogDebug($"Building commit {file.Name}...");
 
-            var commit = _parser.Parse(file.Name);
-            commit.Hash = _hashService.ComputeHash(file);
-            commit.FullName = file.FullName;
-
+            if (_parser.TryParse(file.Name, out Commit commit))
+            {
+                commit.Hash = _hashService.ComputeHash(file);
+                commit.FullName = file.PhysicalPath;
+            }
             _logger.LogDebug($"Commit {file.Name} is built.");
             return commit;
 
         }
+
+
 
 
     }

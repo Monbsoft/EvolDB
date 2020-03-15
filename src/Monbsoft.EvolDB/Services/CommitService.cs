@@ -2,6 +2,7 @@
 using Monbsoft.EvolDB.Commits;
 using Monbsoft.EvolDB.Data;
 using Monbsoft.EvolDB.Excceptions;
+using Monbsoft.EvolDB.Models;
 using System;
 using System.IO;
 
@@ -28,17 +29,22 @@ namespace Monbsoft.EvolDB.Services
 
         public void Create(string migration)
         {
-            var commit = _migrationParser.Parse(migration);
-            commit.FullName = Path.Combine(_repository.CommitFolder.FullName, commit.GetName());
+            if(!_migrationParser.TryParse(migration, out Commit commit))
+            {
+                throw new CommitException("Unable to parser the migration.");
+            }
             if(!_repository.Validate(commit))
             {
                 throw new CommitException("A higher version already exists.");
             }
-            var commitFile = new FileInfo(commit.FullName);
+
+            // créer le fichier du commit
+            var commitFile = _repository.CreateCommitFile(commit.GetName());
             if (commitFile.Exists)
             {
-                throw new CommitException($"Commit {migration} already exits.");
+                throw new CommitException($"Commit {migration} already exists.");
             }
+            commit.FullName = commitFile.PhysicalPath;
             commitFile.Create().Close();
         }
     }

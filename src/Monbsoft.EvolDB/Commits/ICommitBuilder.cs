@@ -1,9 +1,11 @@
-﻿using System.IO;
+﻿using Monbsoft.EvolDB.Models;
+using Monbsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace Monbsoft.EvolDB.Commits
 {
     public interface ICommitBuilder
     {
-        Models.Commit Build(FileInfo file);
+        Commit Build(IFileInfo file);
     }
 }

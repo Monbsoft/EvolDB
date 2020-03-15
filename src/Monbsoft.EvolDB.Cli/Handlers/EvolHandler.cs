@@ -26,7 +26,7 @@ namespace Monbsoft.EvolDB.Cli.Handlers
             _logger.Debug("Creating commit...");
             var commitService = host.Services.GetRequiredService<ICommitService>();
             commitService.Create(migration);
-            _logger.Info($"Commit is created.");
+            _logger.Info($"Commit {migration} is created.");
         }
 
         public static void TestExecute(IRepository repository)

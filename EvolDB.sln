@@ -9,7 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Monbsoft.EvolDB", "src\Monb
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{0C011063-3805-41BE-8BD9-AE4A0829BE44}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monbsoft.EvolDB.Tests", "test\Monbsoft.EvolDB.Tests\Monbsoft.EvolDB.Tests.csproj", "{1CBFBBB8-1E73-4232-8474-A22D6ED1AB6E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Monbsoft.EvolDB.Tests", "test\Monbsoft.EvolDB.Tests\Monbsoft.EvolDB.Tests.csproj", "{1CBFBBB8-1E73-4232-8474-A22D6ED1AB6E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monbsoft.Extensions.FileProviders", "src\Monbsoft.Extensions.FileProviders\Monbsoft.Extensions.FileProviders.csproj", "{7BD3A14C-9E36-4C9E-A006-1ACAA6201BA0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monbsoft.Extensions.FileProviders.Abstractions", "src\Monbsoft.Extensions.FileProviders.Abstractions\Monbsoft.Extensions.FileProviders.Abstractions.csproj", "{C843C564-2162-4327-8303-7C6DEE188555}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +33,14 @@ Global
 		{1CBFBBB8-1E73-4232-8474-A22D6ED1AB6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1CBFBBB8-1E73-4232-8474-A22D6ED1AB6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1CBFBBB8-1E73-4232-8474-A22D6ED1AB6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BD3A14C-9E36-4C9E-A006-1ACAA6201BA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BD3A14C-9E36-4C9E-A006-1ACAA6201BA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BD3A14C-9E36-4C9E-A006-1ACAA6201BA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BD3A14C-9E36-4C9E-A006-1ACAA6201BA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C843C564-2162-4327-8303-7C6DEE188555}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C843C564-2162-4327-8303-7C6DEE188555}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C843C564-2162-4327-8303-7C6DEE188555}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C843C564-2162-4327-8303-7C6DEE188555}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

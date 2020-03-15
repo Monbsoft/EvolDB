@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Monbsoft.EvolDB.Commits;
 using Monbsoft.EvolDB.Models;
+using Monbsoft.Extensions.FileProviders;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,8 +14,8 @@ namespace Monbsoft.EvolDB.Data
     {
         private readonly ICommitBuilder _commitBuilder;
         private readonly ILogger<RepositoryBuilder> _logger;
-        private DirectoryInfo _folder;
-        private DirectoryInfo _commitFolder;
+        private IDirectoryInfo _folder;
+        private IDirectoryInfo _commitFolder;
 
         public RepositoryBuilder(ICommitBuilder commitBuilder, ILogger<RepositoryBuilder> logger)
         {
@@ -25,12 +26,12 @@ namespace Monbsoft.EvolDB.Data
         public IRepository Build()
         {
             _logger.LogDebug("Building repository...");
-            _folder = new DirectoryInfo(Directory.GetCurrentDirectory());
+            _folder = PhysicalDirectoryInfo.Create(Directory.GetCurrentDirectory());
             _commitFolder = GetCommitFolder();
 
             // configuration
             IConfigurationRoot configuration = null;
-            var configFile = new FileInfo(Path.Combine(_folder.FullName, CommitRepository.ConfigFile));
+            var configFile = new FileInfo(Path.Combine(_folder.PhysicalPath, CommitRepository.ConfigFile));
             if (configFile.Exists)
             {
                 configuration = new ConfigurationBuilder()
@@ -51,14 +52,14 @@ namespace Monbsoft.EvolDB.Data
             return repository;
         }
 
-        private DirectoryInfo GetCommitFolder()
+        private IDirectoryInfo GetCommitFolder()
         {
-            return _folder.GetDirectories(CommitRepository.Commit_Folder).First();
+            return _folder.GetFolder(CommitRepository.Commit_Folder);
         }
 
-        private List<FileInfo> GetCommitFiles()
+        private IList<IFileInfo> GetCommitFiles()
         {
-            return _commitFolder.GetFiles().ToList();
+            return _commitFolder.GetFiles();
         }
     }
 }
