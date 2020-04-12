@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Monbsoft.EvolDB.Models
 {
-    public enum Migration
+    public enum Prefix
     {
         Versioned,
         Repeatable

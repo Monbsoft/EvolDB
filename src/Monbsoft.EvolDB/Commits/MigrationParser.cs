@@ -28,7 +28,7 @@ namespace Monbsoft.EvolDB.Commits
             
             commit = new Commit
             {
-                Migration = ParsePrefix(match.Groups["prefix"].Value),
+                Prefix = ParsePrefix(match.Groups["prefix"].Value),
                 Message = ParseMessage(match.Groups["message"].Value),
                 Version = ParseVersion(match.Groups["version"].Value),
             };
@@ -50,15 +50,15 @@ namespace Monbsoft.EvolDB.Commits
             return message.Replace('_', ' ');
         }
 
-        private Migration ParsePrefix(string prefix)
+        private Prefix ParsePrefix(string prefix)
         {
             switch (prefix)
             {
                 case "V":
-                    return Migration.Versioned;
+                    return Prefix.Versioned;
 
                 case "R":
-                    return Migration.Repeatable;
+                    return Prefix.Repeatable;
 
                 default:
                     throw new ArgumentException(

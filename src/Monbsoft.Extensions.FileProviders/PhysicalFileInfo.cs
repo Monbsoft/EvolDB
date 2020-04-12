@@ -9,9 +9,14 @@ namespace Monbsoft.Extensions.FileProviders
         #endregion
 
         #region Constructeurs
-        public PhysicalFileInfo(FileInfo info)
+        public PhysicalFileInfo(string path)
         {
-            _info = info;
+            _info = new FileInfo(path);
+        }
+
+        public PhysicalFileInfo(FileInfo fileInfo)
+        {
+            _info = fileInfo;
         }
         #endregion
 
@@ -22,32 +27,24 @@ namespace Monbsoft.Extensions.FileProviders
         public bool Exists => _info.Exists;
 
         /// <summary>
+        /// Gets the full path of the file.
+        /// </summary>
+        public string FullName => _info.FullName;
+        /// <summary>
         /// Gets the name of the file.
         /// </summary>
         public string Name => _info.Name;
-
-        /// <summary>
-        /// Gets the full path of the file.
-        /// </summary>
-        public string PhysicalPath => _info.FullName;
         #endregion
 
         #region Méthodes
         /// <summary>
-        /// Creates a new file.
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public static IFileInfo Create(string path)
-        {
-            return new PhysicalFileInfo(new FileInfo(path));
-        }
-
-        /// <summary>
         /// Creates a file.
         /// </summary>
         /// <returns></returns>
-        public FileStream Create() => _info.Create();
+        public FileStream Create()
+        {
+            return _info.Create();
+        }
 
         /// <summary>
         /// Creates a read-only stream.

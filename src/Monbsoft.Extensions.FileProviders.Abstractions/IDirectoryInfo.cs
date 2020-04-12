@@ -20,11 +20,11 @@ namespace Monbsoft.Extensions.FileProviders
         string PhysicalPath { get; }
 
         /// <summary>
-        /// Creates a new file on the specified name.
+        /// Creates a directory.
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="path"></param>
         /// <returns></returns>
-        IFileInfo CreateFile(string name);
+        void Create();
 
         /// <summary>
         /// Gets the file list fo the current directory.

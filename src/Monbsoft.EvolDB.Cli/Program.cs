@@ -1,11 +1,13 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Monbsoft.EvolDB.Cli.Handlers;
+using Monbsoft.EvolDB.Cli.Commands;
 using Monbsoft.EvolDB.Commits;
-using Monbsoft.EvolDB.Data;
 using Monbsoft.EvolDB.Exceptions;
+using Monbsoft.EvolDB.Models;
+using Monbsoft.EvolDB.Repositories;
 using Monbsoft.EvolDB.Services;
+using Monbsoft.Extensions.FileProviders;
 using NLog;
 using NLog.Extensions.Logging;
 using System;
@@ -27,41 +29,13 @@ namespace Monbsoft.EvolDB.Cli
             var rootCommand = new RootCommand();
             rootCommand.Description = "EvolDB is a simple database migration tool for .Net Core.";
 
-            // commande init
-            var initCommand = new Command("init");
-            initCommand.Description = "Create a migration repository";
-            initCommand.Handler = CommandHandler.Create<string>(name =>
-            {
-                logger.Debug("Creating repository...");
-                CommitRepository.Create(name);
-                logger.Info($"Repository {name} is created.");
-            });
-            initCommand.AddArgument(new Argument<string>("name"));
-            rootCommand.AddCommand(initCommand);
-
-            // commande commit
-            var commitCommand = new Command("commit");
-            commitCommand.Description = "Create a commit";
-            commitCommand.AddArgument(new Argument<string>("migration"));
-            commitCommand.Handler = CommandHandler.Create<string, IHost>(EvolHandler.CommitExecute);
-            rootCommand.AddCommand(commitCommand);
-
-            // commande push
-            var pushCommand = new Command("push");
-            pushCommand.Description = "Update remote commits using local commits";
-            pushCommand.Handler = CommandHandler.Create<IHost>(EvolHandler.PushExecute);
-            rootCommand.AddCommand(pushCommand);
-
-
-            // commande test
-            var testCommand = new Command("test");
-            testCommand.Description = "Test a commit";
-            testCommand.Handler = CommandHandler.Create<IRepository>(EvolHandler.TestExecute);
-            rootCommand.AddCommand(testCommand);
             try
             {
 
-                var parser = new CommandLineBuilder(rootCommand)
+                var parser = new CommandLineBuilder(rootCommand)                   
+                    .AddCommand(InitCommand.Create())
+                    .AddCommand(CommitCommand.Create())
+                    .AddCommand(PushCommand.Create())
                     .UseHost(host =>
                     {
                         host.ConfigureLogging((context, loggingBuilder) =>
@@ -72,15 +46,17 @@ namespace Monbsoft.EvolDB.Cli
                         });
                         host.ConfigureServices(services =>
                         {
+                            services.AddSingleton<IFileService, PhysicaFileService>();
                             services.AddSingleton<IHashService, HashService>();
                             services.AddSingleton<IMigrationParser, MigrationParser>();
                             services.AddSingleton<IRepositoryBuilder, RepositoryBuilder>();
                             services.AddSingleton<ICommitBuilder, CommitBuilder>();
                             services.AddSingleton<ICommitService, CommitService>();
-                            services.AddSingleton<IRepository, CommitRepository>(services =>
+                            services.AddSingleton<IRepositoryService, RepositoryService>();
+                            services.AddSingleton<Repository>(services =>
                             {
                                 var builder = services.GetRequiredService<IRepositoryBuilder>();
-                                return (CommitRepository)builder.Build();
+                                return builder.Build();
                             });
 
 

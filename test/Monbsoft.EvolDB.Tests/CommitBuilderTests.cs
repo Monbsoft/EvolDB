@@ -24,7 +24,7 @@ namespace Monbsoft.EvolDB.Tests
             var commit = builder.Build(mockFile.Object);
 
             Assert.Equal("init", commit.Message);
-            Assert.Equal(Migration.Versioned, commit.Migration);
+            Assert.Equal(Prefix.Versioned, commit.Prefix);
             Assert.Equal(new CommitVersion(1, 0, 0, 0), commit.Version);
         }
     }

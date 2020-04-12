@@ -113,11 +113,11 @@ namespace Monbsoft.EvolDB
         }
         public static CommitVersion Parse(string input)
         {
-            if(string.IsNullOrEmpty(input))
+            if (string.IsNullOrEmpty(input))
             {
                 throw new ArgumentNullException(nameof(input));
             }
-            CommitVersion version = null;
+            CommitVersion version;
             if (!TryParse(input, out version))
             {
                 throw new ArgumentOutOfRangeException("version");
@@ -127,36 +127,36 @@ namespace Monbsoft.EvolDB
 
         public static bool TryParse(string version, out CommitVersion result)
         {
-            int major = 0, minor = 0, patch = 0, revision = 0;
+            int major, minor, patch = 0, revision = 0;
             result = null;
 
             var parsedComponents = version.Split(SeparatorArray);
             int length = parsedComponents.Length;
-            if((length < 2) || (length > 4))
+            if ((length < 2) || (length > 4))
             {
                 result = null;
                 return false;
             }
 
-            if(!TryParseComponent(parsedComponents[0], out major))
+            if (!TryParseComponent(parsedComponents[0], out major))
             {
                 return false;
             }
-            if(!TryParseComponent(parsedComponents[1], out minor))
+            if (!TryParseComponent(parsedComponents[1], out minor))
             {
                 return false;
             }
             length -= 2;
-            if(length >  0)
+            if (length > 0)
             {
-                if(!TryParseComponent(parsedComponents[2], out patch))
+                if (!TryParseComponent(parsedComponents[2], out patch))
                 {
                     return false;
                 }
                 length--;
-                if(length > 0)
+                if (length > 0)
                 {
-                    if(!TryParseComponent(parsedComponents[3], out revision))
+                    if (!TryParseComponent(parsedComponents[3], out revision))
                     {
                         return false;
                     }

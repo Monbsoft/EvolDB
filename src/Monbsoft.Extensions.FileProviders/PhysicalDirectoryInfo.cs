@@ -14,9 +14,14 @@ namespace Monbsoft.Extensions.FileProviders
         #endregion
 
         #region Constructeurs
-        public PhysicalDirectoryInfo(DirectoryInfo info)
+        public PhysicalDirectoryInfo(string path)
         {
-            _info = info;
+            _info = new DirectoryInfo(path);          
+        }
+
+        public PhysicalDirectoryInfo(DirectoryInfo directoryInfo)
+        {
+            _info = directoryInfo;
         }
         #endregion
 
@@ -39,23 +44,11 @@ namespace Monbsoft.Extensions.FileProviders
 
         #region Méthodes
         /// <summary>
-        /// Creates a new instance on the specified path.
+        /// Creates a directory.
         /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public static IDirectoryInfo Create(string path)
+        public void Create()
         {
-            return new PhysicalDirectoryInfo(new DirectoryInfo(path));
-        }
-
-        /// <summary>
-        /// Creates a new file on the specified name.
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public IFileInfo CreateFile(string name)
-        {
-            return PhysicalFileInfo.Create(Path.Combine(_info.FullName, name));
+            _info.Create();
         }
 
         /// <summary>

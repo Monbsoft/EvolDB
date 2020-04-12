@@ -2,8 +2,8 @@
   "profiles": {
     "Monbsoft.EvolDB.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "init mydata",
-      "workingDirectory": "D:\\Users\\Oliver254\\tmp"
+      "commandLineArgs": "commit V1_0_0__Initial.n1ql",
+      "workingDirectory": "D:\\Users\\Oliver254\\tmp\\mydata"
     }
   }
 }

@@ -13,15 +13,12 @@ namespace Monbsoft.EvolDB.Commits
         private readonly ILogger<CommitBuilder> _logger;
         private readonly IMigrationParser _parser;
         private readonly IHashService _hashService;
-        private Commit _commit;
 
         public CommitBuilder(IMigrationParser parser, IHashService hashService, ILogger<CommitBuilder> logger)
         {
             _parser = parser ?? throw new ArgumentNullException(nameof(parser));
             _hashService = hashService ?? throw new ArgumentNullException(nameof(hashService));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-
-            _commit = null;
         }
 
         public Commit Build(IFileInfo file)
@@ -35,7 +32,7 @@ namespace Monbsoft.EvolDB.Commits
             if (_parser.TryParse(file.Name, out Commit commit))
             {
                 commit.Hash = _hashService.ComputeHash(file);
-                commit.FullName = file.PhysicalPath;
+                commit.FullName = file.FullName;
             }
             _logger.LogDebug($"Commit {file.Name} is built.");
             return commit;

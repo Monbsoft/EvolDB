@@ -8,28 +8,29 @@ namespace Monbsoft.EvolDB.Models
         public string FullName { get; set; }
         public string Hash { get; set; }
         public string Message { get; set; }
-        public Migration Migration { get; set; }
+        public Prefix Prefix { get; set; }
+        public Repository Repository { get; internal set; }
         public CommitVersion Version { get; set; }
 
-        public string GetName()
+        public string ToName()
         {
             StringBuilder sb = new StringBuilder();
             
-            switch(Migration)
+            switch(Prefix)
             {
-                case Migration.Versioned:
+                case Prefix.Versioned:
                     {
                         sb.Append("V");
                         break;
                     }
-                case Migration.Repeatable:
+                case Prefix.Repeatable:
                     {
                         sb.Append("R");
                         break;
                     }
                 default:
                     {
-                        throw new InvalidCastException(nameof(Migration));
+                        throw new InvalidCastException(nameof(Prefix));
                     }
             }
 
