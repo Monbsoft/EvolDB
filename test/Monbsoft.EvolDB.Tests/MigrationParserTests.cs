@@ -1,5 +1,5 @@
 ﻿using Monbsoft.EvolDB.Commits;
-using Monbsoft.EvolDB.Excceptions;
+using Monbsoft.EvolDB.Exceptions;
 using Monbsoft.EvolDB.Models;
 using Xunit;
 

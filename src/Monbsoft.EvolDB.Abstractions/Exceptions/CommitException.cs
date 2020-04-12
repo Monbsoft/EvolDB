@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Monbsoft.EvolDB.Excceptions
+namespace Monbsoft.EvolDB.Exceptions
 {
     public class CommitException : Exception
     {

@@ -29,6 +29,14 @@ namespace Monbsoft.EvolDB.Cli.Handlers
             _logger.Info($"Commit {migration} is created.");
         }
 
+        public static void PushExecute(IHost host)
+        {
+            _logger.Debug("Pushing commits...");
+            var repository = host.Services.GetService<IRepository>();
+
+            _logger.Info($"Commits are pushed.");
+        }
+
         public static void TestExecute(IRepository repository)
         {
             var configuration = repository.Configuration;

@@ -15,10 +15,10 @@
 
   <ItemGroup>
     <Folder Include="Properties\" />
-    <Folder Include="Repository\" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Monbsoft.EvolDB.Abstractions\Monbsoft.EvolDB.Abstractions.csproj" />
     <ProjectReference Include="..\Monbsoft.Extensions.FileProviders\Monbsoft.Extensions.FileProviders.csproj" />
   </ItemGroup>
 

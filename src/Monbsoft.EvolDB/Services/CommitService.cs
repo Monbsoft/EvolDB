@@ -1,10 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
 using Monbsoft.EvolDB.Commits;
 using Monbsoft.EvolDB.Data;
-using Monbsoft.EvolDB.Excceptions;
+using Monbsoft.EvolDB.Exceptions;
 using Monbsoft.EvolDB.Models;
 using System;
-using System.IO;
 
 namespace Monbsoft.EvolDB.Services
 {

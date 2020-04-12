@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using Monbsoft.EvolDB.Excceptions;
+using Monbsoft.EvolDB.Exceptions;
 using Monbsoft.EvolDB.Models;
 
 namespace Monbsoft.EvolDB.Commits

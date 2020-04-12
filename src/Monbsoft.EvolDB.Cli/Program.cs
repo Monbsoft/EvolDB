@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using Monbsoft.EvolDB.Cli.Handlers;
 using Monbsoft.EvolDB.Commits;
 using Monbsoft.EvolDB.Data;
-using Monbsoft.EvolDB.Excceptions;
+using Monbsoft.EvolDB.Exceptions;
 using Monbsoft.EvolDB.Services;
 using NLog;
 using NLog.Extensions.Logging;
@@ -45,6 +45,12 @@ namespace Monbsoft.EvolDB.Cli
             commitCommand.AddArgument(new Argument<string>("migration"));
             commitCommand.Handler = CommandHandler.Create<string, IHost>(EvolHandler.CommitExecute);
             rootCommand.AddCommand(commitCommand);
+
+            // commande push
+            var pushCommand = new Command("push");
+            pushCommand.Description = "Update remote commits using local commits";
+            pushCommand.Handler = CommandHandler.Create<IHost>(EvolHandler.PushExecute);
+            rootCommand.AddCommand(pushCommand);
 
 
             // commande test
