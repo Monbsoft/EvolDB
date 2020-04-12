@@ -23,5 +23,4 @@ steps:
   inputs:
     command: 'test'
     projects: 'test/**/*.csproj'
-    arguments: '--logger trx --results-directory $(Agent.TempDirectory)  --collect "Code coverage"'
     testRunTitle: 'Tests'
