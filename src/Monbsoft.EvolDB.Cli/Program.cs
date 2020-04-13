@@ -2,7 +2,9 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Monbsoft.EvolDB.Cli.Commands;
+using Monbsoft.EvolDB.Cli.Data;
 using Monbsoft.EvolDB.Commits;
+using Monbsoft.EvolDB.Data;
 using Monbsoft.EvolDB.Exceptions;
 using Monbsoft.EvolDB.Models;
 using Monbsoft.EvolDB.Repositories;
@@ -26,7 +28,7 @@ namespace Monbsoft.EvolDB.Cli
         {
             var logger = LogManager.GetCurrentClassLogger();
 
-            var rootCommand = new RootCommand();
+            var rootCommand = new RootCommand();           
             rootCommand.Description = "EvolDB is a simple database migration tool for .Net Core.";
 
             try
@@ -36,6 +38,7 @@ namespace Monbsoft.EvolDB.Cli
                     .AddCommand(InitCommand.Create())
                     .AddCommand(CommitCommand.Create())
                     .AddCommand(PushCommand.Create())
+                    .AddCommand(StatusCommand.Create())
                     .UseHost(host =>
                     {
                         host.ConfigureLogging((context, loggingBuilder) =>
@@ -47,16 +50,23 @@ namespace Monbsoft.EvolDB.Cli
                         host.ConfigureServices(services =>
                         {
                             services.AddSingleton<IFileService, PhysicaFileService>();
-                            services.AddSingleton<IHashService, HashService>();
                             services.AddSingleton<IMigrationParser, MigrationParser>();
                             services.AddSingleton<IRepositoryBuilder, RepositoryBuilder>();
                             services.AddSingleton<ICommitBuilder, CommitBuilder>();
+                            services.AddSingleton<GatewayFactory>();
+                            services.AddSingleton<IHashService, HashService>();
                             services.AddSingleton<ICommitService, CommitService>();
                             services.AddSingleton<IRepositoryService, RepositoryService>();
                             services.AddSingleton<Repository>(services =>
-                            {
+                            {                               
                                 var builder = services.GetRequiredService<IRepositoryBuilder>();
                                 return builder.Build();
+                            });
+                            services.AddSingleton<IDatabaseGateway>(services =>
+                            {
+                                var factory = services.GetRequiredService<GatewayFactory>();
+                                return factory.CreateGateway();
+
                             });
 
 

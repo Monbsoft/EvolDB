@@ -28,7 +28,7 @@ namespace Monbsoft.EvolDB.Services
             }
             // créer l'arborescence
             folder.CreateSubdirectory(Repository.Commit_Folder);
-            FileInfo configFile = new FileInfo(Path.Combine(folder.FullName, Repository.ConfigFile));
+            FileInfo configFile = new FileInfo(Path.Combine(folder.FullName, Repository.Config_File));
             using (var sw = configFile.CreateText())
             {
                 sw.WriteLine("{");

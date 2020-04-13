@@ -10,8 +10,8 @@ namespace Monbsoft.EvolDB.Models
     public class Repository
     {
         public const string Commit_Folder = "commits";
-        public const string ConfigFile = "config.json";     
-
+        public const string Config_File = "config.json";
+        public const string Connection_Type = "ConnectionType";
 
         public Repository(IDirectoryInfo folder, IConfigurationRoot configuration)
         {
@@ -21,17 +21,19 @@ namespace Monbsoft.EvolDB.Models
                 throw new DirectoryNotFoundException(nameof(RootFolder));
             }
             CommitFolder = RootFolder.GetFolder(Commit_Folder);
-            if(!CommitFolder.Exists)
+            if (!CommitFolder.Exists)
             {
                 throw new DirectoryNotFoundException(nameof(CommitFolder));
             }
             Configuration = configuration;
+            ConnectionType = configuration[Connection_Type]?.ToUpperInvariant();
             Commits = new CommitCollection(this);
         }
 
         public IDirectoryInfo CommitFolder { get; }
         public CommitCollection Commits { get; }
         public IConfigurationRoot Configuration { get; }
+        public string ConnectionType { get; }
         public string Name => RootFolder.Name;
         public IDirectoryInfo RootFolder { get; }
 

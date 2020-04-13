@@ -60,7 +60,9 @@ namespace Monbsoft.EvolDB.Services
 
         public bool IsValid(Repository repository, Commit commit)
         {
-            var max = repository.Commits.Max(c => c.Version);
+            var max = repository.Commits
+                .Where(c => c.Prefix == commit.Prefix)
+                .Max(c => c.Version);
             return commit.Version > max;
         }
 

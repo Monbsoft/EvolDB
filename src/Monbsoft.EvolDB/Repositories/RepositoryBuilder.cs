@@ -34,7 +34,7 @@ namespace Monbsoft.EvolDB.Repositories
 
             // configuration
             IConfigurationRoot configuration = null;
-            var configFile = _fileService.CreateFile(Path.Combine(rootFolder.PhysicalPath, Repository.ConfigFile));
+            var configFile = _fileService.CreateFile(Path.Combine(rootFolder.PhysicalPath, Repository.Config_File));
             if (configFile.Exists)
             {
                 configuration = new ConfigurationBuilder()
