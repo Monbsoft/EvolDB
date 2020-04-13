@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Hosting;
 using Monbsoft.EvolDB.Data;
 using Monbsoft.EvolDB.Models;
-using Monbsoft.EvolDB.Repositories;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.Threading.Tasks;

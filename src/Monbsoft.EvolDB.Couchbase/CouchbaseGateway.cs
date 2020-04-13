@@ -1,5 +1,6 @@
 ﻿using Couchbase;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Monbsoft.EvolDB.Data;
 using System;
 using System.Threading.Tasks;
@@ -8,22 +9,18 @@ namespace Monbsoft.EvolDB.Couchbase
 {
     public class CouchbaseGateway : IDatabaseGateway
     {
-        public const string Couchbase_Uri = "COUCHBASE_URI";
-        public const string Couchbase_Username = "COUCHBASE_USERNAME";
-        public const string Couchbase_Password = "COUCHBASE_PASSWORD";
-        public const string Couchbase_Bucket = "COUCHBASE_BUCKET";
-        private bool _disposed = false;
-        private ICluster _cluster;
+        public const string COUCHBASE_BUCKET = "COUCHBASE_BUCKET";
+        public const string COUCHBASE_CONNECTIONSTRING = "COUCHBASE_CONNECTIONSTRING";
+        public const string COUCHBASE_PASSWORD = "COUCHBASE_PASSWORD";
+        public const string COUCHBASE_USERNAME = "COUCHBASE_USERNAME";
+        private readonly ILogger<CouchbaseGateway> _logger;
         private IBucket _bucket;
+        private ICluster _cluster;
+        private bool _disposed = false;
 
-        public async Task OpenAsync(IConfigurationRoot configuration)
+        public CouchbaseGateway(ILogger<CouchbaseGateway> logger)
         {
-            var cluster = await Cluster.ConnectAsync(
-                configuration.GetValue<string>(Couchbase_Uri),
-                configuration.GetValue<string>(Couchbase_Username),
-                configuration.GetValue<string>(Couchbase_Password));
-
-            _bucket = await cluster.BucketAsync(configuration.GetValue<string>(Couchbase_Bucket));
+            _logger = logger;
         }
 
         public void Dispose()
@@ -31,7 +28,19 @@ namespace Monbsoft.EvolDB.Couchbase
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+        public async Task OpenAsync(IConfigurationRoot configuration)
+        {
+            _logger.LogDebug("Opening couchbase...");
+            var options = new ClusterOptions()
+                .WithConnectionString(configuration.GetValue<string>(COUCHBASE_CONNECTIONSTRING))
+                .WithCredentials(configuration.GetValue<string>(COUCHBASE_USERNAME), configuration.GetValue<string>(COUCHBASE_PASSWORD));
 
+            _cluster = await Cluster.ConnectAsync(options);
+            _logger.LogDebug($"Cluster {options.ConnectionString} is connected.");
+
+            _bucket = await _cluster.BucketAsync(configuration.GetValue<string>(COUCHBASE_BUCKET));
+            _logger.LogDebug($"Bucket {_bucket.Name} is opened.");
+        }
         protected virtual void Dispose(bool disposing)
         {
             if (_disposed)
@@ -47,6 +56,5 @@ namespace Monbsoft.EvolDB.Couchbase
 
             _disposed = true;
         }
-
     }
 }

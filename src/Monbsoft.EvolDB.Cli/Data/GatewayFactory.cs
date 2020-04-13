@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Monbsoft.EvolDB.Couchbase;
 using Monbsoft.EvolDB.Data;
 using Monbsoft.EvolDB.Models;
@@ -10,11 +11,13 @@ namespace Monbsoft.EvolDB.Cli.Data
 {
     public class GatewayFactory
     {
+        private readonly ILoggerFactory _loggerFactory;
         private readonly Repository _repository;
 
-        public GatewayFactory(Repository repository)
+        public GatewayFactory(Repository repository, ILoggerFactory loggerFactory)
         {
             _repository = repository;
+            _loggerFactory = loggerFactory;
         }
 
         public IDatabaseGateway CreateGateway()
@@ -30,7 +33,7 @@ namespace Monbsoft.EvolDB.Cli.Data
             {
                 case "COUCHBASE":
                     {
-                        gateway = new CouchbaseGateway();
+                        gateway = new CouchbaseGateway(_loggerFactory.CreateLogger<CouchbaseGateway>());
                         break;
                     }
                 default:
