@@ -33,7 +33,8 @@ namespace Monbsoft.EvolDB.Cli.Data
             {
                 case "COUCHBASE":
                     {
-                        gateway = new CouchbaseGateway(_loggerFactory.CreateLogger<CouchbaseGateway>());
+                        var config = new CouchbaseConfig(_repository.Configuration);
+                        gateway = new CouchbaseGateway(config, _loggerFactory.CreateLogger<CouchbaseGateway>());
                         break;
                     }
                 default:
