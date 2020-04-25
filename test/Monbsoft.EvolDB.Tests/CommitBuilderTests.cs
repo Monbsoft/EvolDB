@@ -19,7 +19,7 @@ namespace Monbsoft.EvolDB.Tests
             mockFile.SetupGet(f => f.Exists).Returns(true);
             var mockHashService = new Mock<IHashService>();
             mockHashService.Setup(hs => hs.ComputeHash(It.IsAny<IFileInfo>())).Returns("hash");
-            var builder = new CommitBuilder(new MigrationParser(), mockHashService.Object, NullLogger<CommitBuilder>.Instance);
+            var builder = new CommitBuilder(new ReferenceParser(), mockHashService.Object, NullLogger<CommitBuilder>.Instance);
 
             var commit = builder.Build(mockFile.Object);
 

@@ -11,10 +11,10 @@ namespace Monbsoft.EvolDB.Commits
     public class CommitBuilder : ICommitBuilder
     {
         private readonly ILogger<CommitBuilder> _logger;
-        private readonly IMigrationParser _parser;
+        private readonly IReferenceParser _parser;
         private readonly IHashService _hashService;
 
-        public CommitBuilder(IMigrationParser parser, IHashService hashService, ILogger<CommitBuilder> logger)
+        public CommitBuilder(IReferenceParser parser, IHashService hashService, ILogger<CommitBuilder> logger)
         {
             _parser = parser ?? throw new ArgumentNullException(nameof(parser));
             _hashService = hashService ?? throw new ArgumentNullException(nameof(hashService));

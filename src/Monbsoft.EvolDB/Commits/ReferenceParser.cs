@@ -5,20 +5,20 @@ using Monbsoft.EvolDB.Models;
 
 namespace Monbsoft.EvolDB.Commits
 {
-    public class MigrationParser : IMigrationParser
+    public class ReferenceParser : IReferenceParser
     {
-        private static Regex _migrationRegex = new Regex(
+        private static Regex _referenceRegex = new Regex(
             @"^(?<prefix>[V|R])(?<version>[0-9\\._]+)__(?<message>\w+)[\\.]{1}n1ql$");
 
         /// <summary>
-        /// Converts the migration representation. A return value indicates whether the conversion succeeded or failed.
+        /// Converts the commit reference. A return value indicates whether the conversion succeeded or failed.
         /// </summary>
-        /// <param name="migration"></param>
+        /// <param name="reference"></param>
         /// <param name="commit"></param>
         /// <returns></returns>
-        public bool TryParse(string migration, out Commit commit)
+        public bool TryParse(string reference, out Commit commit)
         {
-            var match = Match(migration);
+            var match = Match(reference);
 
             if(!match.Success)
             {
@@ -35,9 +35,9 @@ namespace Monbsoft.EvolDB.Commits
             return true;
         }
 
-        private Match Match(string migration)
+        private Match Match(string reference)
         {
-            var match = _migrationRegex.Match(migration.Trim());
+            var match = _referenceRegex.Match(reference.Trim());
             if (match == null || match.Groups.Count < 4 || match.Groups.Count > 4)
             {
                 throw new CommitException("Migration name is invalid.");

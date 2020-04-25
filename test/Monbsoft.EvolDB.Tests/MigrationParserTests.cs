@@ -15,7 +15,7 @@ namespace Monbsoft.EvolDB.Tests
         [InlineData("V2.3.5__test.n1ql", Prefix.Versioned, "2_3_5_0", "test")]
         public void TryParseMigration(string migration, Prefix type, string version, string message)
         {
-            var parser = new MigrationParser();
+            var parser = new ReferenceParser();
 
             var parsed = parser.TryParse(migration, out Commit commit);
 
@@ -31,7 +31,7 @@ namespace Monbsoft.EvolDB.Tests
         [InlineData("V1_0_0_2__.n1ql")]
         public void ParseFakeMigration(string migration)
         {
-            var parser = new MigrationParser();
+            var parser = new ReferenceParser();
 
             Assert.Throws<CommitException>(() => parser.TryParse(migration, out Commit commit));
         }
