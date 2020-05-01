@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 
 namespace Monbsoft.Extensions.FileProviders
 {
@@ -21,6 +22,13 @@ namespace Monbsoft.Extensions.FileProviders
         /// </summary>
         /// <returns></returns>
         FileStream Create();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        List<string> ReadLines(string path);
 
         /// <summary>
         /// Creates a read-only stream.

@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Monbsoft.EvolDB.Data;
 using Monbsoft.EvolDB.Models;
+using Monbsoft.EvolDB.Services;
 using System;
 using System.Collections.Generic;
 using System.CommandLine;
@@ -16,11 +17,13 @@ namespace Monbsoft.EvolDB.Cli.Commands
     {
         private readonly IDatabaseGateway _databaseGateway;
         private readonly Repository _repository;
+        private readonly IDifferenceService _differenceService;
 
-        public PushCommand(IDatabaseGateway gateway, Repository repository)
+        public PushCommand(IDatabaseGateway gateway, Repository repository, IDifferenceService differenceService)
         {
             _databaseGateway = gateway;
             _repository = repository;
+            _differenceService = differenceService;
         }
 
         public static Command Create()
@@ -33,7 +36,9 @@ namespace Monbsoft.EvolDB.Cli.Commands
             {
                 var gateway  = host.Services.GetRequiredService<IDatabaseGateway>();
                 var repository = host.Services.GetRequiredService<Repository>();
-                var pushCommand = new PushCommand(gateway, repository);
+                var diffService = host.Services.GetRequiredService<IDifferenceService>();
+              
+                var pushCommand = new PushCommand(gateway, repository, diffService);
                 await pushCommand.ExecuteAsync();
 
             });
@@ -45,6 +50,7 @@ namespace Monbsoft.EvolDB.Cli.Commands
         {
             await _databaseGateway.OpenAsync();
             var commits = await _databaseGateway.GetCommitsAsync();
+
         }
     }
 }

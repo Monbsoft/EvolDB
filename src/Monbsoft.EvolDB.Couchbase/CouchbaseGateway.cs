@@ -51,6 +51,12 @@ namespace Monbsoft.EvolDB.Couchbase
 
             return await commits.Rows.ToListAsync();
         }
+
+        public void ExecuteAsync(Commit commit)
+        {
+
+        }
+
         protected virtual void Dispose(bool disposing)
         {
             if (_disposed)

@@ -43,7 +43,7 @@ namespace Monbsoft.EvolDB.Services
             {
                 throw new CommitException("Unable to parser the reference.");
             }
-            if(!IsValid(_repository, commit))
+            if(_repository.ValidateCommit(commit))
             {
                 throw new CommitException("A higher version already exists.");
             }
@@ -59,29 +59,12 @@ namespace Monbsoft.EvolDB.Services
             _logger.LogDebug($"Commit {reference} is created.");
         }
 
-        /// <summary>
-        /// Validates the specified commit with the repository.
-        /// </summary>
-        /// <param name="repository"></param>
-        /// <param name="commit"></param>
-        /// <returns></returns>
-        public bool IsValid(Repository repository, Commit commit)
-        {
-            var max = repository.Commits
-                .Where(c => c.Prefix == commit.Prefix)
-                .Max(c => c.Version);
-            return commit.Version > max;
-        }
 
         private IFileInfo CreateCommitFile(Repository repository, Commit commit)
         {
-            string path = Path.Combine(repository.CommitFolder.PhysicalPath, commit.ToName());
+            string path = Path.Combine(repository.CommitFolder.PhysicalPath, commit.ToReference());
             return _fileService.CreateFile(path);
         }
 
-        private void Compare(Repository repository, List<Commit> commits)
-        {
-
-        }
     }
 }

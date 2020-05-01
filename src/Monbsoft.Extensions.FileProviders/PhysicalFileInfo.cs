@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 
 namespace Monbsoft.Extensions.FileProviders
 {
@@ -54,6 +55,20 @@ namespace Monbsoft.Extensions.FileProviders
         /// <exception cref="DirectoryNotFoundException"></exception>
         /// <exception cref="IOException"></exception>
         public FileStream OpenRead() => _info.OpenRead();
+
+        public List<string> ReadLines(string path)
+        {
+            var lines = new List<string>();
+            string line;
+            using (var reader = new StreamReader(path))
+            {
+                while ((line = reader.ReadLine()) != null)
+                {
+                    lines.Add(line.Trim());
+                }
+            }
+            return lines;
+        }
         #endregion
     }
 }

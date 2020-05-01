@@ -40,7 +40,7 @@ namespace Monbsoft.EvolDB.Commits
             var match = _referenceRegex.Match(reference.Trim());
             if (match == null || match.Groups.Count < 4 || match.Groups.Count > 4)
             {
-                throw new CommitException("Migration name is invalid.");
+                throw new CommitException("Commit reference is invalid.");
             }
             return match;
         }
@@ -62,7 +62,7 @@ namespace Monbsoft.EvolDB.Commits
 
                 default:
                     throw new ArgumentException(
-                        message: "Migration is not recognized.",
+                        message: "Reference prefix is not recognized.",
                         paramName: nameof(prefix));
             }
         }

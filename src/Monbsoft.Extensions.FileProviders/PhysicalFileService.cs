@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.IO;
 
 namespace Monbsoft.Extensions.FileProviders
 {
-    public class PhysicaFileService : IFileService
+    public class PhysicalFileService : IFileService
     {
-
         public IDirectoryInfo CreateFolder(string path)
         {
             return new PhysicalDirectoryInfo(path);
@@ -16,5 +14,7 @@ namespace Monbsoft.Extensions.FileProviders
         {
             return new PhysicalFileInfo(path);
         }
+
+
     }
 }

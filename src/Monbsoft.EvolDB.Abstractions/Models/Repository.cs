@@ -4,6 +4,7 @@ using Monbsoft.Extensions.FileProviders;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Monbsoft.EvolDB.Models
 {
@@ -40,6 +41,20 @@ namespace Monbsoft.EvolDB.Models
         public IList<IFileInfo> GetCommitFiles()
         {
             return CommitFolder.GetFiles();
+        }
+
+        /// <summary>
+        /// Validates the specified commit.
+        /// </summary>
+        /// <param name="repository"></param>
+        /// <param name="commit"></param>
+        /// <returns></returns>
+        public bool ValidateCommit( Commit commit)
+        {
+            var max = Commits
+                .Where(c => c.Prefix == commit.Prefix)
+                .Max(c => c.Version);
+            return commit.Version > max;
         }
     }
 }

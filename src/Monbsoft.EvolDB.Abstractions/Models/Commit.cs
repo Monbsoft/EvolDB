@@ -12,7 +12,7 @@ namespace Monbsoft.EvolDB.Models
         public Repository Repository { get; internal set; }
         public CommitVersion Version { get; set; }
 
-        public string ToName()
+        public string ToReference()
         {
             StringBuilder sb = new StringBuilder();
             
