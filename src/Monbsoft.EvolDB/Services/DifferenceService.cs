@@ -31,9 +31,10 @@ namespace Monbsoft.EvolDB.Services
 
 
                 var commitMeta = metadata.FirstOrDefault(cm => cm.Hash == commit.Hash);
-                result.IsTarget = commitMeta != null;
-                if (metadata != null)
+               
+                if (commitMeta != null)
                 {
+                    result.IsTarget = commitMeta != null;
                     metadata.Remove(commitMeta);
                 }
 

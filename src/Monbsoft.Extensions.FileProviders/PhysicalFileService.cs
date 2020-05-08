@@ -5,12 +5,12 @@ namespace Monbsoft.Extensions.FileProviders
 {
     public class PhysicalFileService : IFileService
     {
-        public IDirectoryInfo CreateFolder(string path)
+        public IDirectoryInfo GetFolder(string path)
         {
             return new PhysicalDirectoryInfo(path);
         }
 
-        public IFileInfo CreateFile(string path)
+        public IFileInfo GetFile(string path)
         {
             return new PhysicalFileInfo(path);
         }

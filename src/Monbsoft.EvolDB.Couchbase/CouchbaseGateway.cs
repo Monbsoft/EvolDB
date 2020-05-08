@@ -30,6 +30,16 @@ namespace Monbsoft.EvolDB.Couchbase
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
+        /// <summary>
+        /// Executes the commit.
+        /// </summary>
+        /// <param name="commit"></param>
+        public void Execute(Commit commit)
+        {
+
+        }
+
         public async Task OpenAsync()
         {
             _logger.LogDebug("Opening couchbase...");

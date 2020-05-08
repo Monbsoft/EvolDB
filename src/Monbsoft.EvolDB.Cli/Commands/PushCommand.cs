@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,7 +18,7 @@ namespace Monbsoft.EvolDB.Cli.Commands
     {
         private readonly IDatabaseGateway _databaseGateway;
         private readonly Repository _repository;
-        private readonly IDifferenceService _differenceService;
+        private readonly IDifferenceService _differenceService;     
 
         public PushCommand(IDatabaseGateway gateway, Repository repository, IDifferenceService differenceService)
         {
@@ -48,8 +49,9 @@ namespace Monbsoft.EvolDB.Cli.Commands
 
         public async Task ExecuteAsync()
         {
-            await _databaseGateway.OpenAsync();
-            var commits = await _databaseGateway.GetCommitsAsync();
+            var commit = _repository.Commits.First();
+
+
 
         }
     }

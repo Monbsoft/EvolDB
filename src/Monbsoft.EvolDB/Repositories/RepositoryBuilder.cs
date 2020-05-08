@@ -30,11 +30,11 @@ namespace Monbsoft.EvolDB.Repositories
         public Repository Build()
         {
             _logger.LogDebug("Building repository...");
-            var rootFolder = _fileService.CreateFolder(Directory.GetCurrentDirectory());
+            var rootFolder = _fileService.GetFolder(Directory.GetCurrentDirectory());
 
             // configuration
             IConfigurationRoot configuration = null;
-            var configFile = _fileService.CreateFile(Path.Combine(rootFolder.PhysicalPath, Repository.Config_File));
+            var configFile = _fileService.GetFile(Path.Combine(rootFolder.PhysicalPath, Repository.Config_File));
             if (configFile.Exists)
             {
                 configuration = new ConfigurationBuilder()

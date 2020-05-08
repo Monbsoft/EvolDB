@@ -3,7 +3,7 @@ namespace Monbsoft.Extensions.FileProviders
 {
     public interface IFileService
     {
-        IFileInfo CreateFile(string path);
-        IDirectoryInfo CreateFolder(string path);
+        IFileInfo GetFile(string path);
+        IDirectoryInfo GetFolder(string path);
     }
 }

@@ -59,11 +59,23 @@ namespace Monbsoft.EvolDB.Services
             _logger.LogDebug($"Commit {reference} is created.");
         }
 
+        public void Execute(Commit commit)
+        {
+            var commitFile = _fileService.GetFile(commit.FullName);
+        }
+
+        public void Push(Commit commit)
+        {
+            var commitFile = _fileService.GetFile(commit.FullName);
+            var lines = commitFile.ReadLines();
+           
+        }
+
 
         private IFileInfo CreateCommitFile(Repository repository, Commit commit)
         {
             string path = Path.Combine(repository.CommitFolder.PhysicalPath, commit.ToReference());
-            return _fileService.CreateFile(path);
+            return _fileService.GetFile(path);
         }
 
     }

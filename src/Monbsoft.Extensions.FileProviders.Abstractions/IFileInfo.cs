@@ -26,9 +26,8 @@ namespace Monbsoft.Extensions.FileProviders
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="path"></param>
         /// <returns></returns>
-        List<string> ReadLines(string path);
+        List<string> ReadLines();
 
         /// <summary>
         /// Creates a read-only stream.
