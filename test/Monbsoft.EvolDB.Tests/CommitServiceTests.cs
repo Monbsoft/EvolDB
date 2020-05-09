@@ -16,7 +16,7 @@ namespace Monbsoft.EvolDB.Tests
         public void Test()
         {
             TestDirectoryInfo folder = new TestDirectoryInfo();
-            var repository = new Repository(folder, null);
+
 
         }
     }

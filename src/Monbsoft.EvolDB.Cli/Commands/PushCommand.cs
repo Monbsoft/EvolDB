@@ -1,15 +1,12 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Monbsoft.EvolDB.Data;
 using Monbsoft.EvolDB.Models;
 using Monbsoft.EvolDB.Services;
-using System;
-using System.Collections.Generic;
+using Monbsoft.Extensions.FileProviders;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Monbsoft.EvolDB.Cli.Commands
@@ -51,9 +48,12 @@ namespace Monbsoft.EvolDB.Cli.Commands
         public async Task ExecuteAsync()
         {
             var commit = _repository.Commits.First();
+            var parser = new DefaultQueryParser();
+            var file = new PhysicalFileInfo(commit.FullName);
+            var lines  = file.ReadLines();
+            var tokens = parser.Parse(lines);
 
-
-
+            
         }
     }
 }
