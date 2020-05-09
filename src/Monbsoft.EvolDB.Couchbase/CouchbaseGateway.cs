@@ -1,6 +1,4 @@
 ﻿using Couchbase;
-using Couchbase.Management.Collections;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Monbsoft.EvolDB.Data;
 using Monbsoft.EvolDB.Models;
@@ -23,28 +21,27 @@ namespace Monbsoft.EvolDB.Couchbase
         {
             _config = config;
             _logger = logger;
+            Parser = new DefaultQueryParser();
         }
 
+        public IQueryParser Parser { get; }
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-        /// <summary>
-        /// Executes the commit.
-        /// </summary>
-        /// <param name="commit"></param>
-        public void Execute(Commit commit)
+        public async Task<List<Commit>> GetCommitsAsync()
         {
+            var commits = await _cluster.QueryAsync<Commit>($"SELECT * FROM {_bucket.Name} WHERE {_config.Type} = \"__commit\"");
 
+            return await commits.Rows.ToListAsync();
         }
-
         public async Task OpenAsync()
         {
             _logger.LogDebug("Opening couchbase...");
             var options = new ClusterOptions()
-                .WithConnectionString(_config.ConnectionString)               
+                .WithConnectionString(_config.ConnectionString)
                 .WithCredentials(_config.Username, _config.Password);
 
             _cluster = await Cluster.ConnectAsync(options);
@@ -53,20 +50,6 @@ namespace Monbsoft.EvolDB.Couchbase
             _bucket = await _cluster.BucketAsync(_config.Bucket);
             _logger.LogDebug($"Bucket {_bucket.Name} is opened.");
         }
-
-        public async Task<List<Commit>> GetCommitsAsync()
-        {
-            var collection = _bucket.DefaultCollection();                  
-            var commits = await _cluster.QueryAsync<Commit>($"SELECT * FROM {_bucket.Name} WHERE {_config.Type} = \"__commit\"");
-
-            return await commits.Rows.ToListAsync();
-        }
-
-        public void ExecuteAsync(Commit commit)
-        {
-
-        }
-
         protected virtual void Dispose(bool disposing)
         {
             if (_disposed)

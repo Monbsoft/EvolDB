@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Monbsoft.EvolDB.Commits;
+using Monbsoft.EvolDB.Data;
 using Monbsoft.EvolDB.Exceptions;
 using Monbsoft.EvolDB.Models;
 using Monbsoft.Extensions.FileProviders;
@@ -15,17 +16,14 @@ namespace Monbsoft.EvolDB.Services
         private readonly IFileService _fileService;
         private readonly IReferenceParser _referenceParser;
         private readonly Repository _repository;
-        private readonly ICommitBuilder _commitBuilder;
         private readonly ILogger<CommitService> _logger;
 
         public CommitService(
-            ICommitBuilder commitBuilder,   
             Repository repository, 
             IReferenceParser parser,
             IFileService fileService,
             ILogger<CommitService> logger)
         {
-            _commitBuilder = commitBuilder ?? throw new ArgumentNullException(nameof(commitBuilder));
             _referenceParser = parser ?? throw new ArgumentNullException(nameof(parser));
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));

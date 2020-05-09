@@ -49,7 +49,7 @@ namespace Monbsoft.EvolDB.Models
         /// <param name="repository"></param>
         /// <param name="commit"></param>
         /// <returns></returns>
-        public bool ValidateCommit( Commit commit)
+        public bool ValidateCommit(Commit commit)
         {
             var max = Commits
                 .Where(c => c.Prefix == commit.Prefix)

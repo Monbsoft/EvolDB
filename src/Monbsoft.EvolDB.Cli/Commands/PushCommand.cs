@@ -31,18 +31,19 @@ namespace Monbsoft.EvolDB.Cli.Commands
         {
             var command = new Command(
                 name: "push",
-                description: "Update remote commits using local commits");
-
-            command.Handler = CommandHandler.Create<IHost>(async (host) =>
+                description: "Update remote commits using local commits")
             {
-                var gateway  = host.Services.GetRequiredService<IDatabaseGateway>();
-                var repository = host.Services.GetRequiredService<Repository>();
-                var diffService = host.Services.GetRequiredService<IDifferenceService>();
-              
-                var pushCommand = new PushCommand(gateway, repository, diffService);
-                await pushCommand.ExecuteAsync();
+                Handler = CommandHandler.Create<IHost>(async (host) =>
+                {
+                    var gateway = host.Services.GetRequiredService<IDatabaseGateway>();
+                    var repository = host.Services.GetRequiredService<Repository>();
+                    var diffService = host.Services.GetRequiredService<IDifferenceService>();
 
-            });
+                    var pushCommand = new PushCommand(gateway, repository, diffService);
+                    await pushCommand.ExecuteAsync();
+
+                })
+            };
 
             return command;
         }

@@ -56,6 +56,10 @@ namespace Monbsoft.Extensions.FileProviders
         /// <exception cref="IOException"></exception>
         public FileStream OpenRead() => _info.OpenRead();
 
+        /// <summary>
+        /// Reads lines from the current stream.
+        /// </summary>
+        /// <returns></returns>
         public List<string> ReadLines()
         {
             var lines = new List<string>();

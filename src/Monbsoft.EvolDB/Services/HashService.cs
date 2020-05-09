@@ -19,11 +19,9 @@ namespace Monbsoft.EvolDB.Services
 
                 byte[] checksum;
 
-                using (var shaCng = SHA1.Create())
-                {
-                    checksum = shaCng.ComputeHash(bufferedStream);
-                    shaHash = BitConverter.ToString(checksum).Replace("-", string.Empty);
-                }
+                using var shaCng = SHA1.Create();
+                checksum = shaCng.ComputeHash(bufferedStream);
+                shaHash = BitConverter.ToString(checksum).Replace("-", string.Empty);
             }
             return shaHash;
         }
