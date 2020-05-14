@@ -1,4 +1,5 @@
 ﻿using Monbsoft.EvolDB.Models;
+using System.Threading.Tasks;
 
 namespace Monbsoft.EvolDB.Services
 {
@@ -7,5 +8,7 @@ namespace Monbsoft.EvolDB.Services
         void Create(string migration);
 
         void Execute(Commit commit);
+
+        Task Push();
     }
 }

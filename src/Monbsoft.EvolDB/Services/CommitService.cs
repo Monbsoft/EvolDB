@@ -3,29 +3,33 @@ using Monbsoft.EvolDB.Commits;
 using Monbsoft.EvolDB.Data;
 using Monbsoft.EvolDB.Exceptions;
 using Monbsoft.EvolDB.Models;
+using Monbsoft.EvolDB.Repositories;
 using Monbsoft.Extensions.FileProviders;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace Monbsoft.EvolDB.Services
 {
     public class CommitService : ICommitService
     {
+        private readonly IDatabaseGateway _gateway;
         private readonly IFileService _fileService;
         private readonly IReferenceParser _referenceParser;
         private readonly Repository _repository;
         private readonly ILogger<CommitService> _logger;
 
         public CommitService(
-            Repository repository, 
+            Repository repository,
+            IDatabaseGateway gateway,
             IReferenceParser parser,
             IFileService fileService,
             ILogger<CommitService> logger)
         {
-            _referenceParser = parser ?? throw new ArgumentNullException(nameof(parser));
+
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _gateway = gateway ?? throw new ArgumentNullException(nameof(gateway));
+            _referenceParser = parser ?? throw new ArgumentNullException(nameof(parser));
             _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -62,11 +66,38 @@ namespace Monbsoft.EvolDB.Services
             var commitFile = _fileService.GetFile(commit.FullName);
         }
 
-        public void Push(Commit commit)
+        public async Task Push()
+        {
+            await _gateway.OpenAsync();
+            var metadata = await _gateway.GetMetadataAsync();
+            var tree = new RepositoryTree(_repository, metadata);
+            foreach(var commit in tree.GetCommitsToApplied())
+            {
+                await PushCommit(commit).ConfigureAwait(false);
+            }
+           
+        }
+
+        private async Task PushCommit(Commit commit)
         {
             var commitFile = _fileService.GetFile(commit.FullName);
             var lines = commitFile.ReadLines();
-           
+            var queries = _gateway.Parser.Parse(lines);
+            foreach (var query in queries)
+            {
+                await _gateway.PushAsync(query);
+            }
+
+            var metadata = new CommitMetadata
+            {
+                Prefix = nameof(commit.Prefix),
+                Version = commit.Version.ToString(),
+                Message = commit.Message,
+                Hash = commit.Hash,
+                CreationDate = DateTime.UtcNow
+            };
+            await _gateway.AddMetadataAsync(metadata);
+            _logger.LogDebug($"Commit {commit.Message} is applied.");
         }
 
 

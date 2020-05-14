@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Monbsoft.EvolDB.Services;
-using System;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 

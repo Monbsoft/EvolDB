@@ -39,7 +39,7 @@ namespace Monbsoft.EvolDB.Cli.Commands
         public async Task GetStatusAsync()
         {
             await _gateway.OpenAsync();
-            var commits = await _gateway.GetCommitsAsync();
+            var commits = await _gateway.GetMetadataAsync();
         }
     }
 }

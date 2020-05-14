@@ -8,7 +8,9 @@ namespace Monbsoft.EvolDB.Data
     public interface IDatabaseGateway : IDisposable
     {
         IQueryParser Parser { get; }
-        Task<List<Commit>> GetCommitsAsync();
+        Task AddMetadataAsync(CommitMetadata meta);
+        Task<List<CommitMetadata>> GetMetadataAsync();
         Task OpenAsync();
+        Task PushAsync(QueryToken query);
     }
 }

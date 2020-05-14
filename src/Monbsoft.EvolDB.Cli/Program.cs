@@ -57,7 +57,6 @@ namespace Monbsoft.EvolDB.Cli
                             services.AddSingleton<IHashService, HashService>();
                             services.AddSingleton<ICommitService, CommitService>();
                             services.AddSingleton<IRepositoryService, RepositoryService>();
-                            services.AddSingleton<IDifferenceService, DifferenceService>();
                             services.AddSingleton<Repository>(services =>
                             {                               
                                 var builder = services.GetRequiredService<IRepositoryBuilder>();

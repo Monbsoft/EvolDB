@@ -1,4 +1,5 @@
 ﻿using Couchbase;
+using Couchbase.Core.Exceptions;
 using Microsoft.Extensions.Logging;
 using Monbsoft.EvolDB.Data;
 using Monbsoft.EvolDB.Models;
@@ -31,12 +32,30 @@ namespace Monbsoft.EvolDB.Couchbase
             GC.SuppressFinalize(this);
         }
 
-        public async Task<List<Commit>> GetCommitsAsync()
+        public Task AddMetadataAsync(CommitMetadata meta)
         {
-            var commits = await _cluster.QueryAsync<Commit>($"SELECT * FROM {_bucket.Name} WHERE {_config.Type} = \"__commit\"");
-
-            return await commits.Rows.ToListAsync();
+            return _bucket.DefaultCollection().InsertAsync<CommitMetadata>(Guid.NewGuid().ToString(), meta);
         }
+
+        public async Task<List<CommitMetadata>> GetMetadataAsync()
+        {
+            try
+            {
+                var commits = await _cluster.QueryAsync<CommitMetadata>($"SELECT * FROM {_bucket.Name} WHERE {_config.Type} = \"__commit\"");
+                return await commits.Rows.ToListAsync();
+            }
+            catch (PlanningFailureException ex)
+            {
+                //index n'est pas créé.
+                return new List<CommitMetadata>();
+            }
+        }
+
+        public Task PushAsync(QueryToken token)
+        {
+            return _cluster.QueryAsync<dynamic>(token.Text);
+        }
+
         public async Task OpenAsync()
         {
             _logger.LogDebug("Opening couchbase...");
@@ -62,7 +81,7 @@ namespace Monbsoft.EvolDB.Couchbase
                 _bucket?.Dispose();
                 _cluster?.Dispose();
             }
-
+            _logger.LogDebug("Couchbase is disposed.");
             _disposed = true;
         }
     }
