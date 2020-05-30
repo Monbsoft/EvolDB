@@ -90,7 +90,7 @@ namespace Monbsoft.EvolDB.Services
 
             var metadata = new CommitMetadata
             {
-                Prefix = nameof(commit.Prefix),
+                Prefix = commit.Prefix.ToString(),
                 Version = commit.Version.ToString(),
                 Message = commit.Message,
                 Hash = commit.Hash,
