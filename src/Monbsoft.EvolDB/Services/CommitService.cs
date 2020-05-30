@@ -80,23 +80,33 @@ namespace Monbsoft.EvolDB.Services
 
         private async Task PushCommit(Commit commit)
         {
-            var commitFile = _fileService.GetFile(commit.FullName);
-            var lines = commitFile.ReadLines();
-            var queries = _gateway.Parser.Parse(lines);
-            foreach (var query in queries)
+            bool applied = false;
+            try
             {
-                await _gateway.PushAsync(query);
+                var commitFile = _fileService.GetFile(commit.FullName);
+                var lines = commitFile.ReadLines();
+                var queries = _gateway.Parser.Parse(lines);
+                foreach (var query in queries)
+                {
+                    await _gateway.PushAsync(query);
+                }
+                applied = true;
+            }
+            finally
+            {
+                var metadata = new CommitMetadata
+                {
+                    Prefix = commit.Prefix.ToString(),
+                    Version = commit.Version.ToString(),
+                    Message = commit.Message,
+                    Hash = commit.Hash,
+                    Applied = applied,
+                    CreationDate = DateTime.UtcNow
+                };
+                await _gateway.AddMetadataAsync(metadata);
             }
 
-            var metadata = new CommitMetadata
-            {
-                Prefix = commit.Prefix.ToString(),
-                Version = commit.Version.ToString(),
-                Message = commit.Message,
-                Hash = commit.Hash,
-                CreationDate = DateTime.UtcNow
-            };
-            await _gateway.AddMetadataAsync(metadata);
+;
             _logger.LogDebug($"Commit {commit.Message} is applied.");
         }
 

@@ -33,12 +33,23 @@ namespace Monbsoft.EvolDB.Couchbase
             GC.SuppressFinalize(this);
         }
 
-        public Task AddMetadataAsync(CommitMetadata meta)
+        public async Task AddMetadataAsync(CommitMetadata meta)
         {
             string id = Guid.NewGuid().ToString();
-            var qb = new CouchbaseQuery();
+            var qb = new Query();
             qb.Insert(_config.Bucket)
-                .Values(Guid.NewGuid().ToString());
+                .Values(Guid.NewGuid().ToString(), x =>
+                {
+                    return x.WithKeyValue(_config.Type, "Commit")
+                        .WithKeyValue("Prefix", meta.Prefix)
+                        .WithKeyValue("Version", meta.Version)
+                        .WithKeyValue("Message", meta.Message)
+                        .WithKeyValue("Hash", meta.Hash)
+                        .WithKeyValue("Applied", meta.Applied)
+                        .WithKeyValue("CreationDate", meta.CreationDate);
+                });
+
+            await _cluster.QueryAsync<dynamic>(qb.Build());
         }
 
         public async Task<List<CommitMetadata>> GetMetadataAsync()
