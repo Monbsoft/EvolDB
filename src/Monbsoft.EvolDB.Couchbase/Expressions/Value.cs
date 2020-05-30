@@ -40,7 +40,7 @@ namespace Monbsoft.EvolDB.Couchbase.Expressions
                 case string v:
                     return $"\"{v}\"";
                 case DateTime v:
-                    return $"\"{v.ToString("yyyy-MM-dd HH:mm:ss")}\"";
+                    return $"\"{v.ToString("O")}\"";
 
                 default:
                     return $"{value}";

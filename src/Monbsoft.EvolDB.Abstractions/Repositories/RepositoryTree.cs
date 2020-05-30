@@ -17,9 +17,16 @@ namespace Monbsoft.EvolDB.Repositories
             LoadMetadata(metadata);
         }
 
-        public LinkedListNode<TreeEntry> Current { get; private set; }
         public LinkedListNode<TreeEntry> First => _entries.First;
         public LinkedListNode<TreeEntry> Last => _entries.Last;
+        public IEnumerable<Commit> GetCommitsToPush()
+        {
+            return _entries
+                .Where(e => e.Target == null)
+                .OrderBy(e => e.Version)
+                .Select(e => e.Source);
+
+        }
         public IEnumerator<TreeEntry> GetEnumerator()
         {
             return _entries.GetEnumerator();
@@ -33,39 +40,30 @@ namespace Monbsoft.EvolDB.Repositories
             var map = _entries.ToDictionary(e => e.Version, e => e);
             var orderedMetadata = metadata.OrderBy(m => m.CreationDate);
 
-            Current = First;
+            LinkedListNode<TreeEntry> current = _entries.First;
 
             foreach (var orderedMeta in orderedMetadata)
             {
                 if (!orderedMeta.Applied)
                 {
                     continue;
-                }
+                }              
 
-                if (Current.Value.Version == orderedMeta.Version)
+                if (current.Value.Version == orderedMeta.Version)
                 {
                     if (orderedMeta.Prefix == nameof(Prefix.Versioned))
                     {
-                        Current = Current.Next;
+                        current.Value.Target = orderedMeta;
+                        current = current.Next;
                     }
                     else if (orderedMeta.Prefix == nameof(Prefix.Repeatable))
                     {
-                        Current = Current.Previous;
+                        current.Value.Target = null;
+                        current = current.Previous;
                     }
                 }
             }
         }
-
-        public IEnumerable<Commit> GetCommitsToApplied()
-        {
-            var current = Current;
-            while(current != null)
-            {                
-                yield return current.Value.Source;
-                current = current.Next;
-            }
-        }
-
         private void LoadRepository(Repository repository)
         {
             var map = new Dictionary<CommitVersion, TreeEntry>();

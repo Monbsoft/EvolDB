@@ -39,12 +39,6 @@ namespace Monbsoft.EvolDB.Cli.Commands
         {
             await _commitService.Push().ConfigureAwait(false);
 
-            //await _databaseGateway.OpenAsync();
-            //foreach(var token in tokens)
-            //{
-
-            //    await _databaseGateway.PushAsync(token);
-            //}
             
         }
     }

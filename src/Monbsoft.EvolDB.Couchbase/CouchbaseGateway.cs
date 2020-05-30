@@ -56,7 +56,7 @@ namespace Monbsoft.EvolDB.Couchbase
         {
             try
             {
-                var commits = await _cluster.QueryAsync<CommitMetadata>($"SELECT * FROM {_bucket.Name} WHERE {_config.Type} = \"__commit\"");
+                var commits = await _cluster.QueryAsync<CommitMetadata>($"SELECT Applied, CreationDate, `Hash`, Message, Prefix, Version FROM {_bucket.Name} WHERE {_config.Type} = \"Commit\" AND Applied = true");
                 return await commits.Rows.ToListAsync();
             }
             catch (PlanningFailureException ex)

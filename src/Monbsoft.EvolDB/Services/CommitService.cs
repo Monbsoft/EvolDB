@@ -6,7 +6,9 @@ using Monbsoft.EvolDB.Models;
 using Monbsoft.EvolDB.Repositories;
 using Monbsoft.Extensions.FileProviders;
 using System;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Monbsoft.EvolDB.Services
@@ -61,21 +63,20 @@ namespace Monbsoft.EvolDB.Services
             _logger.LogDebug($"Commit {reference} is created.");
         }
 
-        public void Execute(Commit commit)
-        {
-            var commitFile = _fileService.GetFile(commit.FullName);
-        }
-
         public async Task Push()
         {
+            var stopwatch = new Stopwatch();
             await _gateway.OpenAsync();
             var metadata = await _gateway.GetMetadataAsync();
             var tree = new RepositoryTree(_repository, metadata);
-            foreach(var commit in tree.GetCommitsToApplied())
+            var commitsToPush = tree.GetCommitsToPush();
+            stopwatch.Start();
+            foreach(var commit in commitsToPush)
             {
                 await PushCommit(commit).ConfigureAwait(false);
             }
-           
+            stopwatch.Stop();
+            _logger.LogInformation($"{commitsToPush.Count()} commits are pushed in {stopwatch.ElapsedMilliseconds} ms.");
         }
 
         private async Task PushCommit(Commit commit)
@@ -105,9 +106,7 @@ namespace Monbsoft.EvolDB.Services
                 };
                 await _gateway.AddMetadataAsync(metadata);
             }
-
-;
-            _logger.LogDebug($"Commit {commit.Message} is applied.");
+            _logger.LogInformation($"Commit {commit.Message} is pushed.");               
         }
 
 
