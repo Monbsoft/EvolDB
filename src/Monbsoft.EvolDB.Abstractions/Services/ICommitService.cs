@@ -7,6 +7,6 @@ namespace Monbsoft.EvolDB.Services
     {
         void Create(string migration);
 
-        Task Push();
+        Task PushAsync();
     }
 }

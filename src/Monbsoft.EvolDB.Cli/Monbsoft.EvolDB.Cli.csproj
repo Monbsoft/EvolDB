@@ -7,7 +7,6 @@
     <Company>Monbsoft.com</Company>
     <Product>Monbsoft.EvolDB</Product>
     <AssemblyName>evoldb</AssemblyName>
-    <PackageId>Monbsoft.EvolDB</PackageId>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="NLog" Version="4.7.2" />

@@ -63,27 +63,47 @@ namespace Monbsoft.EvolDB.Services
             _logger.LogDebug($"Commit {reference} is created.");
         }
 
-        public async Task Push()
+        public async Task PushAsync()
         {
             var stopwatch = new Stopwatch();
             await _gateway.OpenAsync();
             var metadata = await _gateway.GetMetadataAsync();
+
             var tree = new RepositoryTree(_repository, metadata);
             var commitsToPush = tree.GetCommitsToPush();
+
             stopwatch.Start();
             foreach(var commit in commitsToPush)
             {
-                await PushCommit(commit).ConfigureAwait(false);
+                await SendCommitAsync(commit).ConfigureAwait(false);
             }
             stopwatch.Stop();
             _logger.LogInformation($"{commitsToPush.Count()} commits are pushed in {stopwatch.ElapsedMilliseconds} ms.");
         }
 
-        private async Task PushCommit(Commit commit)
+        public async Task ResetAsync()
         {
-            bool applied = false;
-            try
+            var stopwaatch = new Stopwatch();
+            await _gateway.OpenAsync();
+            var metadata = await _gateway.GetMetadataAsync();
+
+            var tree = new RepositoryTree(_repository, metadata);
+            
+            if(tree.Current?.Value?.Repeatable == null)
             {
+                return;
+            }
+
+            stopwaatch.Start();
+
+
+            stopwaatch.Stop();
+
+            _logger.LogInformation("");
+        }
+
+        private async Task SendCommitAsync(Commit commit)
+        {
                 var commitFile = _fileService.GetFile(commit.FullName);
                 var lines = commitFile.ReadLines();
                 var queries = _gateway.Parser.Parse(lines);
@@ -91,6 +111,14 @@ namespace Monbsoft.EvolDB.Services
                 {
                     await _gateway.PushAsync(query);
                 }
+        }
+
+        private async Task PushCommitWithMetaAsync(Commit commit)
+        {
+            bool applied = false;
+            try
+            {
+                await SendCommitAsync(commit);
                 applied = true;
             }
             finally

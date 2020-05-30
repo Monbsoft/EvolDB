@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 
 namespace Monbsoft.EvolDB.Repositories
 {
-    public class RepositoryTree : IEnumerable<TreeEntry>
+    public class RepositoryTree
     {
         private readonly LinkedList<TreeEntry> _entries;
         public RepositoryTree(Repository repository, List<CommitMetadata> metadata)
@@ -18,6 +18,7 @@ namespace Monbsoft.EvolDB.Repositories
         }
 
         public LinkedListNode<TreeEntry> First => _entries.First;
+        public LinkedListNode<TreeEntry> Current;
         public LinkedListNode<TreeEntry> Last => _entries.Last;
         public IEnumerable<Commit> GetCommitsToPush()
         {
@@ -27,21 +28,17 @@ namespace Monbsoft.EvolDB.Repositories
                 .Select(e => e.Source);
 
         }
-        public IEnumerator<TreeEntry> GetEnumerator()
-        {
-            return _entries.GetEnumerator();
-        }
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+
         private void LoadMetadata(List<CommitMetadata> metadata)
         {
-            var map = _entries.ToDictionary(e => e.Version, e => e);
-            var orderedMetadata = metadata.OrderBy(m => m.CreationDate);
-
             LinkedListNode<TreeEntry> current = _entries.First;
+            if (current == null)
+            {
+                Current = null;
+                return;
+            }
 
+            var orderedMetadata = metadata.OrderBy(m => m.CreationDate);
             foreach (var orderedMeta in orderedMetadata)
             {
                 if (!orderedMeta.Applied)
@@ -63,6 +60,7 @@ namespace Monbsoft.EvolDB.Repositories
                     }
                 }
             }
+            Current = current;
         }
         private void LoadRepository(Repository repository)
         {

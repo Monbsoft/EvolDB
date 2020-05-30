@@ -37,7 +37,7 @@ namespace Monbsoft.EvolDB.Cli.Commands
 
         public async Task ExecuteAsync()
         {
-            await _commitService.Push().ConfigureAwait(false);
+            await _commitService.PushAsync().ConfigureAwait(false);
 
             
         }
