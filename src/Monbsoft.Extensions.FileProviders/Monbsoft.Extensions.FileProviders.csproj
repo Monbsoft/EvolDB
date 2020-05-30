@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Company>Monbsoft</Company>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Monbsoft.Extensions.FileProviders.Abstractions\Monbsoft.Extensions.FileProviders.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

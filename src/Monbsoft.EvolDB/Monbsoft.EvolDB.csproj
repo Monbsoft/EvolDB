@@ -2,17 +2,23 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Company>Monbsoft</Company>
+    <Product>EvolDB</Product>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CouchbaseNetClient" Version="2.7.15" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.2" />
     <PackageReference Include="NLog" Version="4.6.8" />
     <PackageReference Include="System.CommandLine.Hosting" Version="0.3.0-alpha.19577.1" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Monbsoft.EvolDB.Abstractions\Monbsoft.EvolDB.Abstractions.csproj" />
+    <ProjectReference Include="..\Monbsoft.Extensions.FileProviders\Monbsoft.Extensions.FileProviders.csproj" />
   </ItemGroup>
 
 </Project>

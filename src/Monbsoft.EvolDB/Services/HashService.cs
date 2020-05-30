@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Monbsoft.Extensions.FileProviders;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
@@ -8,7 +9,7 @@ namespace Monbsoft.EvolDB.Services
 {
     public class HashService : IHashService
     {
-        public string ComputeHash(FileInfo file)
+        public string ComputeHash(IFileInfo file)
         {
             string shaHash = string.Empty;
 
@@ -18,11 +19,9 @@ namespace Monbsoft.EvolDB.Services
 
                 byte[] checksum;
 
-                using (var shaCng = SHA1.Create())
-                {
-                    checksum = shaCng.ComputeHash(bufferedStream);
-                    shaHash = BitConverter.ToString(checksum).Replace("-", string.Empty);
-                }
+                using var shaCng = SHA1.Create();
+                checksum = shaCng.ComputeHash(bufferedStream);
+                shaHash = BitConverter.ToString(checksum).Replace("-", string.Empty);
             }
             return shaHash;
         }

@@ -1,0 +1,23 @@
+# tye application configuration file
+# read all about it at https://github.com/dotnet/tye
+#
+# when you've given us a try, we'd love to know what you think:
+#    https://aka.ms/AA7q20u
+#
+name: evoldb
+services:
+  - name: couchbase
+    image: bentonam/couchbase-docker:latest
+    bindings:
+      - port: 8091
+    env:
+      - name: CLUSTER_USERNAME
+        value: COUCHBASE_USERNAME
+      - name: CLUSTER_PASSWORD
+        value: COUCHBASE_PASSWORD
+      - name: CLUSTER_NAME
+        value: Couchbase CLuster
+      - name: BUCKET
+        value: Northwind
+      - name: SERVICES
+        value: data,index,query,fts,analytics
