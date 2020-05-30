@@ -1,30 +1,26 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Version>0.1.0</Version>
-    <Authors>Monbsoft</Authors>
-    <Company>Monbsoft</Company>
-    <Product>EvolDB</Product>
+    <Version>0.2.0</Version>
+    <Authors>Monbsoft.com</Authors>
+    <Company>Monbsoft.com</Company>
+    <Product>Monbsoft.EvolDB</Product>
     <AssemblyName>evoldb</AssemblyName>
+    <PackageId>Monbsoft.EvolDB</PackageId>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="NLog" Version="4.7.2" />
     <PackageReference Include="NLog.Extensions.Logging" Version="1.6.4" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Monbsoft.EvolDB.Abstractions\Monbsoft.EvolDB.Abstractions.csproj" />
     <ProjectReference Include="..\Monbsoft.EvolDB.Couchbase\Monbsoft.EvolDB.Couchbase.csproj" />
     <ProjectReference Include="..\Monbsoft.EvolDB\Monbsoft.EvolDB.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <None Update="nlog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
 </Project>
