@@ -6,6 +6,7 @@ using Monbsoft.EvolDB.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Monbsoft.EvolDB.Couchbase
@@ -34,7 +35,10 @@ namespace Monbsoft.EvolDB.Couchbase
 
         public Task AddMetadataAsync(CommitMetadata meta)
         {
-            return _bucket.DefaultCollection().InsertAsync<CommitMetadata>(Guid.NewGuid().ToString(), meta);
+            string id = Guid.NewGuid().ToString();
+            var qb = new CouchbaseQuery();
+            qb.Insert(_config.Bucket)
+                .Values(Guid.NewGuid().ToString());
         }
 
         public async Task<List<CommitMetadata>> GetMetadataAsync()

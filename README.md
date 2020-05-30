@@ -1,6 +1,6 @@
 # EvolDB
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/dotnet/winforms/blob/master/LICENSE.TXT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/Monbsoft/EvolDB/blob/master/LICENSE)
 ![.NET Core](https://github.com/Monbsoft/EvolDB/workflows/.NET%20Core/badge.svg)
 
 EvolDB is a simple database migration tool with .Net Core. It is a tool to help you design evolutionary databases. It is inspired by [Evolve](https://github.com/lecaillon/Evolve) and [Flyway](https://flywaydb.org/).
