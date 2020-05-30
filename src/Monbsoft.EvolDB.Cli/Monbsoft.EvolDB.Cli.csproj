@@ -16,6 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Monbsoft.EvolDB.Abstractions\Monbsoft.EvolDB.Abstractions.csproj" />
+    <ProjectReference Include="..\Monbsoft.EvolDB.Couchbase\Monbsoft.EvolDB.Couchbase.csproj" />
     <ProjectReference Include="..\Monbsoft.EvolDB\Monbsoft.EvolDB.csproj" />
   </ItemGroup>
 

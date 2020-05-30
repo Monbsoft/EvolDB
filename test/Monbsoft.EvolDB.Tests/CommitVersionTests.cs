@@ -10,7 +10,7 @@ namespace Monbsoft.EvolDB.Tests
         [InlineData("1_0_0_1", "1_1_0_0", -1)]
         [InlineData("1_2_0_0", "1_2_0_1", -1)]
         [InlineData("1_4_0_1", "1_4_0_0", 1)]
-        public void CommitVersionCompare(string ver1, string ver2, int result)
+        public void Compare_CommitVersions(string ver1, string ver2, int result)
         {
             Assert.True(CommitVersion.TryParse(ver1, out CommitVersion v1));
             Assert.True(CommitVersion.TryParse(ver2, out CommitVersion v2));
@@ -21,7 +21,7 @@ namespace Monbsoft.EvolDB.Tests
         [Theory]
         [InlineData("1.0.1", 1, 0, 1, 0)]
         [InlineData("2_0_12_1", 2, 0, 12, 1)]
-        public void ParseVersion(string parsedVersion, int major, int minor, int patch, int revision)
+        public void Parse_Versions(string parsedVersion, int major, int minor, int patch, int revision)
         {
             var version = CommitVersion.Parse(parsedVersion);
 
@@ -31,7 +31,7 @@ namespace Monbsoft.EvolDB.Tests
             Assert.Equal(revision, version.Revision);
         }
         [Fact]
-        public void ParseFake()
+        public void Parse_FakeVersion()
         {
             Assert.Throws<System.ArgumentOutOfRangeException>(() =>
                 CommitVersion.Parse("1__2"));

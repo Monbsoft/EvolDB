@@ -5,6 +5,16 @@
 
 EvolDB is a simple database migration tool with .Net Core. It is a tool to help you design evolutionary databases. It is inspired by [Evolve](https://github.com/lecaillon/Evolve) and [Flyway](https://flywaydb.org/).
 
+## Commands
+
+- _init_ : creates a migration repository.
+- _commit_ : creates a commit.
+- _push_ : Updates remote commits using local commits.
+
+```
+evoldb commit V1_0_0_1__init.n1sql
+```
+
 ## Community
 
 - Ask questions by [opening an issue on GitHub](https://github.com/Monbsoft/EvolDB/issues).
