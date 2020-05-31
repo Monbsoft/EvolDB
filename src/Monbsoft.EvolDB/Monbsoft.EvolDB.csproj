@@ -1,24 +1,21 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Company>Monbsoft</Company>
-    <Product>EvolDB</Product>
+    <Company>Monbsoft.com</Company>
+    <Product>Monbsoft.EvolDB</Product>
+    <Version>0.2.0</Version>
+    <Authors>Monbsoft.com</Authors>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.4" />
     <PackageReference Include="NLog" Version="4.7.2" />
     <PackageReference Include="System.CommandLine.Hosting" Version="0.3.0-alpha.19577.1" />
   </ItemGroup>
-
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Monbsoft.EvolDB.Abstractions\Monbsoft.EvolDB.Abstractions.csproj" />
     <ProjectReference Include="..\Monbsoft.Extensions.FileProviders\Monbsoft.Extensions.FileProviders.csproj" />
   </ItemGroup>
-
 </Project>

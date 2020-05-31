@@ -7,6 +7,14 @@ namespace Monbsoft.EvolDB.Tests.Infrastructure
 {
     public class TestFileInfo : IFileInfo
     {
+        public TestFileInfo()
+        {
+        }
+
+        public TestFileInfo(string name)
+        {
+            Name = name;
+        }
         public bool Exists => true;
 
         public string FullName { get; set; }

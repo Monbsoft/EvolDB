@@ -33,19 +33,36 @@ namespace Monbsoft.EvolDB.Couchbase
             GC.SuppressFinalize(this);
         }
 
-        public Task AddMetadataAsync(CommitMetadata meta)
+        public async Task AddMetadataAsync(CommitMetadata meta)
         {
             string id = Guid.NewGuid().ToString();
-            var qb = new CouchbaseQuery();
+            var qb = new Query();
             qb.Insert(_config.Bucket)
-                .Values(Guid.NewGuid().ToString());
+                .Values(Guid.NewGuid().ToString(), x =>
+                {
+                    return x.WithKeyValue(_config.Type, "Commit")
+                        .WithKeyValue("Prefix", meta.Prefix)
+                        .WithKeyValue("Version", meta.Version)
+                        .WithKeyValue("Message", meta.Message)
+                        .WithKeyValue("Hash", meta.Hash)
+                        .WithKeyValue("Applied", meta.Applied)
+                        .WithKeyValue("CreationDate", meta.CreationDate);
+                });
+
+            await _cluster.QueryAsync<dynamic>(qb.Build());
+        }
+        
+        public Task RemoveMetadataAsync(CommitMetadata meta)
+        {
+            var collection = _bucket.DefaultCollection();
+            return collection.RemoveAsync(meta.Id);
         }
 
         public async Task<List<CommitMetadata>> GetMetadataAsync()
         {
             try
-            {
-                var commits = await _cluster.QueryAsync<CommitMetadata>($"SELECT * FROM {_bucket.Name} WHERE {_config.Type} = \"__commit\"");
+            {               
+                var commits = await _cluster.QueryAsync<CommitMetadata>($"SELECT meta().id, Applied, CreationDate, `Hash`, Message, Prefix, Version FROM {_bucket.Name} WHERE {_config.Type} = \"Commit\" AND Applied = true");
                 return await commits.Rows.ToListAsync();
             }
             catch (PlanningFailureException ex)
