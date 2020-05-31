@@ -14,13 +14,14 @@ namespace Monbsoft.EvolDB.Repositories
             Version = version;
         }
 
+        public Commit Repeatable { get; set; }
         public Commit Source { get; set; }
         public CommitMetadata Target { get; set; }
         public string Version { get; set; }
 
         public void AddCommit(Commit commit)
         {
-            if(Version != commit.Version.ToString())
+            if (Version != commit.Version.ToString())
             {
                 throw new InvalidOperationException("Version is not the same.");
             }
@@ -31,9 +32,14 @@ namespace Monbsoft.EvolDB.Repositories
                         Source = commit;
                         break;
                     }
+                case Prefix.Repeatable:
+                    {
+                        Repeatable = commit;
+                        break;
+                    }
                 default:
                     {
-                        break;
+                        throw new ArgumentException(nameof(commit));
                     }
             }
         }

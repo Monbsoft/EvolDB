@@ -1,12 +1,10 @@
 ﻿using Monbsoft.EvolDB.Models;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 
 namespace Monbsoft.EvolDB.Repositories
 {
-    public class RepositoryTree : IEnumerable<TreeEntry>
+    public class RepositoryTree
     {
         private readonly LinkedList<TreeEntry> _entries;
         public RepositoryTree(Repository repository, List<CommitMetadata> metadata)
@@ -16,25 +14,28 @@ namespace Monbsoft.EvolDB.Repositories
             LoadRepository(repository);
             LoadMetadata(metadata);
         }
+        public LinkedListNode<TreeEntry> FirstNode => _entries.First;
+        public TreeEntry CurrentEntry => CurrentNode?.Value;
+        public LinkedListNode<TreeEntry> CurrentNode { get; set; }
+        public LinkedListNode<TreeEntry> LastNode => _entries.Last;
+        public IEnumerable<Commit> GetCommitsToPush()
+        {
+            return _entries
+                .Where(e => e.Target == null)
+                .OrderBy(e => e.Version)
+                .Select(e => e.Source);
+        }
 
-        public LinkedListNode<TreeEntry> Current { get; private set; }
-        public LinkedListNode<TreeEntry> First => _entries.First;
-        public LinkedListNode<TreeEntry> Last => _entries.Last;
-        public IEnumerator<TreeEntry> GetEnumerator()
-        {
-            return _entries.GetEnumerator();
-        }
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
         private void LoadMetadata(List<CommitMetadata> metadata)
         {
-            var map = _entries.ToDictionary(e => e.Version, e => e);
+            LinkedListNode<TreeEntry> current = _entries.First;
+            if (current == null)
+            {
+                CurrentNode = null;
+                return;
+            }
+
             var orderedMetadata = metadata.OrderBy(m => m.CreationDate);
-
-            Current = First;
-
             foreach (var orderedMeta in orderedMetadata)
             {
                 if (!orderedMeta.Applied)
@@ -42,30 +43,23 @@ namespace Monbsoft.EvolDB.Repositories
                     continue;
                 }
 
-                if (Current.Value.Version == orderedMeta.Version)
+                if (current.Value.Version == orderedMeta.Version)
                 {
                     if (orderedMeta.Prefix == nameof(Prefix.Versioned))
                     {
-                        Current = Current.Next;
+                        current.Value.Target = orderedMeta;
+                        CurrentNode = current;
+                        current = current.Next;
                     }
                     else if (orderedMeta.Prefix == nameof(Prefix.Repeatable))
                     {
-                        Current = Current.Previous;
+                        current.Value.Target = null;
+                        current = current.Previous;
+                        CurrentNode = current;
                     }
                 }
             }
         }
-
-        public IEnumerable<Commit> GetCommitsToApplied()
-        {
-            var current = Current;
-            while(current != null)
-            {                
-                yield return current.Value.Source;
-                current = current.Next;
-            }
-        }
-
         private void LoadRepository(Repository repository)
         {
             var map = new Dictionary<CommitVersion, TreeEntry>();

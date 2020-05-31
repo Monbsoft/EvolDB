@@ -22,22 +22,22 @@ using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace Monbsoft.EvolDB.Cli
 {
-    class Program
+    internal class Program
     {
-        static async Task<int> Main(string[] args)
+        private static async Task<int> Main(string[] args)
         {
             var logger = LogManager.GetCurrentClassLogger();
 
-            var rootCommand = new RootCommand();           
+            var rootCommand = new RootCommand();
             rootCommand.Description = "EvolDB is a simple database migration tool for .Net Core.";
 
             try
             {
-
-                var parser = new CommandLineBuilder(rootCommand)                   
+                var parser = new CommandLineBuilder(rootCommand)
                     .AddCommand(InitCommand.Create())
                     .AddCommand(CommitCommand.Create())
                     .AddCommand(PushCommand.Create())
+                    .AddCommand(ResetCommand.Create())
                     .AddCommand(StatusCommand.Create())
                     .UseHost(host =>
                     {
@@ -58,7 +58,7 @@ namespace Monbsoft.EvolDB.Cli
                             services.AddSingleton<ICommitService, CommitService>();
                             services.AddSingleton<IRepositoryService, RepositoryService>();
                             services.AddSingleton<Repository>(services =>
-                            {                               
+                            {
                                 var builder = services.GetRequiredService<IRepositoryBuilder>();
                                 return builder.Build();
                             });
@@ -66,10 +66,7 @@ namespace Monbsoft.EvolDB.Cli
                             {
                                 var factory = services.GetRequiredService<GatewayFactory>();
                                 return factory.CreateGateway();
-
                             });
-
-
                         });
                     })
                     .UseVersionOption()
@@ -77,12 +74,12 @@ namespace Monbsoft.EvolDB.Cli
                     .Build();
                 return await parser.InvokeAsync(args);
             }
-            catch(Exception ex) when (ex.InnerException is CommitException)
+            catch (Exception ex) when (ex.InnerException is CommitException)
             {
                 logger.Error(ex.InnerException.Message);
                 throw;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logger.Error(ex, $"Stopped program because of exception: {ex.Message}");
                 throw;

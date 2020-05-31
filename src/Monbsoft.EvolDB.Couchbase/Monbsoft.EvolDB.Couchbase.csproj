@@ -1,18 +1,16 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Version>0.2.0</Version>
+    <Authors>Monbsoft.com</Authors>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="CouchbaseNetClient" Version="3.0.1" />
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="1.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="3.1.4" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Monbsoft.EvolDB.Abstractions\Monbsoft.EvolDB.Abstractions.csproj" />
     <ProjectReference Include="..\Monbsoft.EvolDB\Monbsoft.EvolDB.csproj" />
   </ItemGroup>
-
 </Project>

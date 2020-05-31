@@ -9,6 +9,7 @@ namespace Monbsoft.EvolDB.Data
     {
         IQueryParser Parser { get; }
         Task AddMetadataAsync(CommitMetadata meta);
+        Task RemoveMetadataAsync(CommitMetadata meta);
         Task<List<CommitMetadata>> GetMetadataAsync();
         Task OpenAsync();
         Task PushAsync(QueryToken query);
