@@ -18,6 +18,8 @@ namespace Monbsoft.EvolDB.Repositories
         public TreeEntry CurrentEntry => CurrentNode?.Value;
         public LinkedListNode<TreeEntry> CurrentNode { get; set; }
         public LinkedListNode<TreeEntry> LastNode => _entries.Last;
+        public IEnumerable<TreeEntry> TreeEntries => _entries;
+
         public IEnumerable<Commit> GetCommitsToPush()
         {
             return _entries

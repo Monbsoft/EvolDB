@@ -5,7 +5,6 @@ using Monbsoft.EvolDB.Services;
 using Monbsoft.EvolDB.Tests.Infrastructure;
 using Monbsoft.Extensions.FileProviders;
 using Moq;
-using System.IO;
 using Xunit;
 
 namespace Monbsoft.EvolDB.Tests
