@@ -3,6 +3,6 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>Monbsoft.Extensions.FileProviders</RootNamespace>
     <Company>Monbsoft</Company>
-    <Version>0.2.0</Version>
+    <Version>1.0.0</Version>
   </PropertyGroup>
 </Project>
