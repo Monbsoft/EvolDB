@@ -40,7 +40,6 @@ namespace Monbsoft.EvolDB.Repositories
                 default:
                     {
                         throw new ArgumentException(nameof(commit));
-                        break;
                     }
             }
         }

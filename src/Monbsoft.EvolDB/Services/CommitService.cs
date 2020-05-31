@@ -28,7 +28,6 @@ namespace Monbsoft.EvolDB.Services
             IFileService fileService,
             ILogger<CommitService> logger)
         {
-
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _gateway = gateway ?? throw new ArgumentNullException(nameof(gateway));
             _referenceParser = parser ?? throw new ArgumentNullException(nameof(parser));
@@ -43,11 +42,11 @@ namespace Monbsoft.EvolDB.Services
         public void Create(string reference)
         {
             _logger.LogDebug($"Creating commit...");
-            if(!_referenceParser.TryParse(reference, out Commit commit))
+            if (!_referenceParser.TryParse(reference, out Commit commit))
             {
                 throw new CommitException("Unable to parser the reference.");
             }
-            if(_repository.ValidateCommit(commit))
+            if (_repository.ValidateCommit(commit))
             {
                 throw new CommitException("A higher version already exists.");
             }
@@ -73,9 +72,9 @@ namespace Monbsoft.EvolDB.Services
             var commitsToPush = tree.GetCommitsToPush();
 
             stopwatch.Start();
-            foreach(var commit in commitsToPush)
+            foreach (var commit in commitsToPush)
             {
-                await SendCommitAsync(commit).ConfigureAwait(false);
+                await PushVersionedCommitAsync(commit).ConfigureAwait(false);
             }
             stopwatch.Stop();
             _logger.LogInformation($"{commitsToPush.Count()} commits are pushed in {stopwatch.ElapsedMilliseconds} ms.");
@@ -83,42 +82,40 @@ namespace Monbsoft.EvolDB.Services
 
         public async Task ResetAsync()
         {
-            var stopwaatch = new Stopwatch();
+            var stopwatch = new Stopwatch();
             await _gateway.OpenAsync();
             var metadata = await _gateway.GetMetadataAsync();
 
             var tree = new RepositoryTree(_repository, metadata);
-            
-            if(tree.Current?.Value?.Repeatable == null)
+            var entry = tree.CurrentEntry;
+            if (entry == null || entry.Repeatable == null)
             {
-                return;
+                throw new RepositoryException("No repeatable commit found.");
             }
-
-            stopwaatch.Start();
-
-
-            stopwaatch.Stop();
-
-            _logger.LogInformation("");
+            stopwatch.Start();
+            await PushCommitAsync(entry.Repeatable);
+            await _gateway.RemoveMetadataAsync(entry.Target);
+            stopwatch.Stop();
+            _logger.LogInformation($"Commit {entry.Repeatable.Message} is reset in {stopwatch.ElapsedMilliseconds} ms.");
         }
 
-        private async Task SendCommitAsync(Commit commit)
+        private async Task PushCommitAsync(Commit commit)
         {
-                var commitFile = _fileService.GetFile(commit.FullName);
-                var lines = commitFile.ReadLines();
-                var queries = _gateway.Parser.Parse(lines);
-                foreach (var query in queries)
-                {
-                    await _gateway.PushAsync(query);
-                }
+            var commitFile = _fileService.GetFile(commit.FullName);
+            var lines = commitFile.ReadLines();
+            var queries = _gateway.Parser.Parse(lines);
+            foreach (var query in queries)
+            {
+                await _gateway.PushAsync(query);
+            }
         }
 
-        private async Task PushCommitWithMetaAsync(Commit commit)
+        private async Task PushVersionedCommitAsync(Commit commit)
         {
             bool applied = false;
             try
             {
-                await SendCommitAsync(commit);
+                await PushCommitAsync(commit);
                 applied = true;
             }
             finally
@@ -134,15 +131,13 @@ namespace Monbsoft.EvolDB.Services
                 };
                 await _gateway.AddMetadataAsync(metadata);
             }
-            _logger.LogInformation($"Commit {commit.Message} is pushed.");               
+            _logger.LogInformation($"Commit {commit.Message} is pushed.");
         }
-
 
         private IFileInfo CreateCommitFile(Repository repository, Commit commit)
         {
             string path = Path.Combine(repository.CommitFolder.PhysicalPath, commit.ToReference());
             return _fileService.GetFile(path);
         }
-
     }
 }

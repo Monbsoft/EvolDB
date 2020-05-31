@@ -51,12 +51,18 @@ namespace Monbsoft.EvolDB.Couchbase
 
             await _cluster.QueryAsync<dynamic>(qb.Build());
         }
+        
+        public Task RemoveMetadataAsync(CommitMetadata meta)
+        {
+            var collection = _bucket.DefaultCollection();
+            return collection.RemoveAsync(meta.Id);
+        }
 
         public async Task<List<CommitMetadata>> GetMetadataAsync()
         {
             try
-            {
-                var commits = await _cluster.QueryAsync<CommitMetadata>($"SELECT Applied, CreationDate, `Hash`, Message, Prefix, Version FROM {_bucket.Name} WHERE {_config.Type} = \"Commit\" AND Applied = true");
+            {               
+                var commits = await _cluster.QueryAsync<CommitMetadata>($"SELECT meta().id, Applied, CreationDate, `Hash`, Message, Prefix, Version FROM {_bucket.Name} WHERE {_config.Type} = \"Commit\" AND Applied = true");
                 return await commits.Rows.ToListAsync();
             }
             catch (PlanningFailureException ex)

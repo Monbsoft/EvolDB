@@ -1,8 +1,6 @@
 ﻿using Monbsoft.EvolDB.Models;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 
 namespace Monbsoft.EvolDB.Repositories
 {
@@ -16,9 +14,9 @@ namespace Monbsoft.EvolDB.Repositories
             LoadRepository(repository);
             LoadMetadata(metadata);
         }
-
         public LinkedListNode<TreeEntry> First => _entries.First;
-        public LinkedListNode<TreeEntry> Current;
+        public TreeEntry CurrentEntry => CurrentNode?.Value;
+        public LinkedListNode<TreeEntry> CurrentNode { get; set; }
         public LinkedListNode<TreeEntry> Last => _entries.Last;
         public IEnumerable<Commit> GetCommitsToPush()
         {
@@ -26,7 +24,6 @@ namespace Monbsoft.EvolDB.Repositories
                 .Where(e => e.Target == null)
                 .OrderBy(e => e.Version)
                 .Select(e => e.Source);
-
         }
 
         private void LoadMetadata(List<CommitMetadata> metadata)
@@ -34,7 +31,7 @@ namespace Monbsoft.EvolDB.Repositories
             LinkedListNode<TreeEntry> current = _entries.First;
             if (current == null)
             {
-                Current = null;
+                CurrentNode = null;
                 return;
             }
 
@@ -44,23 +41,24 @@ namespace Monbsoft.EvolDB.Repositories
                 if (!orderedMeta.Applied)
                 {
                     continue;
-                }              
+                }
 
                 if (current.Value.Version == orderedMeta.Version)
                 {
                     if (orderedMeta.Prefix == nameof(Prefix.Versioned))
                     {
                         current.Value.Target = orderedMeta;
+                        CurrentNode = current;
                         current = current.Next;
                     }
                     else if (orderedMeta.Prefix == nameof(Prefix.Repeatable))
                     {
                         current.Value.Target = null;
                         current = current.Previous;
+                        CurrentNode = current;
                     }
                 }
             }
-            Current = current;
         }
         private void LoadRepository(Repository repository)
         {

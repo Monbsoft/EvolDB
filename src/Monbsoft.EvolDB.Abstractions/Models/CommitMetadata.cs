@@ -4,6 +4,8 @@ namespace Monbsoft.EvolDB.Models
 {
     public class CommitMetadata
     {
+        public string Id { get; set; }
+
         public string Prefix { get; set; }
 
         public string Version { get; set; }
