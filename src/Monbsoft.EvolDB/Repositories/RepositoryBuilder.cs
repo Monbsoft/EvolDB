@@ -4,9 +4,7 @@ using Monbsoft.EvolDB.Commits;
 using Monbsoft.EvolDB.Models;
 using Monbsoft.Extensions.FileProviders;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace Monbsoft.EvolDB.Repositories
 {

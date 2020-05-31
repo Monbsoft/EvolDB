@@ -16,7 +16,7 @@ using System;
 using System.CommandLine;
 using System.CommandLine.Builder;
 using System.CommandLine.Hosting;
-using System.CommandLine.Invocation;
+using System.CommandLine.Parsing;
 using System.Threading.Tasks;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
@@ -36,6 +36,7 @@ namespace Monbsoft.EvolDB.Cli
                 var parser = new CommandLineBuilder(rootCommand)
                     .AddCommand(InitCommand.Create())
                     .AddCommand(CommitCommand.Create())
+                    .AddCommand(LogCommand.Create())
                     .AddCommand(PushCommand.Create())
                     .AddCommand(ResetCommand.Create())
                     .AddCommand(StatusCommand.Create())

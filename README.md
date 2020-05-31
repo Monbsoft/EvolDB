@@ -10,6 +10,7 @@ EvolDB is a simple database migration tool with .Net Core. It is a tool to help 
 - _init_ : creates a migration repository.
 - _commit_ : creates a commit.
 - _push_ : Updates remote commits using local commits.
+- _log_ : Show log commits.
 
 ```
 evoldb commit V1_0_0_1__init.n1sql

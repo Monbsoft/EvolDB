@@ -6,6 +6,7 @@ using Monbsoft.EvolDB.Models;
 using Monbsoft.EvolDB.Repositories;
 using Monbsoft.Extensions.FileProviders;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -15,12 +16,11 @@ namespace Monbsoft.EvolDB.Services
 {
     public class CommitService : ICommitService
     {
-        private readonly IDatabaseGateway _gateway;
         private readonly IFileService _fileService;
+        private readonly IDatabaseGateway _gateway;
+        private readonly ILogger<CommitService> _logger;
         private readonly IReferenceParser _referenceParser;
         private readonly Repository _repository;
-        private readonly ILogger<CommitService> _logger;
-
         public CommitService(
             Repository repository,
             IDatabaseGateway gateway,
@@ -62,6 +62,23 @@ namespace Monbsoft.EvolDB.Services
             _logger.LogDebug($"Commit {reference} is created.");
         }
 
+        /// <summary>
+        /// Gets the entries.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IEnumerable<TreeEntry>> GetTreeEntries()
+        {
+            await _gateway.OpenAsync();
+            var metadata = await _gateway.GetMetadataAsync();
+
+            var tree = new RepositoryTree(_repository, metadata);
+            return tree.TreeEntries;
+        }
+
+        /// <summary>
+        /// Pushs the commits.
+        /// </summary>
+        /// <returns></returns>
         public async Task PushAsync()
         {
             var stopwatch = new Stopwatch();
@@ -80,6 +97,10 @@ namespace Monbsoft.EvolDB.Services
             _logger.LogInformation($"{commitsToPush.Count()} commits are pushed in {stopwatch.ElapsedMilliseconds} ms.");
         }
 
+        /// <summary>
+        /// Resets the current commit.
+        /// </summary>
+        /// <returns></returns>
         public async Task ResetAsync()
         {
             var stopwatch = new Stopwatch();
@@ -99,6 +120,17 @@ namespace Monbsoft.EvolDB.Services
             _logger.LogInformation($"Commit {entry.Repeatable.Message} is reset in {stopwatch.ElapsedMilliseconds} ms.");
         }
 
+        private IFileInfo CreateCommitFile(Repository repository, Commit commit)
+        {
+            string path = Path.Combine(repository.CommitFolder.PhysicalPath, commit.ToReference());
+            return _fileService.GetFile(path);
+        }
+
+        /// <summary>
+        /// Pushs the commit.
+        /// </summary>
+        /// <param name="commit"></param>
+        /// <returns></returns>
         private async Task PushCommitAsync(Commit commit)
         {
             var commitFile = _fileService.GetFile(commit.FullName);
@@ -132,12 +164,6 @@ namespace Monbsoft.EvolDB.Services
                 await _gateway.AddMetadataAsync(metadata);
             }
             _logger.LogInformation($"Commit {commit.Message} is pushed.");
-        }
-
-        private IFileInfo CreateCommitFile(Repository repository, Commit commit)
-        {
-            string path = Path.Combine(repository.CommitFolder.PhysicalPath, commit.ToReference());
-            return _fileService.GetFile(path);
         }
     }
 }
