@@ -16,6 +16,12 @@ namespace Monbsoft.EvolDB.Tests.Infrastructure
             _subfolders = new List<IDirectoryInfo>();
         }
 
+        public TestDirectoryInfo(string name)
+            : base()
+        {
+            Name = name;
+        }
+
         public bool Exists { get; set; }
 
         public string Name { get; set; }
@@ -29,7 +35,7 @@ namespace Monbsoft.EvolDB.Tests.Infrastructure
 
         public IList<IFileInfo> GetFiles()
         {
-            throw new NotImplementedException();
+            return _files;
         }
 
         public IDirectoryInfo GetFolder(string name)

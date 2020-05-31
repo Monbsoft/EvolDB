@@ -14,10 +14,10 @@ namespace Monbsoft.EvolDB.Repositories
             LoadRepository(repository);
             LoadMetadata(metadata);
         }
-        public LinkedListNode<TreeEntry> First => _entries.First;
+        public LinkedListNode<TreeEntry> FirstNode => _entries.First;
         public TreeEntry CurrentEntry => CurrentNode?.Value;
         public LinkedListNode<TreeEntry> CurrentNode { get; set; }
-        public LinkedListNode<TreeEntry> Last => _entries.Last;
+        public LinkedListNode<TreeEntry> LastNode => _entries.Last;
         public IEnumerable<Commit> GetCommitsToPush()
         {
             return _entries
