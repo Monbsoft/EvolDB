@@ -2,7 +2,8 @@
   "profiles": {
     "Monbsoft.EvolDB.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "new"
+      "commandLineArgs": "init mydata",
+      "workingDirectory": "D:\\Users\\Oliver254\\tmp"
     }
   }
 }
