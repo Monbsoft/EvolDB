@@ -54,6 +54,7 @@ namespace Monbsoft.EvolDB.Models
             var max = Commits
                 .Where(c => c.Prefix == commit.Prefix)
                 .Max(c => c.Version);
+
             return commit.Version > max;
         }
     }

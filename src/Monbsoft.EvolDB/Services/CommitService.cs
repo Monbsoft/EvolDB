@@ -42,23 +42,21 @@ namespace Monbsoft.EvolDB.Services
         public void Create(string reference)
         {
             _logger.LogDebug($"Creating commit...");
-            if (!_referenceParser.TryParse(reference, out Commit commit))
-            {
-                throw new CommitException("Unable to parser the reference.");
-            }
-            if (_repository.ValidateCommit(commit))
+            _referenceParser.Parse(reference, out Commit commit);
+
+            if (!_repository.ValidateCommit(commit))
             {
                 throw new CommitException("A higher version already exists.");
             }
 
             // créer le fichier du commit
-            var commitFile = CreateCommitFile(_repository, commit);
+            var commitFile = CreateCommitFileInfo(_repository, commit);
             if (commitFile.Exists)
             {
                 throw new CommitException($"Commit {reference} already exists.");
             }
             commit.FullName = commitFile.FullName;
-            commitFile.Create().Close();
+            commitFile.Create();
             _logger.LogDebug($"Commit {reference} is created.");
         }
 
@@ -120,7 +118,7 @@ namespace Monbsoft.EvolDB.Services
             _logger.LogInformation($"Commit {entry.Repeatable.Message} is reset in {stopwatch.ElapsedMilliseconds} ms.");
         }
 
-        private IFileInfo CreateCommitFile(Repository repository, Commit commit)
+        private IFileInfo CreateCommitFileInfo(Repository repository, Commit commit)
         {
             string path = Path.Combine(repository.CommitFolder.PhysicalPath, commit.ToReference());
             return _fileService.GetFile(path);

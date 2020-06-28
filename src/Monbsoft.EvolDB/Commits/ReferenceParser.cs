@@ -16,15 +16,9 @@ namespace Monbsoft.EvolDB.Commits
         /// <param name="reference"></param>
         /// <param name="commit"></param>
         /// <returns></returns>
-        public bool TryParse(string reference, out Commit commit)
+        public bool Parse(string reference, out Commit commit)
         {
             var match = Match(reference);
-
-            if(!match.Success)
-            {
-                commit = null;
-                return false;
-            }
             
             commit = new Commit
             {
@@ -38,7 +32,7 @@ namespace Monbsoft.EvolDB.Commits
         private Match Match(string reference)
         {
             var match = _referenceRegex.Match(reference.Trim());
-            if (match == null || match.Groups.Count < 4 || match.Groups.Count > 4)
+            if (match == null || !match.Success)
             {
                 throw new CommitException("Commit reference is invalid.");
             }

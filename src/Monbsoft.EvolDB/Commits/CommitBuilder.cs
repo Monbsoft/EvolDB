@@ -29,7 +29,7 @@ namespace Monbsoft.EvolDB.Commits
             }
             _logger.LogDebug($"Building commit {file.Name}...");
 
-            if (_parser.TryParse(file.Name, out Commit commit))
+            if (_parser.Parse(file.Name, out Commit commit))
             {
                 commit.Hash = _hashService.ComputeHash(file);
                 commit.FullName = file.FullName;

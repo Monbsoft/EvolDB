@@ -22,9 +22,10 @@ namespace Monbsoft.EvolDB.Tests.Infrastructure
 
         public string Name { get; set; }
 
-        public FileStream Create()
+
+        public void Create()
         {
-            throw new NotImplementedException();
+            Exists = true;
         }
 
         public FileStream OpenRead()
