@@ -16,6 +16,38 @@ EvolDB is a simple database migration tool with .Net Core. It is a tool to help 
 evoldb commit V1_0_0_1__init.n1sql
 ```
 
+## Getting Started
+
+Create the data repository called _mydata_.
+
+```
+evoldb init mydata
+```
+
+Configure the config file called _config.json_.
+
+```
+{
+  "ConnectionType": "Couchbase",
+  "COUCHBASE_CONNECTIONSTRING": "couchbase://127.0.0.1",
+  "COUCHBASE_BUCKET": <REPLACE-WITH-BUCKET>,
+  "COUCHBASE_USERNAME": <REPLACE-WITH-USERNAME>,
+  "COUCHBASE_PASSWORD": <REPLACE-WITH-PASSWORD>
+}
+```
+
+Create the first commit called _V1_0_0_0\_\_init.n1ql_.
+
+```
+evoldb commit V1_0_0_0__init.n1ql
+```
+
+Update database with commits.
+
+```
+evoldb push
+```
+
 ## Supported Databases
 
 ![Couchbase](doc/images/couchbase.png) | |
