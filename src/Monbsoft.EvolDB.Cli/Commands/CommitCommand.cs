@@ -39,9 +39,7 @@ namespace Monbsoft.EvolDB.Cli.Commands
 
         public void CreateCommit(string migration)
         {
-            _logger.LogDebug("Creating commit...");
             _commitService.Create(migration);
-            _logger.LogInformation($"Commit {migration} is created.");
         }
     }
 }

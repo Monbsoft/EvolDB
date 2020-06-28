@@ -11,34 +11,27 @@ namespace Monbsoft.EvolDB.Commits
             @"^(?<prefix>[V|R])(?<version>[0-9\\._]+)__(?<message>\w+)[\\.]{1}n1ql$");
 
         /// <summary>
-        /// Converts the commit reference. A return value indicates whether the conversion succeeded or failed.
+        /// Converts the commit reference.
         /// </summary>
         /// <param name="reference"></param>
-        /// <param name="commit"></param>
         /// <returns></returns>
-        public bool TryParse(string reference, out Commit commit)
+        public Commit CreateCommit(string reference)
         {
             var match = Match(reference);
-
-            if(!match.Success)
-            {
-                commit = null;
-                return false;
-            }
             
-            commit = new Commit
+            return new Commit
             {
                 Prefix = ParsePrefix(match.Groups["prefix"].Value),
                 Message = ParseMessage(match.Groups["message"].Value),
                 Version = ParseVersion(match.Groups["version"].Value),
             };
-            return true;
+
         }
 
         private Match Match(string reference)
         {
             var match = _referenceRegex.Match(reference.Trim());
-            if (match == null || match.Groups.Count < 4 || match.Groups.Count > 4)
+            if (match == null || !match.Success)
             {
                 throw new CommitException("Commit reference is invalid.");
             }

@@ -33,17 +33,15 @@ namespace Monbsoft.EvolDB.Repositories
             // configuration
             IConfigurationRoot configuration = null;
             var configFile = _fileService.GetFile(Path.Combine(rootFolder.PhysicalPath, Repository.Config_File));
-            if (configFile.Exists)
-            {
-                configuration = new ConfigurationBuilder()
-                    .AddJsonFile(configFile.FullName)
-                    .Build();
-            }
+
+            configuration = new ConfigurationBuilder()
+                .AddJsonFile(configFile.FullName)
+                .Build();
 
             var repository = new Repository(rootFolder, configuration);
 
             // commits
-            foreach(var commitFile in repository.GetCommitFiles())
+            foreach (var commitFile in repository.GetCommitFiles())
             {
                 var commit = _commitBuilder.Build(commitFile);
                 repository.Commits.Add(commit);

@@ -42,9 +42,9 @@ namespace Monbsoft.Extensions.FileProviders
         /// Creates a file.
         /// </summary>
         /// <returns></returns>
-        public FileStream Create()
+        public void Create()
         {
-            return _info.Create();
+            _info.Create().Close();
         }
 
         /// <summary>

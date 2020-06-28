@@ -1,10 +1,8 @@
-﻿
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Monbsoft.EvolDB.Models;
 using Monbsoft.EvolDB.Services;
 using Monbsoft.Extensions.FileProviders;
 using System;
-
 
 namespace Monbsoft.EvolDB.Commits
 {
@@ -29,18 +27,12 @@ namespace Monbsoft.EvolDB.Commits
             }
             _logger.LogDebug($"Building commit {file.Name}...");
 
-            if (_parser.TryParse(file.Name, out Commit commit))
-            {
-                commit.Hash = _hashService.ComputeHash(file);
-                commit.FullName = file.FullName;
-            }
+            var commit = _parser.CreateCommit(file.Name);
+            commit.Hash = _hashService.ComputeHash(file);
+            commit.FullName = file.FullName;
+
             _logger.LogDebug($"Commit {file.Name} is built.");
             return commit;
-
         }
-
-
-
-
     }
 }

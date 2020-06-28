@@ -21,7 +21,7 @@ namespace Monbsoft.Extensions.FileProviders
         /// Creates a file.
         /// </summary>
         /// <returns></returns>
-        FileStream Create();
+        void Create();
 
         /// <summary>
         /// 

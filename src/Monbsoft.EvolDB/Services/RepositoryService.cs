@@ -29,8 +29,9 @@ namespace Monbsoft.EvolDB.Services
             FileInfo configFile = new FileInfo(Path.Combine(folder.FullName, Repository.Config_File));
             using (var sw = configFile.CreateText())
             {
-                sw.WriteLine("{");
-                sw.WriteLine("}");
+                sw.WriteLine(@"{
+    ""ConnectionType"": "" ""
+}");
             }
         }
     }

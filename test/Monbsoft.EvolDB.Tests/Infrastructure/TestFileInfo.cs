@@ -14,16 +14,18 @@ namespace Monbsoft.EvolDB.Tests.Infrastructure
         public TestFileInfo(string name)
         {
             Name = name;
+            Exists = true;
         }
-        public bool Exists => true;
+        public bool Exists { get; set; }
 
         public string FullName { get; set; }
 
         public string Name { get; set; }
 
-        public FileStream Create()
+
+        public void Create()
         {
-            throw new NotImplementedException();
+            Exists = true;
         }
 
         public FileStream OpenRead()

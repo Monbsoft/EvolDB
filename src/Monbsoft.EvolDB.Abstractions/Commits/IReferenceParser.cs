@@ -4,6 +4,6 @@ namespace Monbsoft.EvolDB.Commits
 {
     public interface IReferenceParser
     {
-        bool TryParse(string reference, out Commit commit);
+        Commit CreateCommit(string reference);
     }
 }
