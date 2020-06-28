@@ -14,8 +14,9 @@ namespace Monbsoft.EvolDB.Tests.Infrastructure
         public TestFileInfo(string name)
         {
             Name = name;
+            Exists = true;
         }
-        public bool Exists => true;
+        public bool Exists { get; set; }
 
         public string FullName { get; set; }
 

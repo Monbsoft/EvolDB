@@ -17,7 +17,7 @@ namespace Monbsoft.EvolDB.Tests.Infrastructure
         }
 
         public TestDirectoryInfo(string name)
-            : base()
+            : this()
         {
             Name = name;
         }
