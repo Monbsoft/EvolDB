@@ -44,7 +44,7 @@ namespace Monbsoft.EvolDB.Tests
             mockHashService.Setup(hs => hs.ComputeHash(It.IsAny<IFileInfo>())).Returns("hash");
             var builder = new CommitBuilder(new ReferenceParser(), mockHashService.Object, NullLogger<CommitBuilder>.Instance);
 
-            Assert.Throws<ArgumentNullException>(() => builder.Build(testFile));
+            Assert.Throws<ArgumentNullException>("file", () => builder.Build(testFile));
         }
 
         [Fact]
@@ -59,7 +59,8 @@ namespace Monbsoft.EvolDB.Tests
             mockHashService.Setup(hs => hs.ComputeHash(It.IsAny<IFileInfo>())).Returns("hash");
             var builder = new CommitBuilder(new ReferenceParser(), mockHashService.Object, NullLogger<CommitBuilder>.Instance);
 
-            Assert.Throws<CommitException>(() => builder.Build(testFile));
+            var exception = Assert.Throws<CommitException>(() => builder.Build(testFile));
+            Assert.Equal("Commit reference is invalid.", exception.Message);
         }
     }
 }
