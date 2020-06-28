@@ -18,8 +18,8 @@ evoldb commit V1_0_0_1__init.n1sql
 
 ## Supported Databases
 
-[![Couchbase](doc/images/couchbase.png)] |
-Couchbase | |
+| -------------------------------------- | ------ |
+| ![Couchbase](doc/images/couchbase.png) | |
 
 ## Community
 
