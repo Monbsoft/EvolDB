@@ -16,7 +16,9 @@ namespace Monbsoft.EvolDB.Tests
         [Fact]
         public void Create_commit()
         {
-            (var commitService, var commitFile) = InitializeTest();
+            var folder = InitializeFolder();
+            var commitFile = InitializeCommitFile();
+            var commitService = InitializeService(folder, commitFile);
 
             commitService.Create("V1_0_0_0__init.n1ql");
 
@@ -24,14 +26,60 @@ namespace Monbsoft.EvolDB.Tests
         }
 
         [Fact]
+        public void Create_commit_exist()
+        {
+            var folder = InitializeFolder();
+            var commitFile = InitializeCommitFile();
+            commitFile.Exists = true;
+            var commitService = InitializeService(folder, commitFile);
+
+            var exeception = Assert.Throws<CommitException>(() => commitService.Create("V1_0_0_0__init.n1ql"));
+            Assert.Equal("Commit V1_0_0_0__init.n1ql already exists.", exeception.Message);
+        }
+
+        [Fact]
+        public void Create_commit_with_small_version()
+        {
+            var folder = InitializeFolder();
+            var commitFile = InitializeCommitFile();
+            ((TestDirectoryInfo)folder.GetFolder("commits")).WithFile(commitFile);
+            commitFile.Exists = true;
+            var fileService = new TestFileService()
+                .WithFile(commitFile);
+            var mockConfig = new Mock<IConfigurationRoot>();
+            mockConfig.Setup(config => config[It.IsAny<string>()]).Returns("COUCHBASE_TYPE");
+            var repository = new Repository(folder, mockConfig.Object);
+            repository.Commits.Add(
+                new Commit
+                {
+                    Prefix = Prefix.Versioned,
+                    Version = new CommitVersion(1, 0, 0, 0),
+                    Message = "init"
+                });
+            var mockGateway = new Mock<IDatabaseGateway>();
+            var commitService = new CommitService(
+                repository,
+                mockGateway.Object,
+                new ReferenceParser(),
+                fileService,
+                NullLogger<CommitService>.Instance);
+
+            var exception = Assert.Throws<CommitException>(() => commitService.Create("V0_95_5_6__init.n1ql"));
+            Assert.Equal("A higher version already exists.", exception.Message);
+        }
+
+        [Fact]
         public void Create_commit_with_bad_reference()
         {
-            (var commitService, var commitFile) = InitializeTest();
+            var folder = InitializeFolder();
+            var commitFile = InitializeCommitFile();
+            var commitService = InitializeService(folder, commitFile);
 
-            Assert.Throws<CommitException>(() => commitService.Create("V10000.n1ql"));
+            var exception = Assert.Throws<CommitException>(() => commitService.Create("V10000.n1ql"));
+            Assert.Equal("Commit reference is invalid.", exception.Message);
         }
-        
-        private (CommitService service, TestFileInfo commitFile) InitializeTest()
+
+        private TestDirectoryInfo InitializeFolder()
         {
             var testFolder = new TestDirectoryInfo("repository")
             {
@@ -42,20 +90,27 @@ namespace Monbsoft.EvolDB.Tests
                 Exists = true,
                 PhysicalPath = "/dev/repository/commits"
             });
+            return testFolder;
+        }
 
+        private TestFileInfo InitializeCommitFile()
+        {
             var commitFile = new TestFileInfo("V1_0_0_0__init.n1ql")
             {
                 Exists = false,
                 FullName = "/dev/repository/commits/V1_0_0_0__init.n1ql"
             };
+            return commitFile;
+        }
 
+        private CommitService InitializeService(TestDirectoryInfo folder, TestFileInfo commitFile)
+        {
             var fileService = new TestFileService()
                 .WithFile(commitFile);
 
-
             var mockConfig = new Mock<IConfigurationRoot>();
             mockConfig.Setup(config => config[It.IsAny<string>()]).Returns("COUCHBASE_TYPE");
-            var repository = new Repository(testFolder, mockConfig.Object);
+            var repository = new Repository(folder, mockConfig.Object);
             var mockGateway = new Mock<IDatabaseGateway>();
             var commitService = new CommitService(
                 repository,
@@ -64,7 +119,7 @@ namespace Monbsoft.EvolDB.Tests
                 fileService,
                 NullLogger<CommitService>.Instance);
 
-            return (commitService, commitFile);
+            return commitService;
         }
     }
 }

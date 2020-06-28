@@ -17,7 +17,7 @@ namespace Monbsoft.EvolDB.Tests
         {
             var parser = new ReferenceParser();
 
-            var parsed = parser.Parse(migration, out Commit commit);
+            var commit = parser.CreateCommit(migration);
 
             Assert.Equal(type, commit.Prefix);
             Assert.Equal(version, commit.Version.ToString());
@@ -33,7 +33,7 @@ namespace Monbsoft.EvolDB.Tests
         {
             var parser = new ReferenceParser();
 
-            Assert.Throws<CommitException>(() => parser.Parse(migration, out Commit commit));
+            Assert.Throws<CommitException>(() => parser.CreateCommit(migration));
         }
     }
 }

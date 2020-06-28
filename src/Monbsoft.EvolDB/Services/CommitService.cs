@@ -42,7 +42,7 @@ namespace Monbsoft.EvolDB.Services
         public void Create(string reference)
         {
             _logger.LogDebug($"Creating commit...");
-            _referenceParser.Parse(reference, out Commit commit);
+            var commit = _referenceParser.CreateCommit(reference);
 
             if (!_repository.ValidateCommit(commit))
             {
