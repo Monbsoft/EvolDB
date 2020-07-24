@@ -15,9 +15,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Monbsoft.Extensions.FilePro
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Monbsoft.Extensions.FileProviders.Abstractions", "src\Monbsoft.Extensions.FileProviders.Abstractions\Monbsoft.Extensions.FileProviders.Abstractions.csproj", "{C843C564-2162-4327-8303-7C6DEE188555}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monbsoft.EvolDB.Abstractions", "src\Monbsoft.EvolDB.Abstractions\Monbsoft.EvolDB.Abstractions.csproj", "{66885C45-68B4-41B4-83D5-1D096228F88A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Monbsoft.EvolDB.Abstractions", "src\Monbsoft.EvolDB.Abstractions\Monbsoft.EvolDB.Abstractions.csproj", "{66885C45-68B4-41B4-83D5-1D096228F88A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monbsoft.EvolDB.Couchbase", "src\Monbsoft.EvolDB.Couchbase\Monbsoft.EvolDB.Couchbase.csproj", "{625ACD75-49AD-4951-A313-7A580F762BA8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Monbsoft.EvolDB.Couchbase", "src\Monbsoft.EvolDB.Couchbase\Monbsoft.EvolDB.Couchbase.csproj", "{625ACD75-49AD-4951-A313-7A580F762BA8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monbsoft.EvolDB.SQLite", "src\Monbsoft.EvolDB.SQLite\Monbsoft.EvolDB.SQLite.csproj", "{629D3E91-AA8D-4C11-9659-6717028BC2CD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,6 +55,10 @@ Global
 		{625ACD75-49AD-4951-A313-7A580F762BA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{625ACD75-49AD-4951-A313-7A580F762BA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{625ACD75-49AD-4951-A313-7A580F762BA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{629D3E91-AA8D-4C11-9659-6717028BC2CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{629D3E91-AA8D-4C11-9659-6717028BC2CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{629D3E91-AA8D-4C11-9659-6717028BC2CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{629D3E91-AA8D-4C11-9659-6717028BC2CD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
