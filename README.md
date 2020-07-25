@@ -50,7 +50,9 @@ evoldb push
 
 ## Supported Databases
 
-![Couchbase](doc/images/couchbase.png) | |
+| Couchbase                              | SQLite                           |
+| -------------------------------------- | -------------------------------- |
+| ![Couchbase](doc/images/couchbase.png) | ![SQLite](doc/images/sqlite.png) |
 
 ## Community
 

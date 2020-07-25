@@ -39,7 +39,7 @@ namespace Monbsoft.EvolDB.Tests
 
         private static IReferenceParser CreateTestParser()
         {
-            return new ReferenceParser(null);
+            return new ReferenceParser("n1ql");
         }
     }
 }
