@@ -4,6 +4,7 @@ using Monbsoft.EvolDB.Data;
 using Monbsoft.EvolDB.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Threading.Tasks;
 
 namespace Monbsoft.EvolDB.SQLite
@@ -73,9 +74,29 @@ namespace Monbsoft.EvolDB.SQLite
                 sqlCommand = _connection.CreateCommand();
                 sqlCommand.CommandText =
                 @"
-                    SELECT * FROM _commits;
+                    SELECT CommitId, Prefix, Version, Message, Hash, Applied, CreationDate FROM __Commits WHERE Applied = 1;
                 ";
-                sqlCommand.ExecuteReader();
+                using(var reader = await sqlCommand.ExecuteReaderAsync())
+                {
+                    var metaList = new List<CommitMetadata>();
+
+                    while(reader.Read())
+                    {
+                        var meta = new CommitMetadata
+                        {
+                            Id = reader.GetString(0),
+                            Prefix = reader.GetString(1),
+                            Version = reader.GetString(2),
+                            Message = reader.GetString(3),
+                            Hash = reader.GetString(4),
+                            Applied = reader.GetBoolean(5),
+                            CreationDate = reader.GetDateTime(6)
+                        };
+                        metaList.Add(meta);
+                    }
+                    return metaList;
+                }
+
             }
             catch (SqliteException)
             {
@@ -92,7 +113,7 @@ namespace Monbsoft.EvolDB.SQLite
             _logger.LogDebug("Opening SQLite...");
             _connection = new SqliteConnection(_config.ConnectionString);
             await _connection.OpenAsync();
-            _logger.LogDebug($"{_connection.Database} SQLite is opened.");
+            _logger.LogDebug($"SQLite is opened.");
         }
         public async Task PushAsync(QueryToken query)
         {

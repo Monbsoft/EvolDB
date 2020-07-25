@@ -1,4 +1,5 @@
-﻿using Monbsoft.EvolDB.Models;
+﻿using Monbsoft.EvolDB.Exceptions;
+using Monbsoft.EvolDB.Models;
 using System;
 
 namespace Monbsoft.EvolDB.Repositories
@@ -65,6 +66,20 @@ namespace Monbsoft.EvolDB.Repositories
         public override int GetHashCode()
         {
             return Version.GetHashCode();
+        }
+
+        public bool CanPush()
+        {
+            if(Target == null)
+            {
+                return true;
+            }
+
+            if(!Source.Hash.Equals(Target.Hash))
+            {
+                throw new CommitException($"Commit hash {Version} is different.");
+            }
+            return false;
         }
     }
 }
