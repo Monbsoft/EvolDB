@@ -1,4 +1,5 @@
-﻿using Monbsoft.EvolDB.Models;
+﻿using Monbsoft.EvolDB.Exceptions;
+using Monbsoft.EvolDB.Models;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -23,8 +24,7 @@ namespace Monbsoft.EvolDB.Repositories
         public IEnumerable<Commit> GetCommitsToPush()
         {
             return _entries
-                .Where(e => e.Target == null)
-                .OrderBy(e => e.Version)
+                .Where(e => e.CanPush())
                 .Select(e => e.Source);
         }
 
@@ -59,6 +59,10 @@ namespace Monbsoft.EvolDB.Repositories
                         current = current.Previous;
                         CurrentNode = current;
                     }
+                }
+                else
+                {
+                    throw new RepositoryException("Database metadata does not exist in the directory.");
                 }
             }
         }

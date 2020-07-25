@@ -21,9 +21,7 @@ namespace Monbsoft.EvolDB.Tests
                 Name = "V1_0_0_0__init.n1ql",
                 Exists = true,
             };
-            var mockHashService = new Mock<IHashService>();
-            mockHashService.Setup(hs => hs.ComputeHash(It.IsAny<IFileInfo>())).Returns("hash");
-            var builder = new CommitBuilder(new ReferenceParser(), mockHashService.Object, NullLogger<CommitBuilder>.Instance);
+            var builder = CreateTestBuilder();    
 
             var commit = builder.Build(testFile);
 
@@ -40,9 +38,8 @@ namespace Monbsoft.EvolDB.Tests
                 Name = "V1_0_0_0__init.n1ql",
                 Exists = false,
             };
-            var mockHashService = new Mock<IHashService>();
-            mockHashService.Setup(hs => hs.ComputeHash(It.IsAny<IFileInfo>())).Returns("hash");
-            var builder = new CommitBuilder(new ReferenceParser(), mockHashService.Object, NullLogger<CommitBuilder>.Instance);
+
+            var builder = CreateTestBuilder();
 
             Assert.Throws<ArgumentNullException>("file", () => builder.Build(testFile));
         }
@@ -55,12 +52,19 @@ namespace Monbsoft.EvolDB.Tests
                 Name = "A1_0_0_0__init.n1ql",
                 Exists = true,
             };
-            var mockHashService = new Mock<IHashService>();
-            mockHashService.Setup(hs => hs.ComputeHash(It.IsAny<IFileInfo>())).Returns("hash");
-            var builder = new CommitBuilder(new ReferenceParser(), mockHashService.Object, NullLogger<CommitBuilder>.Instance);
+
+            var builder = CreateTestBuilder();
 
             var exception = Assert.Throws<CommitException>(() => builder.Build(testFile));
             Assert.Equal("Commit reference is invalid.", exception.Message);
+        }
+
+        private static ICommitBuilder CreateTestBuilder()
+        {
+            var mockHashService = new Mock<IHashService>();
+            mockHashService.Setup(hs => hs.ComputeHash(It.IsAny<IFileInfo>())).Returns("hash");
+
+            return new CommitBuilder(new ReferenceParser("n1ql"), mockHashService.Object, NullLogger<CommitBuilder>.Instance);
         }
     }
 }

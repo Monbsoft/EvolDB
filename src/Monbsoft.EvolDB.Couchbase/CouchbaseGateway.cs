@@ -6,7 +6,6 @@ using Monbsoft.EvolDB.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Monbsoft.EvolDB.Couchbase
@@ -27,12 +26,6 @@ namespace Monbsoft.EvolDB.Couchbase
         }
 
         public IQueryParser Parser { get; }
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
         public async Task AddMetadataAsync(CommitMetadata meta)
         {
             string id = Guid.NewGuid().ToString();
@@ -51,17 +44,15 @@ namespace Monbsoft.EvolDB.Couchbase
 
             await _cluster.QueryAsync<dynamic>(qb.Build());
         }
-        
-        public Task RemoveMetadataAsync(CommitMetadata meta)
+        public void Dispose()
         {
-            var collection = _bucket.DefaultCollection();
-            return collection.RemoveAsync(meta.Id);
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
-
         public async Task<List<CommitMetadata>> GetMetadataAsync()
         {
             try
-            {               
+            {
                 var commits = await _cluster.QueryAsync<CommitMetadata>($"SELECT meta().id, Applied, CreationDate, `Hash`, Message, Prefix, Version FROM {_bucket.Name} WHERE {_config.Type} = \"Commit\" AND Applied = true");
                 return await commits.Rows.ToListAsync();
             }
@@ -71,12 +62,6 @@ namespace Monbsoft.EvolDB.Couchbase
                 return new List<CommitMetadata>();
             }
         }
-
-        public Task PushAsync(QueryToken token)
-        {
-            return _cluster.QueryAsync<dynamic>(token.Text);
-        }
-
         public async Task OpenAsync()
         {
             _logger.LogDebug("Opening couchbase...");
@@ -89,6 +74,15 @@ namespace Monbsoft.EvolDB.Couchbase
 
             _bucket = await _cluster.BucketAsync(_config.Bucket);
             _logger.LogDebug($"Bucket {_bucket.Name} is opened.");
+        }
+        public Task PushAsync(QueryToken token)
+        {
+            return _cluster.QueryAsync<dynamic>(token.Text);
+        }
+        public Task RemoveMetadataAsync(CommitMetadata meta)
+        {
+            var collection = _bucket.DefaultCollection();
+            return collection.RemoveAsync(meta.Id);
         }
         protected virtual void Dispose(bool disposing)
         {

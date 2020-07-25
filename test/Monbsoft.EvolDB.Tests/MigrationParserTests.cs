@@ -1,4 +1,5 @@
-﻿using Monbsoft.EvolDB.Commits;
+﻿using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
+using Monbsoft.EvolDB.Commits;
 using Monbsoft.EvolDB.Exceptions;
 using Monbsoft.EvolDB.Models;
 using Xunit;
@@ -15,7 +16,7 @@ namespace Monbsoft.EvolDB.Tests
         [InlineData("V2.3.5__test.n1ql", Prefix.Versioned, "2_3_5_0", "test")]
         public void TryParseMigration(string migration, Prefix type, string version, string message)
         {
-            var parser = new ReferenceParser();
+            var parser = CreateTestParser();
 
             var commit = parser.CreateCommit(migration);
 
@@ -31,9 +32,14 @@ namespace Monbsoft.EvolDB.Tests
         [InlineData("V1_0_0_2__.n1ql")]
         public void ParseFakeMigration(string migration)
         {
-            var parser = new ReferenceParser();
+            var parser = CreateTestParser();
 
             Assert.Throws<CommitException>(() => parser.CreateCommit(migration));
+        }
+
+        private static IReferenceParser CreateTestParser()
+        {
+            return new ReferenceParser("n1ql");
         }
     }
 }

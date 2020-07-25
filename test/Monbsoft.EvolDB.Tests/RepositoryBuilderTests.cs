@@ -1,5 +1,4 @@
-﻿using Castle.Core.Configuration;
-using Microsoft.Extensions.Logging.Abstractions;
+﻿using Microsoft.Extensions.Logging.Abstractions;
 using Monbsoft.EvolDB.Commits;
 using Monbsoft.EvolDB.Repositories;
 using Monbsoft.EvolDB.Services;
@@ -13,6 +12,13 @@ namespace Monbsoft.EvolDB.Tests
     {
         [Fact]
         public void Build_without_config_file()
+        {
+            var builder = CreateTestBuilder();
+
+            Assert.Throws<FileNotFoundException>(() => builder.Build());
+        }
+
+        private static IRepositoryBuilder CreateTestBuilder()
         {
             var fileService = new TestFileService()
                 .WithFolder(
@@ -30,10 +36,10 @@ namespace Monbsoft.EvolDB.Tests
                     FullName = "/dev/repository/config.json",
                     Exists = false
                 });
-            var commitBuilder = new CommitBuilder(new ReferenceParser(), new HashService(), NullLogger<CommitBuilder>.Instance);
-            var builder = new RepositoryBuilder(fileService, commitBuilder, NullLogger<RepositoryBuilder>.Instance);
+            var commitFactory = new TestCommitFactory("n1ql");
 
-            Assert.Throws<FileNotFoundException>(() => builder.Build());
+
+            return new RepositoryBuilder(fileService, commitFactory, NullLogger<RepositoryBuilder>.Instance);
         }
     }
 }

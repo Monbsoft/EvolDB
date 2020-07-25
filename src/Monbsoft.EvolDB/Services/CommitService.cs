@@ -7,6 +7,7 @@ using Monbsoft.EvolDB.Repositories;
 using Monbsoft.Extensions.FileProviders;
 using System;
 using System.Collections.Generic;
+using System.CommandLine.Parsing;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -24,13 +25,17 @@ namespace Monbsoft.EvolDB.Services
         public CommitService(
             Repository repository,
             IDatabaseGateway gateway,
-            IReferenceParser parser,
+            ICommitFactory commitFactory,
             IFileService fileService,
             ILogger<CommitService> logger)
         {
+            if (commitFactory == null)
+            {
+                throw new ArgumentNullException(nameof(commitFactory));
+            }
+            _referenceParser = commitFactory.CreateParser(repository);
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _gateway = gateway ?? throw new ArgumentNullException(nameof(gateway));
-            _referenceParser = parser ?? throw new ArgumentNullException(nameof(parser));
             _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }

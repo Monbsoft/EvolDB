@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Monbsoft.EvolDB.Couchbase;
 using Monbsoft.EvolDB.Data;
 using Monbsoft.EvolDB.Models;
+using Monbsoft.EvolDB.SQLite;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -31,10 +32,16 @@ namespace Monbsoft.EvolDB.Cli.Data
             IDatabaseGateway gateway;
             switch(_repository.ConnectionType)
             {
-                case "COUCHBASE":
+                case ConnectionTypes.Couchbase:
                     {
                         var config = new CouchbaseConfig(_repository.Configuration);
                         gateway = new CouchbaseGateway(config, _loggerFactory.CreateLogger<CouchbaseGateway>());
+                        break;
+                    }
+                case ConnectionTypes.SQLite:
+                    {
+                        var config = new SQLiteConfig(_repository.Configuration);
+                        gateway = new SQLiteGateway(config, _loggerFactory.CreateLogger<SQLiteGateway>());
                         break;
                     }
                 default:

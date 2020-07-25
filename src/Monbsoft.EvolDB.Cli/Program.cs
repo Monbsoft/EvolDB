@@ -39,7 +39,6 @@ namespace Monbsoft.EvolDB.Cli
                     .AddCommand(LogCommand.Create())
                     .AddCommand(PushCommand.Create())
                     .AddCommand(ResetCommand.Create())
-                    .AddCommand(StatusCommand.Create())
                     .UseHost(host =>
                     {
                         host.ConfigureLogging((context, loggingBuilder) =>
@@ -51,9 +50,8 @@ namespace Monbsoft.EvolDB.Cli
                         host.ConfigureServices(services =>
                         {
                             services.AddSingleton<IFileService, PhysicalFileService>();
-                            services.AddSingleton<IReferenceParser, ReferenceParser>();
+                            services.AddSingleton<ICommitFactory, CommitFactory>();
                             services.AddSingleton<IRepositoryBuilder, RepositoryBuilder>();
-                            services.AddSingleton<ICommitBuilder, CommitBuilder>();
                             services.AddSingleton<GatewayFactory>();
                             services.AddSingleton<IHashService, HashService>();
                             services.AddSingleton<ICommitService, CommitService>();
@@ -71,6 +69,7 @@ namespace Monbsoft.EvolDB.Cli
                         });
                     })
                     .UseVersionOption()
+                    .UseDefaults()
                     .UseHelp()
                     .Build();
                 return await parser.InvokeAsync(args);

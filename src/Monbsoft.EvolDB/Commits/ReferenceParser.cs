@@ -7,8 +7,13 @@ namespace Monbsoft.EvolDB.Commits
 {
     public class ReferenceParser : IReferenceParser
     {
-        private static Regex _referenceRegex = new Regex(
-            @"^(?<prefix>[V|R])(?<version>[0-9\\._]+)__(?<message>\w+)[\\.]{1}n1ql$");
+        private readonly Regex _referenceRegex;
+
+        public ReferenceParser(string extension)
+        {
+            string pattern = @"^(?<prefix>[V|R])(?<version>[0-9\\._]+)__(?<message>\w+)[\\.]{1}" + extension + "$";
+            _referenceRegex = new Regex(pattern);
+        }
 
         /// <summary>
         /// Converts the commit reference.
