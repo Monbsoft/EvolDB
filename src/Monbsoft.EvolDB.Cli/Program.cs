@@ -51,9 +51,8 @@ namespace Monbsoft.EvolDB.Cli
                         host.ConfigureServices(services =>
                         {
                             services.AddSingleton<IFileService, PhysicalFileService>();
-                            services.AddSingleton<IReferenceParser, ReferenceParser>();
+                            services.AddSingleton<ICommitFactory, CommitFactory>();
                             services.AddSingleton<IRepositoryBuilder, RepositoryBuilder>();
-                            services.AddSingleton<ICommitBuilder, CommitBuilder>();
                             services.AddSingleton<GatewayFactory>();
                             services.AddSingleton<IHashService, HashService>();
                             services.AddSingleton<ICommitService, CommitService>();

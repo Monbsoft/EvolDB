@@ -24,9 +24,39 @@ namespace Monbsoft.EvolDB.SQLite
 
         public IQueryParser Parser { get; }
 
-        public Task AddMetadataAsync(CommitMetadata meta)
+        public async Task AddMetadataAsync(CommitMetadata meta)
         {
-            throw new NotImplementedException();
+            using (var command = _connection.CreateCommand())
+            {
+                command.CommandText =
+                @"
+                    CREATE TABLE IF NOT EXISTS __Commits
+                    (
+                        CommitId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                        Prefix TEXT NOT NULL,
+                        Version TEXT NOT NULL,
+                        Message TEXT NOT NULL,
+                        Hash TEXT NOT NULL,
+                        Applied INTEGER NOT NULL,
+                        CreationDate TEXT NOT NULL
+                    );
+                ";
+                await command.ExecuteNonQueryAsync();
+
+                command.CommandText =
+                @"
+                    INSERT INTO __Commits(Prefix, Version, Message, Hash, Applied, CreationDate)
+                    VALUES (@Prefix, @Version, @Message, @Hash, @Applied, @CreationDate)
+                ";
+                command.Parameters.AddWithValue("@Prefix", meta.Prefix);
+                command.Parameters.AddWithValue("@Version", meta.Version);
+                command.Parameters.AddWithValue("@Message", meta.Message);
+                command.Parameters.AddWithValue("@Hash", meta.Hash);
+                command.Parameters.AddWithValue("@Applied", meta.Applied);
+                command.Parameters.AddWithValue("@CreationDate", meta.CreationDate);
+
+                await command.ExecuteNonQueryAsync();
+            }
         }
 
         public void Dispose()
@@ -47,7 +77,7 @@ namespace Monbsoft.EvolDB.SQLite
                 ";
                 sqlCommand.ExecuteReader();
             }
-            catch(SqliteException ex)
+            catch (SqliteException)
             {
                 return new List<CommitMetadata>();
             }
@@ -57,23 +87,20 @@ namespace Monbsoft.EvolDB.SQLite
             }
             return new List<CommitMetadata>();
         }
-        public Task OpenAsync()
+        public async Task OpenAsync()
         {
             _logger.LogDebug("Opening SQLite...");
-            _connection = new SqliteConnection(_config.ConnectionString);            
-            _connection.Open();
-
-            _logger.LogDebug("");
-            return Task.CompletedTask;
+            _connection = new SqliteConnection(_config.ConnectionString);
+            await _connection.OpenAsync();
+            _logger.LogDebug($"{_connection.Database} SQLite is opened.");
         }
         public async Task PushAsync(QueryToken query)
         {
-            using(var sqlCommand = _connection.CreateCommand())
+            using (var sqlCommand = _connection.CreateCommand())
             {
                 sqlCommand.CommandText = query.Text;
                 await sqlCommand.ExecuteReaderAsync();
             }
-
         }
         public Task RemoveMetadataAsync(CommitMetadata meta)
         {

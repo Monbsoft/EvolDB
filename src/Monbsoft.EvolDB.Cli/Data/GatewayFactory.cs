@@ -32,13 +32,13 @@ namespace Monbsoft.EvolDB.Cli.Data
             IDatabaseGateway gateway;
             switch(_repository.ConnectionType)
             {
-                case "COUCHBASE":
+                case ConnectionTypes.Couchbase:
                     {
                         var config = new CouchbaseConfig(_repository.Configuration);
                         gateway = new CouchbaseGateway(config, _loggerFactory.CreateLogger<CouchbaseGateway>());
                         break;
                     }
-                case "SQLITE":
+                case ConnectionTypes.SQLite:
                     {
                         var config = new SQLiteConfig(_repository.Configuration);
                         gateway = new SQLiteGateway(config, _loggerFactory.CreateLogger<SQLiteGateway>());

@@ -60,7 +60,7 @@ namespace Monbsoft.EvolDB.Tests
             var commitService = new CommitService(
                 repository,
                 mockGateway.Object,
-                new ReferenceParser(),
+                new TestCommitFactory("n1ql"),
                 fileService,
                 NullLogger<CommitService>.Instance);
 
@@ -115,7 +115,7 @@ namespace Monbsoft.EvolDB.Tests
             var commitService = new CommitService(
                 repository,
                 mockGateway.Object,
-                new ReferenceParser(),
+                new TestCommitFactory("n1ql"),
                 fileService,
                 NullLogger<CommitService>.Instance);
 

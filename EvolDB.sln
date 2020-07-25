@@ -19,7 +19,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Monbsoft.EvolDB.Abstraction
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Monbsoft.EvolDB.Couchbase", "src\Monbsoft.EvolDB.Couchbase\Monbsoft.EvolDB.Couchbase.csproj", "{625ACD75-49AD-4951-A313-7A580F762BA8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monbsoft.EvolDB.SQLite", "src\Monbsoft.EvolDB.SQLite\Monbsoft.EvolDB.SQLite.csproj", "{629D3E91-AA8D-4C11-9659-6717028BC2CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Monbsoft.EvolDB.SQLite", "src\Monbsoft.EvolDB.SQLite\Monbsoft.EvolDB.SQLite.csproj", "{629D3E91-AA8D-4C11-9659-6717028BC2CD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A607A722-1A4B-4BF1-A749-B38ADA68646E}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -43,6 +43,21 @@ namespace Monbsoft.EvolDB.Models
             return CommitFolder.GetFiles();
         }
 
+        public string GetFileExtension()
+        {
+            switch(ConnectionType)
+            {
+                case ConnectionTypes.Couchbase:
+                    {
+                        return "n1ql";
+                    }
+                default:
+                    {
+                        return "sql";
+                    }
+            }
+        }
+
         /// <summary>
         /// Validates the specified commit.
         /// </summary>
