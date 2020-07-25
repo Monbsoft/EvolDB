@@ -70,6 +70,7 @@ namespace Monbsoft.EvolDB.Cli
                         });
                     })
                     .UseVersionOption()
+                    .UseDefaults()
                     .UseHelp()
                     .Build();
                 return await parser.InvokeAsync(args);

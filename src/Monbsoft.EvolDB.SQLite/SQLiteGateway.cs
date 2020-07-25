@@ -106,7 +106,6 @@ namespace Monbsoft.EvolDB.SQLite
             {
                 sqlCommand?.Dispose();
             }
-            return new List<CommitMetadata>();
         }
         public async Task OpenAsync()
         {
@@ -123,9 +122,16 @@ namespace Monbsoft.EvolDB.SQLite
                 await sqlCommand.ExecuteReaderAsync();
             }
         }
-        public Task RemoveMetadataAsync(CommitMetadata meta)
+        public async Task RemoveMetadataAsync(CommitMetadata meta)
         {
-            throw new NotImplementedException();
+            string pattern = $"DELETE FROM __Commits WHERE CommitId = @commitId";
+
+            using(var command = _connection.CreateCommand())
+            {
+                command.Parameters.AddWithValue("@commitId", meta.Id);
+                command.CommandText = pattern;
+                await command.ExecuteNonQueryAsync();
+            }
         }
         protected virtual void Dispose(bool disposing)
         {
