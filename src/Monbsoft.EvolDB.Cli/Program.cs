@@ -39,7 +39,6 @@ namespace Monbsoft.EvolDB.Cli
                     .AddCommand(LogCommand.Create())
                     .AddCommand(PushCommand.Create())
                     .AddCommand(ResetCommand.Create())
-                    .AddCommand(StatusCommand.Create())
                     .UseHost(host =>
                     {
                         host.ConfigureLogging((context, loggingBuilder) =>
