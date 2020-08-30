@@ -24,6 +24,12 @@ namespace Monbsoft.Extensions.FileProviders
         void Create();
 
         /// <summary>
+        /// Reads all characters  from the current position to the end of the stream.
+        /// </summary>
+        /// <returns></returns>
+        string ReadAll();
+
+        /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>

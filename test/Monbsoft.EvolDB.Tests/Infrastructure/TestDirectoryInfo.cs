@@ -33,6 +33,10 @@ namespace Monbsoft.EvolDB.Tests.Infrastructure
             throw new NotImplementedException();
         }
 
+        public IFileInfo GetFile(string name)
+        {
+            throw new NotImplementedException();
+        }
         public IList<IFileInfo> GetFiles()
         {
             return _files;
@@ -43,15 +47,14 @@ namespace Monbsoft.EvolDB.Tests.Infrastructure
             return _subfolders.FirstOrDefault(d => d.Name == name);
         }
 
-        public TestDirectoryInfo WithFile(TestFileInfo file)
-        {
-            _files.Add(file);
-            return this;
-        }
-
         public TestDirectoryInfo WithDirectory(TestDirectoryInfo subdirectory)
         {
             _subfolders.Add(subdirectory);
+            return this;
+        }
+        public TestDirectoryInfo WithFile(TestFileInfo file)
+        {
+            _files.Add(file);
             return this;
         }
     }

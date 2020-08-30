@@ -26,6 +26,8 @@ namespace Monbsoft.Extensions.FileProviders
         /// <returns></returns>
         void Create();
 
+        IFileInfo GetFile(string name);
+
         /// <summary>
         /// Gets the file list fo the current directory.
         /// </summary>

@@ -19,11 +19,11 @@ namespace Monbsoft.EvolDB.SQLite
         public SQLiteGateway(SQLiteConfig config, ILogger<SQLiteGateway> logger)
         {
             _config = config;
-            Parser = new DefaultQueryParser();
+            StatementParser = new StatementParser();
             _logger = logger;
         }
 
-        public IQueryParser Parser { get; }
+        public IStatementParser StatementParser { get; }
 
         public async Task AddMetadataAsync(CommitMetadata meta)
         {

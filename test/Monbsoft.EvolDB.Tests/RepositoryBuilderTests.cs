@@ -4,6 +4,7 @@ using Monbsoft.EvolDB.Repositories;
 using Monbsoft.EvolDB.Services;
 using Monbsoft.EvolDB.Tests.Infrastructure;
 using System.IO;
+using System.Linq;
 using Xunit;
 
 namespace Monbsoft.EvolDB.Tests
@@ -13,33 +14,33 @@ namespace Monbsoft.EvolDB.Tests
         [Fact]
         public void Build_without_config_file()
         {
-            var builder = CreateTestBuilder();
-
-            Assert.Throws<FileNotFoundException>(() => builder.Build());
+            using (var fs = new DisposableFileSystem())
+            {
+                var builder = InitializeTestBuilder(fs);
+                Assert.Throws<FileNotFoundException>(() => builder.Build());
+            }
         }
 
-        private static IRepositoryBuilder CreateTestBuilder()
+        [Fact]
+        public void Build_repository()
         {
-            var fileService = new TestFileService()
-                .WithFolder(
-                new TestDirectoryInfo("repository")
-                {
-                    Exists = true,
-                    PhysicalPath = "/dev/repository",
-                }.WithDirectory(
-                    new TestDirectoryInfo("commits")
-                    {
-                        Exists = true
-                    }))
-                .WithFile(new TestFileInfo("config.json")
-                {
-                    FullName = "/dev/repository/config.json",
-                    Exists = false
-                });
-            var commitFactory = new TestCommitFactory("n1ql");
+            using (var fs = new DisposableFileSystem()
+                .CreateFileWithContent("config.json", "{ \"ConnectionType\": \"COUCHBASE\"}")
+                .CreateFolder("commits")
+                .CreateFile("commits/V1_0_0_0__init.n1ql"))
+            {
+                var builder = InitializeTestBuilder(fs);
+                var repository = builder.Build();
 
+                Assert.Equal("V1_0_0_0__init.n1ql", repository.Commits.First().ToReference());
+            }
+        }
 
-            return new RepositoryBuilder(fileService, commitFactory, NullLogger<RepositoryBuilder>.Instance);
+        private static IRepositoryBuilder InitializeTestBuilder(DisposableFileSystem fs)
+        {
+            var commitFactory = new CommitFactory(new HashService(), NullLoggerFactory.Instance);
+
+            return new RepositoryBuilder(fs.DirectoryInfo, commitFactory, NullLogger<RepositoryBuilder>.Instance);
         }
     }
 }

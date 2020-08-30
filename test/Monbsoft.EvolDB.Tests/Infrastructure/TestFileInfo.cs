@@ -33,6 +33,11 @@ namespace Monbsoft.EvolDB.Tests.Infrastructure
             throw new NotImplementedException();
         }
 
+        public string ReadAll()
+        {
+            throw new NotImplementedException();
+        }
+
         public List<string> ReadLines()
         {
             throw new NotImplementedException();

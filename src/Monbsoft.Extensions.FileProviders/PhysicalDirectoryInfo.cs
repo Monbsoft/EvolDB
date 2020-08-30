@@ -52,6 +52,16 @@ namespace Monbsoft.Extensions.FileProviders
         }
 
         /// <summary>
+        /// Returns the file of the current directory.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public IFileInfo GetFile(string name)
+        {
+            return new PhysicalFileInfo(Path.Combine(PhysicalPath, name));
+        }
+
+        /// <summary>
         /// Returns the file list of the current directory.
         /// </summary>
         /// <returns></returns>
@@ -68,12 +78,7 @@ namespace Monbsoft.Extensions.FileProviders
 
         public IDirectoryInfo GetFolder(string name)
         {
-            var subDirectory = _info.GetDirectories(name).FirstOrDefault();
-            if(subDirectory != null)
-            {
-                return new PhysicalDirectoryInfo(subDirectory);
-            }
-            return null;
+            return new PhysicalDirectoryInfo(Path.Combine(PhysicalPath, name));
         }
 
         #endregion

@@ -57,6 +57,18 @@ namespace Monbsoft.Extensions.FileProviders
         public FileStream OpenRead() => _info.OpenRead();
 
         /// <summary>
+        /// Reads all characters from the current position to the end of the stream.
+        /// </summary>
+        /// <returns></returns>
+        public string ReadAll()
+        {
+            using (var stream = _info.OpenRead())
+            using (var reader = new StreamReader(stream))
+            {
+                return reader.ReadToEnd();
+            }
+        }
+        /// <summary>
         /// Reads lines from the current stream.
         /// </summary>
         /// <returns></returns>

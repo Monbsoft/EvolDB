@@ -22,10 +22,10 @@ namespace Monbsoft.EvolDB.Couchbase
         {
             _config = config;
             _logger = logger;
-            Parser = new DefaultQueryParser();
+            StatementParser = new StatementParser();
         }
 
-        public IQueryParser Parser { get; }
+        public IStatementParser StatementParser { get; }
         public async Task AddMetadataAsync(CommitMetadata meta)
         {
             string id = Guid.NewGuid().ToString();

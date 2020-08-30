@@ -10,13 +10,13 @@ namespace Monbsoft.EvolDB.Repositories
 {
     public class RepositoryBuilder : IRepositoryBuilder
     {
-        private readonly IFileService _fileService;
+        private readonly IDirectoryInfo _rootFolder;
         private readonly ICommitFactory _commitFactory;
         private readonly ILogger<RepositoryBuilder> _logger;
 
-        public RepositoryBuilder(IFileService fileService, ICommitFactory commitFactory , ILogger<RepositoryBuilder> logger)
+        public RepositoryBuilder(IDirectoryInfo folder, ICommitFactory commitFactory , ILogger<RepositoryBuilder> logger)
         {
-            _fileService = fileService;
+            _rootFolder = folder;
             _commitFactory = commitFactory;
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -28,17 +28,21 @@ namespace Monbsoft.EvolDB.Repositories
         public Repository Build()
         {
             _logger.LogDebug("Building repository...");
-            var rootFolder = _fileService.GetFolder(Directory.GetCurrentDirectory());
 
             // configuration
             IConfigurationRoot configuration = null;
-            var configFile = _fileService.GetFile(Path.Combine(rootFolder.PhysicalPath, Repository.Config_File));
+            var configFile = _rootFolder.GetFile(Repository.Config_File);
+
+            if(!configFile.Exists)
+            {
+                throw new FileNotFoundException("config.json");
+            }
 
             configuration = new ConfigurationBuilder()
                 .AddJsonFile(configFile.FullName)
                 .Build();
 
-            var repository = new Repository(rootFolder, configuration);
+            var repository = new Repository(_rootFolder, configuration);
             var commitBuilder = _commitFactory.CreateBuilder(repository);
             // commits
             foreach (var commitFile in repository.GetCommitFiles())

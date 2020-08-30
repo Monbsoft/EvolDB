@@ -5,6 +5,7 @@ namespace Monbsoft.EvolDB.Models
 {
     public class Commit
     {
+        public string Extension { get; set; }
         public string FullName { get; set; }
         public string Hash { get; set; }
         public string Message { get; set; }
@@ -37,7 +38,7 @@ namespace Monbsoft.EvolDB.Models
             sb.Append(Version.ToString());
             sb.Append("__");
             sb.Append(Message.Replace(" ", "_"));
-            sb.Append(".n1ql");
+            sb.Append($".{Extension}");
             return sb.ToString();
         }
     }

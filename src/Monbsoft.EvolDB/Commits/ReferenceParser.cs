@@ -7,12 +7,14 @@ namespace Monbsoft.EvolDB.Commits
 {
     public class ReferenceParser : IReferenceParser
     {
+        private readonly string _extension;
         private readonly Regex _referenceRegex;
 
         public ReferenceParser(string extension)
         {
             string pattern = @"^(?<prefix>[V|R])(?<version>[0-9\\._]+)__(?<message>\w+)[\\.]{1}" + extension + "$";
             _referenceRegex = new Regex(pattern);
+            _extension = extension;
         }
 
         /// <summary>
@@ -23,12 +25,13 @@ namespace Monbsoft.EvolDB.Commits
         public Commit CreateCommit(string reference)
         {
             var match = Match(reference);
-            
+
             return new Commit
             {
                 Prefix = ParsePrefix(match.Groups["prefix"].Value),
                 Message = ParseMessage(match.Groups["message"].Value),
                 Version = ParseVersion(match.Groups["version"].Value),
+                Extension = _extension
             };
 
         }

@@ -38,6 +38,11 @@ namespace Monbsoft.EvolDB.Models
         public string Name => RootFolder.Name;
         public IDirectoryInfo RootFolder { get; }
 
+        public IFileInfo GetCommitFile(Commit commit)
+        {
+            return CommitFolder.GetFile(commit.ToReference());
+        }
+
         public IList<IFileInfo> GetCommitFiles()
         {
             return CommitFolder.GetFiles();

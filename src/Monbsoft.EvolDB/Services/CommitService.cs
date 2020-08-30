@@ -17,7 +17,6 @@ namespace Monbsoft.EvolDB.Services
 {
     public class CommitService : ICommitService
     {
-        private readonly IFileService _fileService;
         private readonly IDatabaseGateway _gateway;
         private readonly ILogger<CommitService> _logger;
         private readonly IReferenceParser _referenceParser;
@@ -26,7 +25,6 @@ namespace Monbsoft.EvolDB.Services
             Repository repository,
             IDatabaseGateway gateway,
             ICommitFactory commitFactory,
-            IFileService fileService,
             ILogger<CommitService> logger)
         {
             if (commitFactory == null)
@@ -36,7 +34,6 @@ namespace Monbsoft.EvolDB.Services
             _referenceParser = commitFactory.CreateParser(repository);
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _gateway = gateway ?? throw new ArgumentNullException(nameof(gateway));
-            _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -55,7 +52,7 @@ namespace Monbsoft.EvolDB.Services
             }
 
             // créer le fichier du commit
-            var commitFile = CreateCommitFileInfo(_repository, commit);
+            var commitFile = _repository.GetCommitFile(commit);
             if (commitFile.Exists)
             {
                 throw new CommitException($"Commit {reference} already exists.");
@@ -123,10 +120,9 @@ namespace Monbsoft.EvolDB.Services
             _logger.LogInformation($"Commit {entry.Repeatable.Message} is reset in {stopwatch.ElapsedMilliseconds} ms.");
         }
 
-        private IFileInfo CreateCommitFileInfo(Repository repository, Commit commit)
+        private IFileInfo CreateCommitFileInfo(Commit commit)
         {
-            string path = Path.Combine(repository.CommitFolder.PhysicalPath, commit.ToReference());
-            return _fileService.GetFile(path);
+            return _repository.GetCommitFile(commit);
         }
 
         /// <summary>
@@ -136,13 +132,13 @@ namespace Monbsoft.EvolDB.Services
         /// <returns></returns>
         private async Task PushCommitAsync(Commit commit)
         {
-            var commitFile = _fileService.GetFile(commit.FullName);
-            var lines = commitFile.ReadLines();
-            var queries = _gateway.Parser.Parse(lines);
-            foreach (var query in queries)
-            {
-                await _gateway.PushAsync(query);
-            }
+            //var commitFile = _fileService.GetFile(commit.FullName);
+            //var lines = commitFile.ReadLines();
+            //var queries = _gateway.StatementParser.Parse(lines);
+            //foreach (var query in queries)
+            //{
+            //    await _gateway.PushAsync(query);
+            //}
         }
 
         private async Task PushVersionedCommitAsync(Commit commit)

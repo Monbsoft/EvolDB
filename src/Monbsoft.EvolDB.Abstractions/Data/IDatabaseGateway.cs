@@ -7,7 +7,7 @@ namespace Monbsoft.EvolDB.Data
 {
     public interface IDatabaseGateway : IDisposable
     {
-        IQueryParser Parser { get; }
+        IStatementParser StatementParser { get; }
         Task AddMetadataAsync(CommitMetadata meta);
         Task RemoveMetadataAsync(CommitMetadata meta);
         Task<List<CommitMetadata>> GetMetadataAsync();
