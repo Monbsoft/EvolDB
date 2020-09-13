@@ -50,12 +50,14 @@ namespace Monbsoft.EvolDB.Tests
         [Fact]
         public void Create_commit_with_bad_reference()
         {
-            //var folder = InitializeFolder();
-            //var commitFile = InitializeCommitFile();
-            //var commitService = InitializeService(folder, commitFile);
+            using (var fs = new DisposableFileSystem()
+                .CreateFolder("commits"))
+            {
+                var commitService = InitializeService(fs);
 
-            //var exception = Assert.Throws<CommitException>(() => commitService.Create("V10000.n1ql"));
-            //Assert.Equal("Commit reference is invalid.", exception.Message);
+                var exception = Assert.Throws<CommitException>(() => commitService.Create("V10000.n1ql"));
+                Assert.Equal("Commit reference is invalid.", exception.Message);
+            }
         }
 
 
