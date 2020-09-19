@@ -31,7 +31,7 @@ namespace Monbsoft.EvolDB.Models
                     }
                 default:
                     {
-                        throw new InvalidCastException(nameof(Prefix));
+                        throw new InvalidOperationException(nameof(Prefix));
                     }
             }
 
