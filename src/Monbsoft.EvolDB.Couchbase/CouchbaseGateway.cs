@@ -75,9 +75,9 @@ namespace Monbsoft.EvolDB.Couchbase
             _bucket = await _cluster.BucketAsync(_config.Bucket);
             _logger.LogDebug($"Bucket {_bucket.Name} is opened.");
         }
-        public Task PushAsync(QueryToken token)
+        public Task PushAsync(string query)
         {
-            return _cluster.QueryAsync<dynamic>(token.Text);
+            return _cluster.QueryAsync<dynamic>(query);
         }
         public Task RemoveMetadataAsync(CommitMetadata meta)
         {

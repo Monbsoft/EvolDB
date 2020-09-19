@@ -114,11 +114,11 @@ namespace Monbsoft.EvolDB.SQLite
             await _connection.OpenAsync();
             _logger.LogDebug($"SQLite is opened.");
         }
-        public async Task PushAsync(QueryToken query)
+        public async Task PushAsync(string query)
         {
             using (var sqlCommand = _connection.CreateCommand())
             {
-                sqlCommand.CommandText = query.Text;
+                sqlCommand.CommandText = query;
                 await sqlCommand.ExecuteReaderAsync();
             }
         }

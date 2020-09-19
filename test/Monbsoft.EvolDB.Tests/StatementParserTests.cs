@@ -16,7 +16,7 @@ namespace Monbsoft.EvolDB.Tests
 
             var parser = new StatementParser();
 
-            var statements = parser.Evaluate(content);
+            var statements = parser.ParseQueries(content);
             var statement = statements.First();
 
             Assert.Single(statements);
@@ -36,7 +36,7 @@ WHERE test = 12;";
                 "WHERE test = 12;"
             };
 
-            var statements = parser.Evaluate(content);
+            var statements = parser.ParseQueries(content);
             var statement = statements.First();
 
             Assert.Single(statements);
@@ -48,7 +48,7 @@ WHERE test = 12;";
             string content = "SELECT * FROM data WHERE test";
             var parser = new StatementParser();
 
-            var statements = parser.Evaluate(content);
+            var statements = parser.ParseQueries(content);
 
            Assert.Empty(statements);
         }
@@ -63,7 +63,7 @@ SELECT TOP(10) Name
 FROM authors;";
             var parser = new StatementParser();
 
-            var statements = parser.Evaluate(content);
+            var statements = parser.ParseQueries(content);
 
             Assert.Equal(2, statements.Count());
             Assert.Equal("SELECT * FROM data WHERE name = Test;", StatementHelper.Transform(statements.ElementAt(0)));
@@ -79,7 +79,7 @@ FROM authors;
 SELECT TOP(10) * FROM authors";
             var parser = new StatementParser();
 
-            var statements = parser.Evaluate(content);
+            var statements = parser.ParseQueries(content);
 
             Assert.Single(statements);
             Assert.Equal("SELECT Name FROM authors;", StatementHelper.Transform(statements.First()));

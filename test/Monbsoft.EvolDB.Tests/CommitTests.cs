@@ -16,7 +16,7 @@ namespace Monbsoft.EvolDB.Tests
                 Prefix = Prefix.Versioned,
                 Message = "init",
                 Version = new CommitVersion(1, 0, 0, 0),
-                Extension = "n1ql"
+                Extension = ".n1ql"
             };
 
             Assert.Equal("V1_0_0_0__init.n1ql", commit.ToReference());
@@ -30,7 +30,7 @@ namespace Monbsoft.EvolDB.Tests
                 Prefix = Prefix.Repeatable,
                 Message = "init",
                 Version = new CommitVersion(1, 5, 0, 0),
-                Extension = "sql"
+                Extension = ".sql"
             };
 
             Assert.Equal("R1_5_0_0__init.sql", commit.ToReference());

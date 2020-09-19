@@ -132,13 +132,12 @@ namespace Monbsoft.EvolDB.Services
         /// <returns></returns>
         private async Task PushCommitAsync(Commit commit)
         {
-            //var commitFile = _fileService.GetFile(commit.FullName);
-            //var lines = commitFile.ReadLines();
-            //var queries = _gateway.StatementParser.Parse(lines);
-            //foreach (var query in queries)
-            //{
-            //    await _gateway.PushAsync(query);
-            //}
+            var commitFile = _repository.GetCommitFile(commit);
+            var queries = _gateway.StatementParser.ParseQueries(commitFile.ReadAll());
+            foreach (var query in queries)
+            {
+                await _gateway.PushAsync(query);
+            }
         }
 
         private async Task PushVersionedCommitAsync(Commit commit)

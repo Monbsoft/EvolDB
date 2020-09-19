@@ -70,10 +70,18 @@ namespace Monbsoft.EvolDB.Commits
         /// <returns></returns>
         public Commit CreateCommit(string reference)
         {
-            var commit = Commit.Parse(reference);
+            Commit commit;
+            try
+            {
+                commit = Commit.Parse(reference);               
+            }
+            catch(ParseException pe)
+            {
+                throw new CommitException("Commit reference is invalid.", pe);
+            }
             if (!_extension.Equals(commit.Extension))
             {
-                throw new CommitException("Unknown extension");
+                throw new CommitException("Unknown extension.");
             }
             return commit;
         }
@@ -89,7 +97,7 @@ namespace Monbsoft.EvolDB.Commits
                     return Prefix.Repeatable;
 
                 default:
-                    throw new InvalidOperationException("Unknown prefix");
+                    throw new CommitException("Unknown prefix.");
             }
         }
     }

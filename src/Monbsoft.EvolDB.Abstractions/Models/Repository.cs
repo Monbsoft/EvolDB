@@ -54,11 +54,11 @@ namespace Monbsoft.EvolDB.Models
             {
                 case ConnectionTypes.Couchbase:
                     {
-                        return "n1ql";
+                        return ".n1ql";
                     }
                 default:
                     {
-                        return "sql";
+                        return ".sql";
                     }
             }
         }

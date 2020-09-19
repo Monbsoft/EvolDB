@@ -1,4 +1,5 @@
 ﻿using Monbsoft.EvolDB.Commits;
+using Monbsoft.EvolDB.Exceptions;
 using Monbsoft.EvolDB.Models;
 using Sprache;
 using Xunit;
@@ -51,7 +52,7 @@ namespace Monbsoft.EvolDB.Tests
         {
             var parser = CreateTestParser();
 
-            Assert.Throws<ParseException>(() => parser.CreateCommit(migration));
+            Assert.Throws<CommitException>(() => parser.CreateCommit(migration));
         }
 
         private static IReferenceParser CreateTestParser()

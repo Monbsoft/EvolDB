@@ -38,7 +38,7 @@ namespace Monbsoft.EvolDB.Models
             sb.Append(Version.ToString());
             sb.Append("__");
             sb.Append(Message.Replace(" ", "_"));
-            sb.Append($".{Extension}");
+            sb.Append(Extension);
             return sb.ToString();
         }
     }
