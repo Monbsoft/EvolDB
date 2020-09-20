@@ -15,5 +15,6 @@ namespace Monbsoft.EvolDB.Exceptions
             : base(message, innerException)
         {
         }
+       
     }
 }

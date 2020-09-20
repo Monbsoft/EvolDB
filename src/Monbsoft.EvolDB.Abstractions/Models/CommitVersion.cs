@@ -19,6 +19,21 @@ namespace Monbsoft.EvolDB
             Revision = revision;
             _hashCode = major ^ minor ^ patch ^ revision;
         }
+
+        public CommitVersion(int[] numbers)
+        {
+            if(numbers.Length > 4 && numbers.Length < 3)
+            {
+                throw new ArgumentException(nameof(numbers));
+            }
+            Major = numbers[0];
+            Minor = numbers[1];
+            Patch = numbers[2];
+            if (numbers.Length == 4)
+            {
+                Revision = numbers[3];
+            }
+        }
         #endregion
 
         #region Propriétés

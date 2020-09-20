@@ -18,7 +18,7 @@ namespace Monbsoft.EvolDB.Data
             from statement in Statement.Many()
             select statement;
 
-        public IEnumerable<string> Evaluate(string content)
+        public IEnumerable<string> ParseQueries(string content)
         {
             return Statements.Parse(content);
         }

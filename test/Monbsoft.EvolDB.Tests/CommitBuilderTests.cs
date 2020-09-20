@@ -6,6 +6,7 @@ using Monbsoft.EvolDB.Services;
 using Monbsoft.EvolDB.Tests.Infrastructure;
 using Monbsoft.Extensions.FileProviders;
 using Moq;
+using Sprache;
 using System;
 using Xunit;
 
@@ -54,7 +55,6 @@ namespace Monbsoft.EvolDB.Tests
             };
 
             var builder = CreateTestBuilder();
-
             var exception = Assert.Throws<CommitException>(() => builder.Build(testFile));
             Assert.Equal("Commit reference is invalid.", exception.Message);
         }
@@ -64,7 +64,7 @@ namespace Monbsoft.EvolDB.Tests
             var mockHashService = new Mock<IHashService>();
             mockHashService.Setup(hs => hs.ComputeHash(It.IsAny<IFileInfo>())).Returns("hash");
 
-            return new CommitBuilder(new ReferenceParser("n1ql"), mockHashService.Object, NullLogger<CommitBuilder>.Instance);
+            return new CommitBuilder(new ReferenceParser(".n1ql"), mockHashService.Object, NullLogger<CommitBuilder>.Instance);
         }
     }
 }

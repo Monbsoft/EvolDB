@@ -5,6 +5,6 @@ namespace Monbsoft.EvolDB.Data
 {
     public interface IStatementParser
     {
-        IEnumerable<string> Evaluate(string content);
+        IEnumerable<string> ParseQueries(string content);
     }
 }

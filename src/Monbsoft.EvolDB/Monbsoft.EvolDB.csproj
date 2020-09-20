@@ -3,7 +3,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Company>Monbsoft.com</Company>
     <Product>Monbsoft.EvolDB</Product>
-    <Version>1.0.1</Version>
+    <Version>1.1.0</Version>
     <Authors>Monbsoft.com</Authors>
   </PropertyGroup>
   <ItemGroup>

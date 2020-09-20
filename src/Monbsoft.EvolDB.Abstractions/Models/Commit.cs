@@ -31,14 +31,14 @@ namespace Monbsoft.EvolDB.Models
                     }
                 default:
                     {
-                        throw new InvalidCastException(nameof(Prefix));
+                        throw new InvalidOperationException(nameof(Prefix));
                     }
             }
 
             sb.Append(Version.ToString());
             sb.Append("__");
             sb.Append(Message.Replace(" ", "_"));
-            sb.Append($".{Extension}");
+            sb.Append(Extension);
             return sb.ToString();
         }
     }

@@ -12,6 +12,6 @@ namespace Monbsoft.EvolDB.Data
         Task RemoveMetadataAsync(CommitMetadata meta);
         Task<List<CommitMetadata>> GetMetadataAsync();
         Task OpenAsync();
-        Task PushAsync(QueryToken query);
+        Task PushAsync(string query);
     }
 }

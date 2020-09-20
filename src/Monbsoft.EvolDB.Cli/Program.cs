@@ -17,6 +17,7 @@ using System.CommandLine;
 using System.CommandLine.Builder;
 using System.CommandLine.Hosting;
 using System.CommandLine.Parsing;
+using System.IO;
 using System.Threading.Tasks;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
@@ -58,7 +59,11 @@ namespace Monbsoft.EvolDB.Cli
                             services.AddSingleton<IRepositoryService, RepositoryService>();
                             services.AddSingleton<Repository>(services =>
                             {
-                                var builder = services.GetRequiredService<IRepositoryBuilder>();
+                                var commitFactory = services.GetRequiredService<ICommitFactory>();
+                                var logger = services.GetService<ILogger<RepositoryBuilder>>();
+                                var folder = new PhysicalDirectoryInfo(Directory.GetCurrentDirectory());
+
+                                var builder = new RepositoryBuilder(folder, commitFactory, logger);
                                 return builder.Build();
                             });
                             services.AddSingleton<IDatabaseGateway>(services =>
