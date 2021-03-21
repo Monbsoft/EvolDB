@@ -7,7 +7,7 @@
     <Authors>Monbsoft.com</Authors>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Data.Sqlite" Version="3.1.6" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="5.0.4" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Monbsoft.EvolDB\Monbsoft.EvolDB.csproj" />
