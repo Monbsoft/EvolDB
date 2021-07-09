@@ -27,16 +27,13 @@ namespace Monbsoft.EvolDB.Cli
     {
         private static async Task<int> Main(string[] args)
         {
-            var logger = LogManager.GetCurrentClassLogger();
-
             var rootCommand = new RootCommand
             {
 
                 Description = "EvolDB is a simple database as code."
             };
 
-            try
-            {
+
                 var parser = new CommandLineBuilder(rootCommand)
                     .AddCommand(InitCommand.Create())
                     .AddCommand(CommitCommand.Create())
@@ -48,8 +45,7 @@ namespace Monbsoft.EvolDB.Cli
                         host.ConfigureLogging((context, loggingBuilder) =>
                         {
                             loggingBuilder.ClearProviders();
-                            loggingBuilder.SetMinimumLevel(LogLevel.Trace);
-                            loggingBuilder.AddNLog();
+                            loggingBuilder.AddConsole();
                         });
                         host.ConfigureServices(services =>
                         {
@@ -81,21 +77,8 @@ namespace Monbsoft.EvolDB.Cli
                     .UseHelp()
                     .Build();
                 return await parser.InvokeAsync(args);
-            }
-            catch (Exception ex) when (ex.InnerException is CommitException)
-            {
-                logger.Error(ex.InnerException.Message);
-                throw;
-            }
-            catch (Exception ex)
-            {
-                logger.Error(ex, $"Stopped program because of exception: {ex.Message}");
-                throw;
-            }
-            finally
-            {
-                LogManager.Shutdown();
-            }
+            
+
         }
     }
 }
