@@ -29,8 +29,11 @@ namespace Monbsoft.EvolDB.Cli
         {
             var logger = LogManager.GetCurrentClassLogger();
 
-            var rootCommand = new RootCommand();
-            rootCommand.Description = "EvolDB is a simple database migration tool for .Net Core.";
+            var rootCommand = new RootCommand
+            {
+
+                Description = "EvolDB is a simple database as code."
+            };
 
             try
             {

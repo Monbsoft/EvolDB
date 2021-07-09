@@ -24,7 +24,7 @@ namespace Monbsoft.EvolDB.Cli.Commands
         {
             var command = new Command(
                 name: "init",
-                description: "Create a migration repository");
+                description: "Create a database project");
 
             command.AddArgument(new Argument<string>("name"));
 
